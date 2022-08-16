@@ -24,7 +24,7 @@ checksum:
 
 compliance:
   tags:
-    - comp1140
+    - comp1110
   stage: compliance
   script:
     - python3 /validate.py --gitlablogin ${GITLAB_USER_LOGIN} --gitlabuser "${GITLAB_USER_NAME}" --gitlabprojectname "${CI_PROJECT_NAME}" --assignment /ass2/compliance-ass2.yml
@@ -35,7 +35,7 @@ compliance:
 
 build:
   tags:
-    - comp1140
+    - comp1110
   stage: build
   script:
     - javac -encoding utf-8 $JAVAFX_OPTIONS -cp $CP src/comp1140/ass2/*.java src/comp1140/ass2/*/*.java
@@ -46,7 +46,7 @@ build:
 
 Task3:
   tags:
-    - comp1140
+    - comp1110
   stage: test
   script:
     - $JUNIT -c=comp1140.ass2.TestIsBoardStateWellFormed
@@ -54,7 +54,7 @@ Task3:
 
 Task4:
   tags:
-    - comp1140
+    - comp1110
   stage: test
   script:
     - $JUNIT -c=comp1140.ass2.TestIsActionWellFormed
@@ -62,7 +62,7 @@ Task4:
 
 Task5:
   tags:
-    - comp1140
+    - comp1110
   stage: test
   script:
     - $JUNIT -c=comp1140.ass2.TestRollDice
