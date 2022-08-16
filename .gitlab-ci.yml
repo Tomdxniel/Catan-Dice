@@ -1,0 +1,69 @@
+image: cfourteen/comp1110-2022-s2-gitlab-ci:0.1.0
+
+stages:
+  - checksum
+  - compliance
+  - build
+  - test
+
+before_script:
+  - export PATH_TO_FX=/usr/share/openjfx/lib
+  - export JAVAFX_OPTIONS="--module-path $PATH_TO_FX --add-modules javafx.controls,javafx.fxml,javafx.media"
+  - export CP=src:/ass2/*:/shared/junit-platform-console-standalone-1.7.0.jar:$PATH_TO_FX/*
+  - export JUNIT="java $JAVAFX_OPTIONS -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path /ass2/comp1140-ass2-tests.jar:src --disable-banner"
+
+checksum:
+  tags:
+    - comp1110
+  stage: checksum
+  script:
+    - python3 /validate.py --integrity comp1140-ass2
+  except:
+    variables:
+      - $CI_PROJECT_NAME =~ /.*-dev$/
+
+compliance:
+  tags:
+    - comp1140
+  stage: compliance
+  script:
+    - python3 /validate.py --gitlablogin ${GITLAB_USER_LOGIN} --gitlabuser "${GITLAB_USER_NAME}" --gitlabprojectname "${CI_PROJECT_NAME}" --assignment /ass2/compliance-ass2.yml
+  except:
+    variables:
+      - $CI_PROJECT_NAME =~ /.*-dev$/
+  allow_failure: true
+
+build:
+  tags:
+    - comp1140
+  stage: build
+  script:
+    - javac -encoding utf-8 $JAVAFX_OPTIONS -cp $CP src/comp1140/ass2/*.java src/comp1140/ass2/*/*.java
+  artifacts:
+    paths:
+      - src/comp1140/ass2/*.class
+      - src/comp1140/ass2/*/*.class
+
+Task3:
+  tags:
+    - comp1140
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.TestIsBoardStateWellFormed
+  allow_failure: true
+
+Task4:
+  tags:
+    - comp1140
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.TestIsActionWellFormed
+  allow_failure: true
+
+Task5:
+  tags:
+    - comp1140
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.TestRollDice
+  allow_failure: true

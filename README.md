@@ -61,7 +61,7 @@ actually refers to the **Catan Dice Game "Extra"** (sometimes also known as
 Assignment 2 for COMP1110 is built on the basic Catan Dice Game. You can
 find (and may want to refer to) the rules for this game too on
 [the Catan web site](https://www.catan.com/). However, the description here
-is be self-contained; you should not have any need to look at the COMP1110
+is self-contained; you should not have any need to look at the COMP1110
 assignment.
 
 ## Game Overview
