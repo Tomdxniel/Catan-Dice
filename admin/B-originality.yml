@@ -41,9 +41,9 @@ declaration: >-
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:Sam Liersch
-    uid:7448311
-  - name:Thomas Daniel
-    uid:7490675
-  - name:Eliz So 
-    uid:7489812
+  - name: Sam Liersch
+    uid: u7448311
+  - name: Thomas Daniel
+    uid: u7490675
+  - name: Eliz So 
+    uid: u7489812
