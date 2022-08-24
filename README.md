@@ -127,7 +127,8 @@ can be used to swap a resource on the same turn that the knight was built
 (but only after it has been built, of course).
 
 When a player cannot take any more actions, or chooses not to, the turn
-passes to the next player.
+passes to the next player. Resources remaining at the end of the turn are lost 
+(i.e., there is no accumulation of resources between turns).
 
 ### Building Constraints
 
@@ -171,8 +172,8 @@ In addition to the points gained from building Settlements, Cities and
 Castles, players can gain points for having the "longest road" and the
 "largest army": these are worth 1 and 2 points, respectively.
 The longest road points go to the player who currently has the longest
-contiguous sequence of Roads built on the board - branches do not count
-- once that sequence is at least 5 Roads long. The largest army points
+contiguous sequence of Roads built on the board - branches do not count -
+once that sequence is at least 5 Roads long. The largest army points
 go to the player who has the most Knights built on the board, as long as
 they are at least 3. For the purpose of counting the size of the army,
 it does not matter if the Knight's resource-swap function has been used
@@ -286,13 +287,13 @@ is as follows:
 **Pass**
 * Correctly implements all of the <b>Part One</b> criteria.
 * Appropriate use of git (as demonstrated by the history of your repo).
-* Completion of Task #9 and #10.
+* Completion of Task #11.
 * Executable on a standard lab computer from a runnable jar file,
   game.jar, which resides in the root level of your group repo.
 
 **Credit**
 * _All of the Pass-level criteria, plus the following..._
-* Task #11.
+* Tasks #9 and #10.
 
 **Distinction**
 * _All of the Credit-level criteria, plus the following..._

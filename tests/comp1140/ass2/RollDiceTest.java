@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import static java.util.Arrays.sort;
+import static comp1140.ass2.CatanDiceExtra.rollDice;
 
 @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
 public class RollDiceTest {
@@ -22,7 +23,7 @@ public class RollDiceTest {
     public void correctResourceStringLength() {
         for (int len = 1; len <= 6; len++) {
             for (int i = 0; i < 200; i++) {
-                String actual = CatanDiceExtraSol.rollDice(len);
+                String actual = rollDice(len);
                 Assertions.assertEquals(
                         len,
                         actual.length(),
@@ -36,7 +37,7 @@ public class RollDiceTest {
     public void correctResourceStringOrder() {
         for (int len = 1; len <= 6; len++) {
             for (int i = 0; i < 200; i++) {
-                String actual = CatanDiceExtraSol.rollDice(len);
+                String actual = rollDice(len);
                 char[] sortedCharArray = actual.toCharArray();
                 sort(sortedCharArray);
                 String sortedActual = new String(sortedCharArray);
@@ -54,7 +55,7 @@ public class RollDiceTest {
         // get 360 characters for each length
         for (int len = 1; len <= 6; len++) {
             for (int i = 0; i < 360 / len; i++) {
-                for (char c : CatanDiceExtraSol.rollDice(len).toCharArray()) {
+                for (char c : rollDice(len).toCharArray()) {
                     characterCount[resourceCharacterMap.get(c)]++;
                 }
             }
