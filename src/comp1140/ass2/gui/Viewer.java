@@ -23,9 +23,9 @@ public class Viewer extends Application {
 
 
     /**
-     * Show the state of the game in the window.
+     * Show the state of a (single player's) board in the window.
      *
-     * @param boardState: The string representation of the board state.
+     * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
         // FIXME Task 6: implement the state viewer

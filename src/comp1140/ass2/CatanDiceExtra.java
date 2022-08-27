@@ -56,29 +56,29 @@ public class CatanDiceExtra {
      * Given a valid board state and player action, determine whether the
      * action can be executed.
      * The permitted actions depend on the current game phase:
-     * <p>
+     *
      * A. Roll Phase (keep action)
      * 1. A keep action is valid if it satisfies the following conditions:
      * - Action follows the correct format : "keep[Resources]", and the
      *   current player has the resources specified.
      * - [Rolls Done] is less than 3
-     * </p>
-     * <p>
+     *
+     *
      * B. Build Phase (build, trade, and swap actions)
-     * <p>
+     *
      * 1. A build action is valid if it satisfies the following conditions:
      * - Action follows the correct format : "build[Structure Identifier]"
      * - The current player has sufficient resources available for building
-     *   the structure structure.
+     *   the structure.
      * - The structure satisfies the build constraints (is connected to the
      *   current players road network).
      * - See details of the cost of buildable structure in README.md.
-     * <p>
+     *
      * 2. A trade action is valid if it satisfies the following conditions:
      * - Action follows the correct format : "trade[Resources]"
      * - The current player has sufficient resources available to pay for
      *   the trade.
-     * <p>
+     *
      * 3. A swap action is valid if it satisfies the following conditions:
      * - Action follows the correct format : "swap[Resource Out][Resource In]"
      * - The current player has sufficient resources available to swap out.
@@ -130,24 +130,20 @@ public class CatanDiceExtra {
      * the next new board state that results from executing the action.
      * This method should both handle Start of the Game, Middle of the Game,
      * and Game End.
-     * <p>
+     *
      * A. Start of the Game
      * For example : given boardState = "W00WXW00X00", action = "buildR0205"
      * - Player 'W' builds a road from index 02 to 05
      * - The next boardState should be "X00WR0205XW00X00"
      * - Consult details of the rules for the Start of the Game in README.md
-     * <p>
+     *
      * B. Middle of the Game
      * For example : given boardState = "W61bbbgwwWR0205R0509S02XR3237W01X00", action = "keepbbbw"
-     * - Player 'W' keeps three brick and one wool, and rerolls two dice.
+     * - Player 'W' keeps three brick and one wool, and re-rolls two dice.
      * - The next boardState should be "W62[Next Resources]WR0205R0509S02XR3237W01X00"
      * - [Next Resources] can be any 6 resources that contain 3 bricks, 1 wool
      * - Some examples of [Next Resources] are "bbbbmw", "bbbglw", "bbblow", etc
-     * Remark :
-     * - Test cases for Task 9 will only cover "build" and "keep" actions
-     * - All actions (including "trade" and "swap") will be tested in Task 10a
-     *  (isActionSequenceValid).
-     * <p>
+     *
      * C. Game End
      * For example : given boardState = "X63lmoWK01K02K04K05K06R0105R0205R0206R0408R0509R0610R0812R0813R0913R0914R1014R1015R1318R1419R1520S01S02S08S09T10XJ09K10K11K12K15K16R1824R1924R1925R2025R2026R2430R2531R2632R3035R3036R3136R3137R3237R3641R3742R4145R4146R4246R4549S19S20S37S45T36W06X10RA"
      * - Player 'X' got the score 10 and game ended
@@ -185,7 +181,7 @@ public class CatanDiceExtra {
      * - The next boardState should be "X61[Next Resources]WK02R0105R0205R0509S02XR3237W01X00"
      * - Player 'W' knight at index 02 is built
      * - Player 'W' swaps a resource and the knight becomes used
-     * - Player 'W' buildt road R0105
+     * - Player 'W' built road R0105
      * - Player 'W' turn ends and the current player becomes 'X'
      * - [Next Resources] can be any of 6 resources of player 'X'
      * @param boardState: string representation of the board state
@@ -199,7 +195,7 @@ public class CatanDiceExtra {
 
     /**
      * Given a valid board state, return all applicable player action sequences.
-     * The method should return an array or sequences, where each sequence is
+     * The method should return an array of sequences, where each sequence is
      * an array of action string representations.
      *
      * If the current phase of the game is the Start of Game phase, each of
@@ -208,13 +204,26 @@ public class CatanDiceExtra {
      *
      * If the current phase of the game is the Roll phase, each of the
      * sequences should contain just one action, specifying a possible
-     * next rolls (i.e., resources to keep).
+     * next roll (i.e., resources to keep).
      *
      * If the current phase is the Build phase, the sequences should be all
      * non-redundant sequences of trade, swap and build actions that the
-     * player can take. Non-redundant means that action sequences should not
-     * include trade or swap actions if the resources that those actions
-     * provide are not later used by a build action.
+     * player can take.
+     *
+     * In this context, an action sequence is considered non-redundant if
+     * 1. All resources gained through trade and swap actions are totally used.
+     *    i.e. the turn finishes with 0 of that resource.
+     * 2. A trade action occurs at most once during the action sequence.
+     * 3. Gained resources through the trade and swap actions are not later
+     *    traded/swapped away.
+     * 4. The empty sequence is always non-redundant (i.e. the player takes no
+     *    action).
+     *
+     * Note, there are other sources of redundancy in action sequences besides the
+     * ones that are listed here. One of the more noteworthy ones is the ordering of
+     * actions within a sequence whereby two different action sequences may result
+     * in the same state when applied. While this is not relevant for this task, it
+     * may prove useful to consider this for your "smart" game AI in task 14.
      *
      * In the build phase, one of the possible sequences is always to end
      * the player's turn without taking any action, i.e., an empty sequence.
@@ -222,6 +231,7 @@ public class CatanDiceExtra {
      * The order of the action sequences in the return array is unspecified,
      * i.e., does not matter. (Of course, the order of actions within each
      * sequence does matter.)
+     *
      * @param boardState: string representation of the current board state.
      * @return array of possible action sequences.
      */
@@ -241,7 +251,7 @@ public class CatanDiceExtra {
      * without taking any further action.
      *
      * @param boardState: string representation of the board state.
-     * @return: array of strings representing the actions the AI will take.
+     * @return array of strings representing the actions the AI will take.
      */
     public static String[] generateAction(String boardState) {
         // FIXME: Task 13

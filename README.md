@@ -127,7 +127,8 @@ can be used to swap a resource on the same turn that the knight was built
 (but only after it has been built, of course).
 
 When a player cannot take any more actions, or chooses not to, the turn
-passes to the next player.
+passes to the next player. Resources remaining at the end of the turn are lost 
+(i.e., there is no accumulation of resources between turns).
 
 ### Building Constraints
 
@@ -171,8 +172,8 @@ In addition to the points gained from building Settlements, Cities and
 Castles, players can gain points for having the "longest road" and the
 "largest army": these are worth 1 and 2 points, respectively.
 The longest road points go to the player who currently has the longest
-contiguous sequence of Roads built on the board - branches do not count
-- once that sequence is at least 5 Roads long. The largest army points
+contiguous sequence of Roads built on the board - branches do not count -
+once that sequence is at least 5 Roads long. The largest army points
 go to the player who has the most Knights built on the board, as long as
 they are at least 3. For the purpose of counting the size of the army,
 it does not matter if the Knight's resource-swap function has been used
@@ -212,10 +213,189 @@ occur either through building a final Settlement, City or Castle, or
 through capturing the longest road or largest army title by building a
 Road or Knight.
 
-## Encoding Game State
+## Encoding the Game State
 
-*More details of the `CatanDiceExtra` class and the string encoding used
- for interfacing with tests will be included here after D2B is complete.*
+The following text encoding is used by the `CatanDiceExtra` class to interface 
+with the tests we provide for the various tasks.
+
+You are strongly encouraged to use your own internal representation of the
+game, and convert to and from the text encoding as required to fulfill the
+tasks. The text representation is neither robust nor convenient to work
+with, hence why you should use your own representation.
+
+We encourage you to create your own tests. Your tests can interface
+directly with your code. Do not edit the supplied tests, instead
+add new files.
+
+We will use different encodings to represent different aspects of the game:
+
+- A _board state_ is a string that encodes the state of the map, current turn,
+  and player scores. 
+- An _action_ string specifies a player action (a re-roll, trade, swap, or 
+  build); an array of action strings specifies a sequence of actions. This 
+  encoding will be used to test the validity of the action sequences, and for
+  you to output actions or plans for an AI-controlled player.
+
+The encoding defined below, and the tests provided for the different tasks,
+support only two players, named `W` and `X`. If you later implement an
+extended version of the game with more players, you should rely on your
+internal representation instead of the encoding.
+
+## Board State
+
+A board state string is of the format 
+`[Turn][W Board State][X Board State][W Score][X Score]`. 
+Each `[]` indicates one component, and the square brackets are not actually part
+of the string - there is *no* delimiter. There are three types of components in
+this string, namely:
+
+- A _turn_ string specifying the status of the current turn. 
+- A _player board state_ string specifying the structures owned by one player. 
+- A _player score_ string specifying the scores of one player, including 
+  longest road and largest army titles. 
+
+### Turn
+A turn string is of the format `[ID][# Dice][Rolls Done][Resources]`. This string
+encodes information about the current turn.
+
+- The `[ID]` section is a single character `W` or `X` denoting the current
+  player. 
+- The `[# Dice]` section is a single numerical character describing how many
+  dices are being rolled this turn, it should be between 3 and 6 (inclusive). 
+  The only exception being during the setup phase and players are building their
+  first coast road, here this number should be 0. 
+- The `[Rolls Done]` section describes how many times the dices have been
+  rolled this turn. It should be a numerical value between 1 and 3. It is at 
+  least 1 since there is 1 roll when the turn starts, and it is at most 3 since 
+  there can be at most 3 rolls per turn. The setup phase is an exception where 
+  this number should be 0. 
+- The `[Resources]` section includes up to 6 ordered (alphabet ordering) 
+  characters from below indicating what resources the player has available at 
+  the moment. The number of characters may be different to the number of dices,
+  since trades and builds may have occurred this turn. This section should be 
+  empty during the setup phase.
+
+  - `b`: **b**rick
+  - `g`: **g**rain
+  - `l`: **l**umber
+  - `m`: gold (m for **m**oney)
+  - `o`: **o**re
+  - `w`: **w**ool
+
+Note that `[Rolls Done]` being 3 does **not** necessarily indicate that 3 
+rolls have actually occurred this turn. The encoding uses 3 to indicate that
+the roll phase of the turn has ended (see encoding for actions).
+
+A sample turn string is `X42bgoo`: the current player is player X, they are able
+to roll four dices this turn and have rolled twice already (including the
+initial roll). The current resources they have are 1 brick, 1 grain, and 2 ores.
+
+### Player Board State
+
+The player board state string is of the form `[ID][Placement]`. It encodes
+information about a player's board, i.e. what they own. 
+
+- The `[ID]` section is the same as in the turn string, a single character `W`
+  or `X` denoting the player that the string is describing, it may be different
+  to the current player.  
+- The `[Placement]` section contains in alphanumerical order what structures
+  (and knights) are owned by the player. The game contains the following
+  structures:
+  - The four **c**astles (`C`) are referenced in clockwise order by top-right
+    (`0`), bottom-right (`1`), bottom-left (`2`) and top left (`3`).
+  - It is important used and unused knights be labelled differently. Both unused
+    knights (`J`) and used knights (`K`) are referenced according to the knight 
+    indexing figure below. A used knight at position `04`
+    will be `K04` and if it was unused it would be `J04`.
+  - **R**oads (`R`) are referenced by the two positions they connect, as per the
+    position indexing figure below. A road from position `18` to position `23` 
+    will be `R1823`, but it *cannot* be called `R2318` as we require the lower 
+    numbered position to come first.
+  - **S**ettlements (`S`) and ci**t**ies (`T`) are referenced by their 
+    positions. A settlement at position `00` will be `S00` and a city at 
+    position `10` will be `T10`. Note that not every position has a settlement 
+    or city.
+
+|                 Position Indexing                  |                Knight Indexing                 |
+|:--------------------------------------------------:|:----------------------------------------------:|
+| ![Position Indexing](assets/position-indexing.png) | ![Knight Indexing](assets/knight-indexing.png) |
+
+
+A sample player board state string is `WC0C3J03K02K05R0004R0104R0408S00T01`,
+indicating that player `W` 
+
+- has castles `0` and `3`, 
+- owns knights `02`, `03`, and `05` but has used `02` and `05`, 
+- has three roads (`00`<->`04`, `01`<->`04`, and `04`<->`08`)
+- has a settlement at position `00`
+- has a city at position `01`
+
+### Player Score
+
+The last component of the board state string is the player score string. This
+describes how a player is going, and is of the form `[ID][Score][R/A optional]`.
+
+- `[ID]`, as above, is the ID of the player that this string is referring to. 
+- `[Score]` is two digits describing the score of the player
+- `[R/A optional]` describes the special titles: `R` for longest **r**oad) and
+  `A` for largest **a**rmy. 
+
+For example, `W08R` means player `W` has 8 points and holds the longest road
+title, while `X10RA` means player `X` has 10 points (they've won!) and has the
+both the longest road and largest army titles. Note that when a player holds
+both titles, we require `R` to come before `A`. 
+
+## Action
+
+We consider each turn in two phases. First is the roll phase, where the
+current player is deciding what dice to keep and re-rolling the others. After
+that is the build phase, where the player can build, trade, and swap using
+the resources they have. Which phase the game is in is determined by the turn
+component of the board state string. In particular, if the number of rolls done
+is the number 3, then the game is the build phase, otherwise it is in the
+rolling phase. If you are not sure why the number 3, check the description for 
+the turn string. Because the phase can already be determined from the board
+state, there is no need to indicate it when encoding actions. 
+
+The only exception is the setup phase, where players are building their first
+coastal road. Here the roll phase is skipped and only the build action in the
+build phase is allowed, for building coastal roads at least distance 5 away from
+other players' roads. 
+
+### Roll Phase
+
+Here there is only one action possible - re-roll. To encode this action we use
+a string describing all the resources the player wishes to keep, and all other
+resources will be re-rolled. 
+- `keep[Resources]` for keeping resources. The resources should be encoded in the same manner
+as in the turn string, and prefixed by `keep`. If the 
+player wishes to keep all resources, the game moves on to the build phase. 
+
+As an example, if the player currently has rolled resources `bmmoww`, and does
+not want the wools, then the re-roll action would be encoded as `keepbmmo`. If
+instead they like all their resources, the re-roll action would be encoded as
+`keepbmmoww` and the game would move on to the build phase. 
+
+### Build Phase
+
+There are three possible actions in this phase, so an action in this phase is of
+one of three possible forms,
+
+- `build[Structure Identifier]` for building a structure (or knight), the
+  structure identifier is of the same form as a single structure in the player
+  board state string. As an example `buildR0004` is for building a road from
+  position `00` to position `04`. Only `K` is allowed for building knight, 
+  which means `buildJ02` is invalid action.
+- `trade[Resources]` for trading the given resources using two gold for each
+  resource. The resources are specified the same way as in the turn string.
+  For example, `tradebw` means using 4 gold to trade 1 brick and 1 wool. Note
+  players cannot use gold to trade for gold. 
+- `swap[Resource Out][Resource In]` for swapping `Resource In` to 
+  `Resource Out`. Note that both `[Resource In]` and `[Resource Out]` are just a
+  single resource. For example `swapgb` means exchange 1 grain for 1 brick. In
+  this case, the lowest indexed **brick-only** knight owned by the current
+  player is used. If there is no brick-only knight, then the lowest-indexed
+  "multi-purpose" knight owned by the current player is used. 
 
 ## Evaluation Criteria
 
@@ -286,13 +466,13 @@ is as follows:
 **Pass**
 * Correctly implements all of the <b>Part One</b> criteria.
 * Appropriate use of git (as demonstrated by the history of your repo).
-* Completion of Task #9 and #10.
+* Completion of Task #11.
 * Executable on a standard lab computer from a runnable jar file,
   game.jar, which resides in the root level of your group repo.
 
 **Credit**
 * _All of the Pass-level criteria, plus the following..._
-* Task #11.
+* Tasks #9 and #10.
 
 **Distinction**
 * _All of the Credit-level criteria, plus the following..._
