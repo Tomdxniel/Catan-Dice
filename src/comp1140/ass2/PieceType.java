@@ -15,4 +15,21 @@ public enum PieceType {
             default -> null;
         };
     }
+
+    //FIXME is it less efficient to use else or just leave it blank?
+    public char toChar() {
+        if(this == CITY)
+        {
+            return 'T';
+        }
+        else if (this == USEDKNIGHT)
+        {
+            return 'J';
+        }
+        else
+        {
+            return this.toString().charAt(0);
+        }
+    }
+
 }

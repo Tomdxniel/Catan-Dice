@@ -2,13 +2,194 @@ package comp1140.ass2;
 
 public class CatanDiceExtra {
     //FIXME is it alright having this as a static variable as catanDiceExtra will only exit once
-    private static char currentPlayer;
+    private static Player playerTurn;
     private static int numDice;
     private static int rollsDone;
+    private static final String[] names = {"Sam","Jim","Eliz","Tom"};
 
+
+    private static final int playerCount = 2;
     private static boolean setupPhase = false;
-    private static Player player1 = new Player();
-    private static Player player2 = new Player();
+    public static Player[] players = new Player[playerCount];
+    public static ResourceType[] resources;           //"bglmow" corresponding to resource, null for no resource
+
+
+
+    /*
+    Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
+    then does checks to see if boardstate is valid
+     */
+
+    //FIXME is it alright to find if string contains invalid data ie char when int is expected by try catch?
+    //FIXME what does static on a method do? Does it mean that it can only interact with static elements of this class?
+    public static boolean loadBoard(String boardState)
+    {
+        int index = 0;
+        //FIXME is it okay to create a player for each gameState
+        for(int i = 0; i < playerCount; i++)
+        {
+            players[i] = new Player(names[i],"WXYZ".charAt(i));
+        }
+        //FIXME is there any other orientaion for resources so it does not need to be cleared every method call
+        resources = new ResourceType[6];
+
+        String resourceString = "bglmow";
+        //FIXME would the better method be transcribing it totally into game states and then checking if valid, or validate as you go along
+        //FIXME do I have to be careful of attacks such as loading a half state that errors out then loading a full state
+        //FIXME any way in the to debug it with it showing which return was used
+        //FIXME are we supposed to have definitions of @param and @return for each method we create
+        try {
+            for(int i = 0; i < playerCount; i++)
+            {
+                if( players[i].playerID == boardState.charAt(0))
+                {
+                    playerTurn =players[i];
+                }
+            }
+            index++;
+            //FIXME is creating a substring every time you want to convert to int bad practice?
+            numDice = Integer.parseInt(boardState.substring(index, index + 1));
+            index++;
+            rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
+            index++;
+            //FIXME should I initiate a stringbuilder every time I want to output a string with +=
+            for(int i = 0; i < 6; i++)
+            {
+                if(resourceString.indexOf(boardState.charAt(index)) < 0)
+                {
+                    break;
+                }
+                resources[i] = ResourceType.fromChar(boardState.charAt(index));
+                index++;
+            }
+
+
+            //FIXME is there anyway to say not (statement) without bracketing everything
+
+            //FIXME what is the best name convention for pos1&pos2
+            int position1;
+            int position2;
+            for (int i = 0; i < playerCount; i++) {
+                //[ID]
+
+                //FIXME is this a adequate way to loop and check different player?
+
+                //Make sure first Player is W next player is X
+                if(!("WX".charAt(i) == boardState.charAt(index)))
+                {
+                    System.out.println("2");
+                    return false;
+                }
+                index++;
+                //FIXME should it be checked that it is in alphanumerical order
+
+                //[Placement]
+                //Castle
+                while (boardState.charAt(index) == 'C') {
+                    index++;
+                    //FIXME is typecasting like this bad practice?
+                    position1 = (int) boardState.charAt(index) - 48;
+                    //Is referencing a variable of player1 directly and not using a function of player one bad practice
+                    if(players[i].castles[position1] != null)
+                    {
+                        System.out.println("3");
+                        return false;
+                    }
+                    players[i].castles[position1] = PieceType.CITY;
+                    index++;
+                }
+
+
+                //FIXME should it check if knights and used knights don't overlap
+                //Used/Unused Knight
+                while (boardState.charAt(index) == 'J' || boardState.charAt(index) == 'K') {
+                    index++;
+                    position1 = Integer.parseInt(boardState.substring(index, index + 2));
+                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 20 it would create an error
+                    if (!(position1 < 20 && position1 >= 0) || players[i].knights[position1] != null) {
+                        return false;
+                    }
+                    players[i].knights[position1] = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
+
+                    index += 2;
+                }
+
+                //Road
+                while (boardState.charAt(index) == 'R') {
+                    index++;
+                    position1 = Integer.parseInt(boardState.substring(index, index + 4));
+                    if(players[i].roads[position1] != null)
+                    {
+                        return false;
+                    }
+                    players[i].roads[position1] = PieceType.ROAD;
+                    //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
+                    index += 4;
+
+                }
+
+                //Settlement
+                while (boardState.charAt(index) == 'S' || boardState.charAt(index) == 'T') {
+                    index++;
+                    position1 = Integer.parseInt(boardState.substring(index, index + 2));
+                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
+                    if (!(position1 < 54 && position1 >= 0)||players[i].pieces[position1] != null) {
+                        System.out.println("6");
+                        return false;
+                    }
+                    players[i].pieces[position1] = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
+                    index += 2;
+                }
+
+
+
+            }
+            for(int i = 0; i < playerCount; i++)
+            {
+                //-------------------------------------
+                //Player Score
+                //Make sure first Player is W next player is X
+                if(!(players[i].playerID == boardState.charAt(index)))
+                {
+                    System.out.println("7");
+                    return false;
+                }
+                index++;
+
+                players[i].score = Integer.parseInt(boardState.substring(index, index + 2));
+                index += 2;
+
+                //FIXME Is there a more efficient way to do this without using try catch
+                try{
+                    if(boardState.charAt(index) == 'R')
+                    {
+                        players[i].longestRoad = true;
+                        index++;
+                    }
+
+                    if(boardState.charAt(index) == 'A'){
+                        players[i].largestArmy = true;
+                        index++;
+                    }
+                }
+                catch (StringIndexOutOfBoundsException e)
+                {
+                    //String is finished
+                }
+
+            }
+
+        }
+        catch (Exception e)
+        {
+            //FIXME why is the to string method here showing a warning of redundant
+            System.out.println(e.toString());
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     /**
@@ -24,141 +205,108 @@ public class CatanDiceExtra {
      * @return true iff the string is a well-formed representation of
      * a board state, false otherwise.
      */
-    /*
-    Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score]
-    then does checks to see if boardstate is valid
-     */
-    //FIXME is it alright to find if string contains invalid data ie char when int is expected by try catch?
+
     public static boolean isBoardStateWellFormed(String boardState) {
-        int index = 0;
-        String resourceString = "bglmow";
-        //FIXME would the better method be transcribing it totally into game states and then checking if valid, or validate as you go along
-        //FIXME do I have to be careful of attacks such as loading a half state that errors out then loading a full state
-        try {
-            currentPlayer = boardState.charAt(0);
-            index++;
-            //FIXME is creating a substring every time you want to convert to int bad practice?
-            numDice = Integer.parseInt(boardState.substring(index, index + 1));
-            index++;
-            rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
-            index++;
-            //FIXME should I initiate a stringbuilder every time I want to output
-            StringBuilder output = new StringBuilder();
-            for(int i = 0; i < 6; i++)
-            {
-                if(resourceString.indexOf(boardState.charAt(index)) < 0)
-                {
-                    //FIXME output not configured
-                    break;
-                }
-                output.append(boardState.charAt(index));
-                index++;
-            }
-
-            //Check if next character is W otherwise format is incorrect
-            //FIXME is there anyway to say not without bracketing everything
-            if(!(boardState.charAt(index) == 'W'))
-            {
-                return false;
-            }
-            //FIXME what is the best name convention for pos1&pos2
-            int position1;
-            int position2;
-            Player curPlayer;
-            for (int i = 0; i < 2; i++) {
-                //[ID]
-                //FIXME is there any more efficient way to do this?
-                if(i == 0)
-                {
-                    curPlayer = player1;
-                }
-                else {
-                    curPlayer = player2;
-                }
-                //Make sure first Player is W next player is X
-                //FIXME is this a adequate way to loop and check different player?
-                if(!("WX".charAt(i) == boardState.charAt(index)))
-                {
-                    return false;
-                }
-
-                //FIXME should it be checked that it is in alphanumerical order
-
-                //[Placement]
-                //Castle
-                while (boardState.charAt(index) == 'C') {
-                    index++;
-                    //FIXME is typecasting like this bad practice?
-                    position1 = (int) boardState.charAt(index) - 48;
-                    //Is referencing a variable of player1 directly and not using a function of player one bad practice
-                    if(curPlayer.castles[position1] != null)
-                    {
-                        return false;
-                    }
-                    curPlayer.castles[position1] = PieceType.CITY;
-                    index++;
-                }
-
-
-                //FIXME should it check if knights and used knights don't overlap
-                //Used/Unused Knight
-                while (boardState.charAt(index) == 'J' || boardState.charAt(index) == 'K') {
-                    index++;
-                    position1 = Integer.parseInt(boardState.substring(index, index + 1));
-                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 20 it would create an error
-                    if (!(position1 < 20 && position1 >= 0) || curPlayer.knights[position1] != null) {
-                        return false;
-                    }
-                    curPlayer.knights[position1] = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
-
-                    index += 2;
-                }
-
-                //Road
-                while (boardState.charAt(index) == 'R') {
-                    position1 = Integer.parseInt(boardState.substring(index, index + 4));
-                    if(curPlayer.roads[position1] != null)
-                    {
-                        return false;
-                    }
-                    curPlayer.roads[position1] = PieceType.ROAD;
-                    //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
-                    index += 4;
-
-                }
-
-                //Settlement
-                while (boardState.charAt(index) == 'S' || boardState.charAt(index) == 'T') {
-                    index++;
-                    position1 = Integer.parseInt(boardState.substring(index, index + 1));
-                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
-                    if (!(position1 < 54 && position1 >= 0)||curPlayer.pieces[position1] != null) {
-                        return false;
-                    }
-                    curPlayer.pieces[position1] = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
-                    index += 2;
-                }
-
-                //-------------------------------------
-                //Player Score
-
-
-            }
-
-
-
-
-
-
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-            return false;
-        }
-	return false;
+        return loadBoard(boardState);
     }
+
+
+
+
+    // rebuilds board string of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score]
+    public static String boardToString(){
+        StringBuilder output = new StringBuilder();
+        output.append(playerTurn.playerID);
+        output.append(numDice);
+        output.append(rollsDone);
+
+        for(ResourceType r : resources)
+        {
+            if(r != null)
+            {
+                output.append(r.toChar());
+            }
+        }
+        for(int i = 0; i < playerCount; i++)
+        {
+            output.append(players[i].playerID);
+            for(int j = 0; j < players[i].castles.length; j++)
+            {
+                if(players[i].castles[j] != null)
+                {
+                    output.append("C");
+                    output.append(j);
+                }
+            }
+            //USED KNIGHT
+            for(int j = 0; j < players[i].knights.length; j++)
+            {
+                if(players[i].knights[j] == PieceType.USEDKNIGHT)
+                {
+                    output.append(players[i].knights[j].toChar());
+                    //FIXME is this a valid way to ensure string is of good length
+                    output.append(String.format("%2d",j).replace(' ','0'));
+                }
+            }
+            //KNIGHT
+            for(int j = 0; j < players[i].knights.length; j++)
+            {
+                if(players[i].knights[j] == PieceType.KNIGHT)
+                {
+                    output.append(players[i].knights[j].toChar());
+                    //FIXME is this a valid way to ensure string is of good length
+                    output.append(String.format("%2d",j).replace(' ','0'));
+                }
+            }
+
+            //ROADS
+            for(int j = 0; j < players[i].roads.length; j++)
+            {
+                if(players[i].roads[j] != null)
+                {
+                    output.append("R");
+                    output.append(String.format("%4d",j).replace(' ','0'));
+                }
+            }
+            //SETTLEMENTS
+            for(int j = 0; j < players[i].pieces.length; j++)
+            {
+                if(players[i].pieces[j] == PieceType.SETTLEMENT)
+                {
+                    output.append(players[i].pieces[j].toChar());
+                    output.append(String.format("%2d",j).replace(' ','0'));
+                }
+            }
+            //CITIES
+            for(int j = 0; j < players[i].pieces.length; j++)
+            {
+                if(players[i].pieces[j] == PieceType.CITY)
+                {
+                    output.append(players[i].pieces[j].toChar());
+                    output.append(String.format("%2d",j).replace(' ','0'));
+                }
+            }
+        }
+        for(int i = 0; i < playerCount; i++)
+        {
+            output.append(players[i].playerID);
+            output.append(String.format("%2d",players[i].score).replace(' ','0'));
+            if(players[i].longestRoad)
+            {
+                output.append('R');
+            }
+            if(players[i].largestArmy)
+            {
+                output.append('A');
+            }
+
+        }
+        return output.toString();
+    }
+
+
+
+
 
 
 

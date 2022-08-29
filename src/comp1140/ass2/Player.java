@@ -1,17 +1,24 @@
 package comp1140.ass2;
 
+import java.util.Arrays;
+
 public class Player {
 
     String name;
     char playerID;
     int score;
     PieceType[] knights = new PieceType[20];    //mapped locations to used and unused knights.
-    char[] resource = new char[6];          //"bglmow" corresponding to resource, null for no resource
     PieceType[] pieces = new PieceType[54];           //Mapped to the locations ,  's' for settlements, 't' for cities, "E" for no piece.
     PieceType[] roads = new PieceType[10000]; //FIXME this is just a placeholder until road format is decided
     PieceType[] castles = new PieceType[4];
+    boolean largestArmy = false;
+    boolean longestRoad = false;
 
-
+    Player(String playerName, char ID)
+    {
+        this.name = playerName;
+        this.playerID = ID;
+    }
 
 
 
@@ -36,11 +43,19 @@ public class Player {
         this.knights = knights;
     }
 
-    public char[] getAvailableResources(){
-        return resource;
-    }
 
-    public void setAvailableResources(char[] resource){
-        this.resource = resource;
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", playerID=" + playerID +
+                ", score=" + score +
+                ", knights=" + Arrays.toString(knights) +
+                ", resource=" + Arrays.toString(CatanDiceExtra.resources) +
+                ", pieces=" + Arrays.toString(pieces) +
+                //", roads=" + Arrays.toString(roads) +
+                ", castles=" + Arrays.toString(castles) +
+                '}';
     }
 }
+
