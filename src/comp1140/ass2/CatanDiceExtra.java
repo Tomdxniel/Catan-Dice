@@ -1,6 +1,15 @@
 package comp1140.ass2;
 
 public class CatanDiceExtra {
+    //FIXME is it alright having this as a static variable as catanDiceExtra will only exit once
+    private static char currentPlayer;
+    private static int numDice;
+    private static int rollsDone;
+
+    private static boolean setupPhase = false;
+    private static Player player1 = new Player();
+    private static Player player2 = new Player();
+
 
     /**
      * Check if the string encoding of a board state is well-formed.
@@ -15,10 +24,143 @@ public class CatanDiceExtra {
      * @return true iff the string is a well-formed representation of
      * a board state, false otherwise.
      */
+    /*
+    Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score]
+    then does checks to see if boardstate is valid
+     */
+    //FIXME is it alright to find if string contains invalid data ie char when int is expected by try catch?
     public static boolean isBoardStateWellFormed(String boardState) {
-        // FIXME: Task 3
+        int index = 0;
+        String resourceString = "bglmow";
+        //FIXME would the better method be transcribing it totally into game states and then checking if valid, or validate as you go along
+        //FIXME do I have to be careful of attacks such as loading a half state that errors out then loading a full state
+        try {
+            currentPlayer = boardState.charAt(0);
+            index++;
+            //FIXME is creating a substring every time you want to convert to int bad practice?
+            numDice = Integer.parseInt(boardState.substring(index, index + 1));
+            index++;
+            rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
+            index++;
+            //FIXME should I initiate a stringbuilder every time I want to output
+            StringBuilder output = new StringBuilder();
+            for(int i = 0; i < 6; i++)
+            {
+                if(resourceString.indexOf(boardState.charAt(index)) < 0)
+                {
+                    //FIXME output not configured
+                    break;
+                }
+                output.append(boardState.charAt(index));
+                index++;
+            }
+
+            //Check if next character is W otherwise format is incorrect
+            //FIXME is there anyway to say not without bracketing everything
+            if(!(boardState.charAt(index) == 'W'))
+            {
+                return false;
+            }
+            //FIXME what is the best name convention for pos1&pos2
+            int position1;
+            int position2;
+            Player curPlayer;
+            for (int i = 0; i < 2; i++) {
+                //[ID]
+                //FIXME is there any more efficient way to do this?
+                if(i == 0)
+                {
+                    curPlayer = player1;
+                }
+                else {
+                    curPlayer = player2;
+                }
+                //Make sure first Player is W next player is X
+                //FIXME is this a adequate way to loop and check different player?
+                if(!("WX".charAt(i) == boardState.charAt(index)))
+                {
+                    return false;
+                }
+
+                //FIXME should it be checked that it is in alphanumerical order
+
+                //[Placement]
+                //Castle
+                while (boardState.charAt(index) == 'C') {
+                    index++;
+                    //FIXME is typecasting like this bad practice?
+                    position1 = (int) boardState.charAt(index) - 48;
+                    //Is referencing a variable of player1 directly and not using a function of player one bad practice
+                    if(curPlayer.castles[position1] != null)
+                    {
+                        return false;
+                    }
+                    curPlayer.castles[position1] = PieceType.CITY;
+                    index++;
+                }
+
+
+                //FIXME should it check if knights and used knights don't overlap
+                //Used/Unused Knight
+                while (boardState.charAt(index) == 'J' || boardState.charAt(index) == 'K') {
+                    index++;
+                    position1 = Integer.parseInt(boardState.substring(index, index + 1));
+                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 20 it would create an error
+                    if (!(position1 < 20 && position1 >= 0) || curPlayer.knights[position1] != null) {
+                        return false;
+                    }
+                    curPlayer.knights[position1] = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
+
+                    index += 2;
+                }
+
+                //Road
+                while (boardState.charAt(index) == 'R') {
+                    position1 = Integer.parseInt(boardState.substring(index, index + 4));
+                    if(curPlayer.roads[position1] != null)
+                    {
+                        return false;
+                    }
+                    curPlayer.roads[position1] = PieceType.ROAD;
+                    //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
+                    index += 4;
+
+                }
+
+                //Settlement
+                while (boardState.charAt(index) == 'S' || boardState.charAt(index) == 'T') {
+                    index++;
+                    position1 = Integer.parseInt(boardState.substring(index, index + 1));
+                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
+                    if (!(position1 < 54 && position1 >= 0)||curPlayer.pieces[position1] != null) {
+                        return false;
+                    }
+                    curPlayer.pieces[position1] = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
+                    index += 2;
+                }
+
+                //-------------------------------------
+                //Player Score
+
+
+            }
+
+
+
+
+
+
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+            return false;
+        }
 	return false;
     }
+
+
 
     /**
      * Check if the string encoding of a player action is well-formed.
