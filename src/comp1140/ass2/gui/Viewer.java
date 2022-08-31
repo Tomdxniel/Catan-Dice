@@ -68,6 +68,10 @@ public class Viewer extends Application {
         Hex.setUpHex(Board.hexSize,VIEWER_HEIGHT,VIEWER_WIDTH);
         board.createHexes();
         root.getChildren().add(board.hexPlate);
+        root.getChildren().add(board.settlementLayer);
+        root.getChildren().add(board.castleLayer);
+        root.getChildren().add(board.knightLayer);
+        root.getChildren().add(board.roadLayer);
         makeControls();
 
         primaryStage.setScene(scene);

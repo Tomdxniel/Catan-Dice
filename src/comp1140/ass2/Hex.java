@@ -16,14 +16,17 @@ import javafx.stage.Stage;
 
 public class Hex extends Polygon {
     //Hex coordinate for neighbours & storage
-    //q
-    //r
+    public int q;
+    public int r;
     //Hex coordinate for boardString
     int hexIndex;
     //Hex coordinate for drawing hex
     //Layoutx
     //Layouty
     private HexType type;
+    public Piece knights;
+    public Piece[] settlement = new Piece[6];
+
 
     //Offset to get from one hex to the next
     private static double qLengthX;
@@ -33,28 +36,34 @@ public class Hex extends Polygon {
     private static double startX;
     private static double startY;
     //FIXME why does .getPoints().add() require Double (capital D)?
-    private static Double[] points = new Double[12];
-    //FIXME to reduce calculation time points are only calculated once and reused, is this a problem
+    //Points is used to first store all the points of the
 
     public Hex(int q, int r, HexType type,int size) {
         this.type = type;
+        this.q = q;
+        this.r = r;
 
-
-        for(int i = 0; i < 6; i++)
-        {
-            //Add x coord
-            //FIXME what is a better way than just type casting?
-            points[i*2] = Math.cos(Math.PI * ((double)1/6 + (double)i/3))*size;
-            //Add y coord
-            points[i*2 + 1] = Math.sin(Math.PI * ((double)1/6 + (double)i/3))*size;
-        }
-
-        this.getPoints().addAll(points);
+        this.getPoints().addAll(generatePoints(size));
         this.setLayoutX(qLengthX * q + rLengthX * r + startX);
         this.setLayoutY(rLengthY * r + startY);
         this.setFill(Board.hexColor);
 
 
+    }
+
+    public static Double[] generatePoints(int size)
+    {
+        Double[] points = new Double[12];
+        for(int i = 0; i < 6; i++)
+        {
+            //Ensure the points start at the top vertex and go anitclockwise
+            //Add x coord
+            //FIXME what is a better way than just type casting?
+            points[i*2] = Math.cos(Math.PI * ((double)1/2 + -(double)i/3))*size;
+            //Add y coord
+            points[i*2 + 1] = Math.sin(-Math.PI * ((double)1/2 +(double)i/3))*size;
+        }
+        return points;
     }
     //FIXME setup hex will need to be called before initialising a hex, is this okay?
     public static void setUpHex(int size,double boardHeight,double boardWidth)
