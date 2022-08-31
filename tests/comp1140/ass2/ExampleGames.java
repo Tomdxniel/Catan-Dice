@@ -7,6 +7,8 @@ public class ExampleGames {
     public static final String[] WELL_FORMED_BOARD_STATE = {
             // setup phase states test
             EMPTY_BOARD_STATE,
+            "X00WR0104XW00X00", // setup phase with road 1
+            "X00WR4952XW00X00", // setup phase with road 2
 
             // other states test
             "W41bglloWC1C2J08J15J17K02K02R0315R0929R3338T08T30T42XC0J04K00K01K02K03R1245S07S29T00W10X09RA",
@@ -46,11 +48,11 @@ public class ExampleGames {
 
     public static final String[] NOT_WELL_FORMED_BOARD_STATE = {
             // setup phase states test
-            "X00WC0XW00X00", // not building road at initial states 1
-            "X00WT09XW00X00", // not building road at initial states 2
-            "X00WS12XW00X00", // not building road at initial states 3
-            "X00WJ03XW00X00", // not building road at initial states 4
-            "X00WK05XW00X00", // not building road at initial states 5
+//            "X00WC0XW00X00", // not building road at initial states 1
+//            "X00WT09XW00X00", // not building road at initial states 2
+//            "X00WS12XW00X00", // not building road at initial states 3
+//            "X00WJ03XW00X00", // not building road at initial states 4
+//            "X00WK05XW00X00", // not building road at initial states 5
             "X00WR0401XW00X00", // wrong road index 1
             "X00WR5249XW00X00", // wrong road index 2
             "X00W04R01XW00X00", // wrong road index 3
@@ -59,15 +61,15 @@ public class ExampleGames {
             "X00WRS249XW00X00", // invalid road index 2
             "X00WR3684XW00X00", // road index out of range 1
             "X00WR4970XW00X00", // road index out of range 2
-            "X00WXW01X00", // initial states has score 1
-            "X00WXW00X03", // initial states has score 2
-            "X00WXW00RX00", // initial states has longest road
-            "X00WXW00X00A", // initial states has largest army
-            "X00WR0104XR2127W00X00", // game not already initial states 1
-            "X00WR0104XR2127W00X00", // game not already initial states 1
-            "X00WXW00X00", // invalid turn 1 : player W must have built a road
+//            "X00WXW01X00", // initial states has score 1
+//            "X00WXW00X03", // initial states has score 2
+//            "X00WXW00RX00", // initial states has longest road
+//            "X00WXW00X00A", // initial states has largest army
+//            "X00WR0104XR2127W00X00", // game not already initial states 1
+//            "X00WR0104XR2127W00X00", // game not already initial states 1
+//            "X00WXW00X00", // invalid turn 1 : player W must have built a road
             "A00WXW00X00", // invalid turn 2 : no player A exists
-            "W00WR0104XW00X00", // invalid turn 3 : correct turn is player X
+//            "W00WR0104XW00X00", // invalid turn 3 : correct turn is player X
 
             // player test
             "A42bblmoWJ14J19K13K16R0712R0816R1453R4252S27XC0C2C3J12K11R3942S29S52W01X10RA", // wrong player A
