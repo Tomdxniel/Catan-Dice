@@ -1,5 +1,8 @@
 package comp1140.ass2.gui;
 
+import comp1140.ass2.Board;
+import comp1140.ass2.CatanDiceExtra;
+import comp1140.ass2.Hex;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,13 +54,20 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Board State Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
+        //Controls
         root.getChildren().add(controls);
-
+        //Hex Tiles
+        Board board = new Board();
+        Hex.setUpHex(Board.hexSize,VIEWER_HEIGHT,VIEWER_WIDTH);
+        board.createHexes();
+        root.getChildren().add(board.hexPlate);
         makeControls();
 
         primaryStage.setScene(scene);
