@@ -12,7 +12,7 @@ public class CatanDiceExtra {
      */
     public static boolean loadBoard(String boardState)
     {
-        Board board = new Board();
+        Board board = new Board(700,1200);
         int index = 0;
         for(int i = 0; i < playerCount; i++)
         {

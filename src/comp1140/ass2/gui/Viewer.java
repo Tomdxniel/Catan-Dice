@@ -64,9 +64,7 @@ public class Viewer extends Application {
         //Controls
         root.getChildren().add(controls);
         //Hex Tiles
-        Board board = new Board();
-        Hex.setUpHex(Board.hexSize,VIEWER_HEIGHT,VIEWER_WIDTH);
-        board.createHexes();
+        Board board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
         root.getChildren().add(board.hexPlate);
         root.getChildren().add(board.settlementLayer);
         root.getChildren().add(board.castleLayer);
