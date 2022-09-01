@@ -18,14 +18,13 @@ public class Hex extends Polygon {
     //Hex coordinate for neighbours & storage
     public int q;
     public int r;
-    //Hex coordinate for boardString
-    int hexIndex;
     //Hex coordinate for drawing hex
     //Layoutx
     //Layouty
     private HexType type;
     public Piece knights;
     public Piece[] settlement = new Piece[6];
+    public Piece[] roads = new Piece[6];
 
 
     //Offset to get from one hex to the next

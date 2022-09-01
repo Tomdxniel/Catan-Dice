@@ -5,7 +5,13 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
 public class Piece extends Circle {
     private int boardIndex;
-    private PieceType type;
+    public Player owner;
+    public PieceType type;
+    //Player color, Dark for usable piece light for un usable
+    private Color[] playerColor = {Color.GREEN,Color.LIGHTGREEN,//Player1
+                                   Color.BLUE,Color.LIGHTBLUE,//Player2
+                                   Color.PINK,Color.LIGHTPINK,//Player3
+                                   Color.YELLOW,Color.LIGHTYELLOW};//Player4
 
 
 
@@ -21,6 +27,16 @@ public class Piece extends Circle {
             case CITY -> drawCity(x,y);
             case CASTLE -> drawCastle(x,y);
         }
+    }
+    public Piece(int boardIndex, PieceType type, double startX, double startY, double endX, double endY)
+    {
+        this.boardIndex = boardIndex;
+        this.type = type;
+        switch(this.type)
+        {
+            case ROAD -> drawRoad(startX,startY,endX,endY);
+        }
+
     }
 
     public void updatePiece(double x, double y){
@@ -53,6 +69,14 @@ public class Piece extends Circle {
 
     public void drawCastle(double x,double y){
 
+    }
+
+    public void drawRoad(double startX,double startY, double endX, double endY)
+    {
+        this.setRadius(10);
+        this.setLayoutX(startX + (endX-startX)/2);
+        this.setLayoutY(startY + (endY-startY)/2);
+        this.setFill(Color.RED);
     }
 
 
