@@ -1,5 +1,5 @@
 package comp1140.ass2;
-
+import java.util.*;
 public class CatanDiceExtra {
     private static final String[] names = {"Sam","Jim","Eliz","Tom"};
     public static final int playerCount = 2;
@@ -10,9 +10,8 @@ public class CatanDiceExtra {
     Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
     then does checks to see if boardstate is valid
      */
-    public static boolean loadBoard(String boardState)
+    public static boolean loadBoard(String boardState,Board board)
     {
-        Board board = new Board(700,1200);
         int index = 0;
         for(int i = 0; i < playerCount; i++)
         {
@@ -187,7 +186,9 @@ public class CatanDiceExtra {
      */
 
     public static boolean isBoardStateWellFormed(String boardState) {
-        return loadBoard(boardState);
+
+        Board board = new Board(700,1200);
+        return loadBoard(boardState, board);
     }
 
 
@@ -200,6 +201,7 @@ public class CatanDiceExtra {
         output.append(board.numDice);
         output.append(board.rollsDone);
 
+        Integer[] roadSort = new Integer[board.roadsMap.keySet().size()];
         for(ResourceType r : board.resources)
         {
             if(r != null)
@@ -240,13 +242,13 @@ public class CatanDiceExtra {
             }
 
             //ROADS
-            //FIXME this can be improved by only considering roads that are in roadsMap hasMap
-            for(int j = 0; j < 10000; j++) {
-                if(board.roadsMap.containsKey(j)) {
-                    if (board.roadsMap.get(j).owner  == board.players[i]) {
-                        output.append("R");
-                        output.append(String.format("%4d", j).replace(' ', '0'));
-                    }
+            //FIXME is there anyway to map through the hashMap without using lambda calculus or converting to an array first
+            board.roadsMap.keySet().toArray(roadSort);
+            Arrays.sort(roadSort);
+            for(int j : roadSort) {
+                if (board.roadsMap.get(j).owner  == board.players[i]) {
+                    output.append("R");
+                    output.append(String.format("%4d", j).replace(' ', '0'));
                 }
             }
             //SETTLEMENTS
@@ -376,8 +378,52 @@ public class CatanDiceExtra {
      * @return array of contiguous road lengths, one per player.
      */
     public static int[] longestRoad(String boardState) {
-        // FIXME: Task 8a
-        return null;
+        Board board = new Board(0,0);
+        loadBoard(boardState,board);
+        int[] output = new int [playerCount];
+        List<Integer> visited = new ArrayList<>();
+        List<Integer> roads = new ArrayList<>();
+        for(int i = 0; i < playerCount; i++)
+        {
+            for(Integer y : board.roadsMap.keySet())
+            {
+                if(board.roadsMap.get(y).owner == board.players[i])
+                {
+                    roads.add(y);
+                }
+            }
+            output[i] = findMaxRoad(roads,visited,-1);
+            roads.clear();
+        }
+        return output;
+    }
+    private static int findMaxRoad(List<Integer> roads, List<Integer> visited,int lastPos)
+    {
+        //FIXME Im using lastPos -1 to start the recursion is this bad practice?
+        int max = 0;
+        Integer[] posArray = roads.toArray(new Integer[0]);
+        for(Integer i : posArray)
+        {
+            if(i/100 == lastPos || lastPos == -1)
+            {
+                roads.remove(i);
+                visited.add(i);
+                max = Math.max(max, findMaxRoad(roads,visited,i%100));
+                roads.add(i);
+                visited.remove(i );
+
+            }
+            if(i%100 == lastPos|| lastPos == -1)
+            {
+                roads.remove(i);
+                visited.add(i);
+                max = Math.max(max, findMaxRoad(roads,visited,i/100));
+                roads.add(i);
+                visited.remove(i);
+
+            }
+        }
+        return Math.max(max,visited.size());
     }
 
     /**
@@ -392,8 +438,23 @@ public class CatanDiceExtra {
      * @return array of army sizes, one per player.
      */
     public static int[] largestArmy(String boardState) {
-        // FIXME: Task 8b
-        return null;
+        //Hight and width can be 0 as we are not
+        Board board = new Board(0,0);
+        loadBoard(boardState,board);
+        int[] output = new int [playerCount];
+        for(int i = 0; i < playerCount; i ++)
+        {
+            output[i] = 0;
+            for(Piece p : board.knights)
+            {
+                //FIXME does the first statement always process before the second one? if owner is null indexOf will give an error
+                if(p.owner != null && "WXYZ".indexOf(p.owner.playerID) == i)
+                {
+                    output[i] ++;
+                }
+            }
+        }
+        return output;
     }
 
     /**

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
 public class Piece extends Circle {
-    private int boardIndex;
+    public int boardIndex;
     public Player owner;
     public PieceType type;
     //Player color, Dark for usable piece light for un usable
@@ -21,8 +21,8 @@ public class Piece extends Circle {
         this.type = type;
         switch(this.type)
         {
-            case KNIGHT -> drawKnight(x,y,false);
-            case USEDKNIGHT -> drawKnight(x,y,true);
+            case KNIGHT -> drawKnight(x,y);
+            case USEDKNIGHT -> drawKnight(x,y);
             case SETTLEMENT -> drawSettlement(x,y);
             case CITY -> drawCity(x,y);
             case CASTLE -> drawCastle(x,y);
@@ -39,18 +39,21 @@ public class Piece extends Circle {
 
     }
 
-    public void updatePiece(double x, double y){
-        switch(this.type)
+    public void updatePiece(){
+        if(owner != null)
         {
-            case KNIGHT -> drawKnight(x,y,false);
-            case USEDKNIGHT -> drawKnight(x,y,true);
-            case SETTLEMENT -> drawSettlement(x,y);
-            case CITY -> drawCity(x,y);
-            case CASTLE -> drawCastle(x,y);
+            if(type == PieceType.USEDKNIGHT)
+            {
+                this.setFill(playerColor["WXYZ".indexOf(owner.playerID) * 2 + 1]);
+            }
+            else
+            {
+                this.setFill(playerColor["WXYZ".indexOf(owner.playerID)*2]);
+            }
         }
     }
 
-    public void drawKnight(double x,double y,boolean used){
+    public void drawKnight(double x,double y){
         this.setRadius(10);
         this.setLayoutX(x);
         this.setLayoutY(y);

@@ -3,6 +3,7 @@ package comp1140.ass2.gui;
 import comp1140.ass2.Board;
 import comp1140.ass2.CatanDiceExtra;
 import comp1140.ass2.Hex;
+import comp1140.ass2.Piece;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +24,7 @@ public class Viewer extends Application {
     private final Group controls = new Group();
     private TextField playerTextField;
     private TextField boardTextField;
+    Board board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
 
 
     /**
@@ -31,7 +33,16 @@ public class Viewer extends Application {
      * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
-        // FIXME Task 6: implement the state viewer
+        CatanDiceExtra.loadBoard(boardState,board);
+        for(Piece p : board.settlements)
+        {
+            p.updatePiece();
+        }
+        for(Piece p : board.knights)
+        {
+            p.updatePiece();
+        }
+        board.roadsMap.forEach((key,value)-> value.updatePiece());
     }
 
     /**
@@ -64,7 +75,6 @@ public class Viewer extends Application {
         //Controls
         root.getChildren().add(controls);
         //Hex Tiles
-        Board board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
         root.getChildren().add(board.hexPlate);
         root.getChildren().add(board.settlementLayer);
         root.getChildren().add(board.castleLayer);

@@ -55,7 +55,6 @@ public class Board {
 
 
     public Board(double VIEWER_HEIGHT, double VIEWER_WIDTH){
-
         Hex.setUpHex(hexSize,VIEWER_HEIGHT,VIEWER_WIDTH);
         this.createHexes();
     }
