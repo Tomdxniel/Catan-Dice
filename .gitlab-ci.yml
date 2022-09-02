@@ -49,7 +49,7 @@ Task3:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1140.ass2.TestIsBoardStateWellFormed
+    - $JUNIT -c=comp1140.ass2.IsBoardStateWellFormedTest
   allow_failure: true
 
 Task4:
@@ -57,7 +57,7 @@ Task4:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1140.ass2.TestIsActionWellFormed
+    - $JUNIT -c=comp1140.ass2.IsActionWellFormedTest
   allow_failure: true
 
 Task5:
@@ -65,5 +65,69 @@ Task5:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1140.ass2.TestRollDice
+    - $JUNIT -c=comp1140.ass2.RollDiceTest
+  allow_failure: true
+
+Task7:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.IsActionValidTest
+  allow_failure: true
+
+Task8a:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.LongestRoadTest
+  allow_failure: true
+
+Task8b:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.LargestArmyTest
+  allow_failure: true
+
+Task9:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.ApplyActionTest
+  allow_failure: true
+
+Task10a:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.IsActionSequenceValidTest
+  allow_failure: true
+
+Task10b:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.ApplyActionSequenceTest
+  allow_failure: true
+
+Task12:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.GenerateAllPossibleActionSequencesTest
+  allow_failure: true
+
+Task13 Sanity:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1140.ass2.GenerateActionSanityTest
   allow_failure: true

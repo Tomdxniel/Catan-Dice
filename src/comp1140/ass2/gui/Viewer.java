@@ -1,5 +1,9 @@
 package comp1140.ass2.gui;
 
+import comp1140.ass2.Board;
+import comp1140.ass2.CatanDiceExtra;
+import comp1140.ass2.Hex;
+import comp1140.ass2.Piece;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,15 +24,25 @@ public class Viewer extends Application {
     private final Group controls = new Group();
     private TextField playerTextField;
     private TextField boardTextField;
+    Board board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
 
 
     /**
-     * Show the state of the game in the window.
+     * Show the state of a (single player's) board in the window.
      *
-     * @param boardState: The string representation of the board state.
+     * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
-        // FIXME Task 6: implement the state viewer
+        CatanDiceExtra.loadBoard(boardState,board);
+        for(Piece p : board.settlements)
+        {
+            p.updatePiece();
+        }
+        for(Piece p : board.knights)
+        {
+            p.updatePiece();
+        }
+        board.roadsMap.forEach((key,value)-> value.updatePiece());
     }
 
     /**
@@ -51,13 +65,21 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Board State Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
+        //Controls
         root.getChildren().add(controls);
-
+        //Hex Tiles
+        root.getChildren().add(board.hexPlate);
+        root.getChildren().add(board.settlementLayer);
+        root.getChildren().add(board.castleLayer);
+        root.getChildren().add(board.knightLayer);
+        root.getChildren().add(board.roadLayer);
         makeControls();
 
         primaryStage.setScene(scene);
