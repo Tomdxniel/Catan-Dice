@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6c27ce0c-ffee-4b70-8bad-204244fb1a2a" name="Changes" comment="Completed longest road and largest Army">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-    </list>
+    <list default="true" id="6c27ce0c-ffee-4b70-8bad-204244fb1a2a" name="Changes" comment="Refined isBoardStateWellFormed() so it catches all but 1 test case" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,7 +37,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Viewer">
+  <component name="RunManager" selected="JUnit.Task 8a longestRoad">
     <configuration name="Hex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.Hex" />
       <module name="comp1140-ass2" />
@@ -120,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1662079338076</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Refined isBoardStateWellFormed() so it catches all but 1 test case">
+      <created>1662139594948</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1662139594948</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -176,6 +178,7 @@
     <MESSAGE value="Rewrote CatanDiceExtra so it no longer contains any static methods" />
     <MESSAGE value="Rewrote CatanDiceExtra so it no longer contains any static variables so it can become an instance class" />
     <MESSAGE value="Completed longest road and largest Army" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completed longest road and largest Army" />
+    <MESSAGE value="Refined isBoardStateWellFormed() so it catches all but 1 test case" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refined isBoardStateWellFormed() so it catches all but 1 test case" />
   </component>
 </project>
