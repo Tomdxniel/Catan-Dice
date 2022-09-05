@@ -166,11 +166,6 @@ public class CatanDiceExtra {
                 index++;
 
                 board.players[i].score = Integer.parseInt(boardState.substring(index, index + 2));
-                //Scores cant be greater than 10
-                if(board.players[i].score > 10)
-                {
-                    return false;
-                }
                 //2 winners cant exist
                 if(board.players[i].score == 10)
                 {
