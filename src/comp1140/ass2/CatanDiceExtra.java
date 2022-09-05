@@ -11,7 +11,6 @@ public class CatanDiceExtra {
      */
     public static boolean loadBoard(String boardState,Board board)
     {
-    //FIXME is this board state not well formed because the resources are out of ordrr"X31ommlgWJ09K07K16R0526R0820R1424T11XK03K13K19R0437R2533R3740S03S24S32T10T20T35T43W09RX10A"))
         int index = 0;
         boolean winner = false;
         boolean hasLongestRoad = false;
@@ -180,6 +179,11 @@ public class CatanDiceExtra {
                         return false;
                     }
                     winner = true;
+                }
+                //Final score always less than 13
+                if(board.players[i].score > 12)
+                {
+                    return false;
                 }
                 index += 2;
                 //FIXME Is there a more efficient way to do this without using try catch
