@@ -1,36 +1,31 @@
 package comp1140.ass2;
 
+
 public class Player {
 
     String name;
-    int score, knight;
-    String[] resource;
+    char playerID;
+    int score;
+    boolean largestArmy = false;
+    boolean longestRoad = false;
 
-    public String getName(){
-        return name;
+    Player(String playerName, char ID)
+    {
+        this.name = playerName;
+        this.playerID = ID;
     }
 
-    public int getScore(){
-        return score;
-    }
 
-    public void setScore(int score){
-        this.score = score;
-    }
 
-    public int getAvailableKnights(){
-        return knight;
-    }
 
-    public void setAvailableKnights(int knight){
-        this.knight = knight;
-    }
 
-    public String[] getAvailableResources(){
-        return resource;
-    }
-
-    public void setAvailableResources(String[] resource){
-        this.resource = resource;
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", playerID=" + playerID +
+                ", score=" + score +
+                '}';
     }
 }
+
