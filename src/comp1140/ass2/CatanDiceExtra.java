@@ -5,7 +5,6 @@ public class CatanDiceExtra {
     public static final int playerCount = 2;
 
 
-
     /*
     Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
     then does checks to see if boardstate is valid
@@ -13,13 +12,15 @@ public class CatanDiceExtra {
     public static boolean loadBoard(String boardState,Board board)
     {
         int index = 0;
+        boolean winner = false;
+        boolean hasLongestRoad = false;
+        boolean hasLargestArmy = false;
         for(int i = 0; i < playerCount; i++)
         {
             board.players[i] = new Player(names[i],"WXYZ".charAt(i));
         }
         board.resources = new ResourceType[6];
 
-        String resourceString = "bglmow";
         //FIXME do I have to be careful of attacks such as loading a half state that errors out then loading a full state
         //FIXME are we supposed to have definitions of @param and @return for each method we create
         try {
@@ -36,16 +37,49 @@ public class CatanDiceExtra {
                 return false;
             }
             index++;
-            board.numDice = Integer.parseInt(boardState.substring(index, index + 1));
+            if("03456".contains(boardState.substring(index, index + 1)))
+            {
+                board.numDice = Integer.parseInt(boardState.substring(index, index + 1));
+                if('0' == boardState.charAt(index))
+                {
+                    board.setupPhase = true;
+                }
+            }
+            else
+            {
+                return false;
+            }
             index++;
+            if("0123".contains(boardState.substring(index, index + 1)))
+            {
+                board.numDice = Integer.parseInt(boardState.substring(index, index + 1));
+                if('0' == boardState.charAt(index) && !board.setupPhase)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
             board.rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
             index++;
+            //FIXME is testing whether resources are in alphanumeric order required
+
+            char prevChar = '\u0000';
             for(int i = 0; i < 6; i++)
             {
-                if(resourceString.indexOf(boardState.charAt(index)) < 0)
+                if( "bglmow".indexOf(boardState.charAt(index)) < 0 || board.setupPhase)
                 {
                     break;
                 }
+                //Testing whether resources are in order
+                if(prevChar != '\u0000' && (int)prevChar > (int) boardState.charAt(index))
+                {
+                    return false;
+                }
+                prevChar = boardState.charAt(index);
+
                 board.resources[i] = ResourceType.fromChar(boardState.charAt(index));
                 index++;
             }
@@ -55,7 +89,7 @@ public class CatanDiceExtra {
                 //[ID]
 
                 //Make sure first Player is W next player is X
-                if(!("WX".charAt(i) == boardState.charAt(index)))
+                if(!("WXYZ".charAt(i) == boardState.charAt(index)))
                 {
                     return false;
                 }
@@ -66,12 +100,10 @@ public class CatanDiceExtra {
                     index++;
                     pos = (int) boardState.charAt(index) - 48;
                     //FIXME Is referencing a variable of player1 directly and not using a function of player one bad practice
-                    if(board.castles[pos].owner != null)
+                    if(board.castles[pos].owner == null)
                     {
-                        //Castles of pos1 owner is not null it means there is a double
-                        return false;
+                        board.castles[pos].owner = board.players[i];
                     }
-                    board.castles[pos].owner = board.players[i];
                     index++;
                 }
 
@@ -79,33 +111,30 @@ public class CatanDiceExtra {
                 while (boardState.charAt(index) == 'J' || boardState.charAt(index) == 'K') {
                     index++;
                     pos = Integer.parseInt(boardState.substring(index, index + 2));
-                    if (board.knights[pos].owner != null) {
-
-                        return false;
+                    if (board.knights[pos].owner == null) {
+                        board.knights[pos].type = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
+                        board.knights[pos].owner = board.players[i];
                     }
-                    board.knights[pos].type = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
-                    board.knights[pos].owner = board.players[i];
                     index += 2;
                 }
 
                 //Road
+                //FIXME Why is road R0440 valid?
                 while (boardState.charAt(index) == 'R') {
                     index++;
                     pos = Integer.parseInt(boardState.substring(index, index + 4));
-                    if(board.roadsMap.containsKey(pos))
-                    {
-                        if(board.roadsMap.get(pos).owner != null)
-                        {
-                            return false;
-                        }
+                    if(pos%100 < 54 && pos/100 < 54 && pos/100 < pos%100) {
+                        if (board.roadsMap.containsKey(pos)) {
+                            if (board.roadsMap.get(pos).owner == null) {
+                                board.roadsMap.get(pos).owner = board.players[i];
+                            }
 
-                        board.roadsMap.get(pos).owner = board.players[i];
+                        }
                     }
                     else
                     {
                         return false;
                     }
-
                     //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
                     index += 4;
 
@@ -116,11 +145,10 @@ public class CatanDiceExtra {
                     index++;
                     pos = Integer.parseInt(boardState.substring(index, index + 2));
                     //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
-                    if (board.settlements[pos].owner != null) {
-                        return false;
+                    if (board.settlements[pos].owner == null) {
+                        board.settlements[pos].type = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
+                        board.settlements[pos].owner = board.players[i];;
                     }
-                    board.settlements[pos].type = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
-                    board.settlements[pos].owner = board.players[i];
                     index += 2;
                 }
 
@@ -138,20 +166,46 @@ public class CatanDiceExtra {
                 index++;
 
                 board.players[i].score = Integer.parseInt(boardState.substring(index, index + 2));
+                //2 winners cant exist
+                if(board.players[i].score >= 10)
+                {
+                    if(winner)
+                    {
+                        return false;
+                    }
+                    winner = true;
+                }
+                //Final score always less than 13
+                if(board.players[i].score > 12)
+                {
+                    return false;
+                }
                 index += 2;
-
                 //FIXME Is there a more efficient way to do this without using try catch
                 try{
                     if(boardState.charAt(index) == 'R')
                     {
+                        //Duplicate  of longestRoad
+                        if(hasLongestRoad)
+                        {
+                            return false;
+                        }
+                        hasLongestRoad = true;
                         board.players[i].longestRoad = true;
                         index++;
                     }
 
                     if(boardState.charAt(index) == 'A'){
+                        //Duplicate  of largestArmy
+                        if(hasLargestArmy)
+                        {
+                            return false;
+                        }
+                        hasLargestArmy = true;
                         board.players[i].largestArmy = true;
                         index++;
                     }
+
                 }
                 catch (StringIndexOutOfBoundsException e)
                 {
@@ -159,6 +213,13 @@ public class CatanDiceExtra {
                 }
 
             }
+            //Check if no extra characters on end
+            if(boardState.length() != index)
+            {
+                return false;
+            }
+
+
 
         }
         catch (Exception e)
@@ -186,7 +247,6 @@ public class CatanDiceExtra {
      */
 
     public static boolean isBoardStateWellFormed(String boardState) {
-
         Board board = new Board(700,1200);
         return loadBoard(boardState, board);
     }

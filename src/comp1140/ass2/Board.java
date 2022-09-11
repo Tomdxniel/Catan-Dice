@@ -37,7 +37,7 @@ public class Board {
     public Group settlementLayer = new Group();
     public Group roadLayer = new Group();
 
-//FIXME whats the difference between map and hashMap
+    //FIXME whats the difference between map and hashMap
     public HashMap<Integer,Piece> roadsMap = new HashMap<>();
     //FIXME are constants all caps
     //FIXME How do you replace all of a variable with the same name with a different name
