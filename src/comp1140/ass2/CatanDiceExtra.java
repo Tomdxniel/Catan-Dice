@@ -1,4 +1,5 @@
 package comp1140.ass2;
+import java.sql.SQLOutput;
 import java.util.*;
 public class CatanDiceExtra {
     private static final String[] names = {"Sam","Jim","Eliz","Tom"};
@@ -147,7 +148,7 @@ public class CatanDiceExtra {
                     //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
                     if (board.settlements[pos].owner == null) {
                         board.settlements[pos].type = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
-                        board.settlements[pos].owner = board.players[i];;
+                        board.settlements[pos].owner = board.players[i];
                     }
                     index += 2;
                 }
@@ -368,6 +369,95 @@ public class CatanDiceExtra {
      */
     public static boolean isActionWellFormed(String action) {
         // FIXME: Task 4
+        boolean flag = false;
+        String resources = "bglmow";
+
+        if (action.length() < 4) return false;
+
+        if (action.substring(0,4).compareTo("keep") == 0){
+
+            if (action.length() == 4) return true;
+
+            char[] sort = action.substring(4).toCharArray();
+            char[] res = action.substring(4).toCharArray();
+            Arrays.sort(sort);
+
+            if (Arrays.compare(sort, res) != 0){
+                return false;
+            }
+
+            for (int i = 4; i < action.length(); i++){
+                char c = action.charAt(i);
+                int index = resources.indexOf(c);
+                if (index == -1) return false;
+            }
+
+            return true;
+
+        } else if (action.substring(0, 5).compareTo("build") == 0){
+
+            char struct = action.charAt(5);
+            if (struct == 'R'){
+
+                if (action.length() != 10) return false;
+
+                int fir = Integer.parseInt(action.substring(6,8));
+                int sec = Integer.parseInt(action.substring(8,10));
+
+                return (fir < sec && fir >= 0 && sec <= 53);
+
+
+            } else if (struct == 'C'){
+
+                if (action.length() != 7) return false;
+                // 0, 1, 2, 3
+                int n = action.charAt(6)-48;
+                return (n <= 3);
+
+            } else if (struct == 'S' || struct == 'T') {
+
+                if (action.length() != 8) return false;
+                // 00 - 53
+                int n = Integer.parseInt(action.substring(6, 8));
+                return (n >= 0 && n <= 53);
+
+
+            } else if (struct == 'K'){
+
+                if (action.length() != 8) return false;
+                // 00 - 19
+                int n = Integer.parseInt(action.substring(6,8));
+                return (n >= 0 && n <= 19);
+
+            }
+
+        }else if (action.substring(0,5).compareTo("trade") == 0){
+
+            char[] sort = action.substring(5).toCharArray();
+            char[] res = action.substring(5).toCharArray();
+            Arrays.sort(sort);
+
+            if (Arrays.compare(sort, res) != 0){
+                return false;
+            }
+
+            for (int i = 5; i < action.length(); i++){
+                char c = action.charAt(i);
+                if (c == 'm') return false;
+                if (resources.indexOf(c) == -1) return false;
+            }
+
+            return true;
+
+        } else if (action.substring(0,4).compareTo("swap")== 0){
+
+            if (action.length() != 6) return false;
+
+            char in = action.charAt(4);
+            char out = action.charAt(5);
+
+            return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
+        }
 	    return false;
     }
 
@@ -382,7 +472,17 @@ public class CatanDiceExtra {
      */
     public static String rollDice(int numOfDice) {
         // FIXME: Task 5
-        return "";
+        Random rand = new Random();
+        char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
+        char[] output = new char[numOfDice];
+
+        for (int i = 0; i < numOfDice; i++){
+            output[i] = resources[rand.nextInt(6)];
+        }
+
+        Arrays.sort(output);
+
+        return new String(output);
     }
 
     /**
