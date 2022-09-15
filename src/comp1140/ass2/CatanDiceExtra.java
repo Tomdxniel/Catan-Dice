@@ -472,7 +472,17 @@ public class CatanDiceExtra {
      */
     public static String rollDice(int numOfDice) {
         // FIXME: Task 5
-        return "";
+        Random rand = new Random();
+        char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
+        char[] output = new char[numOfDice];
+
+        for (int i = 0; i < numOfDice; i++){
+            output[i] = resources[rand.nextInt(6)];
+        }
+
+        Arrays.sort(output);
+
+        return new String(output);
     }
 
     /**
