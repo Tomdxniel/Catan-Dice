@@ -128,7 +128,7 @@ public class ExampleGames {
     };
 
     /**
-     * Action States
+     * comp1140.ass2.Action States
      */
     public static final String[] WELL_FORMED_ACTION_STATE = {
             "keep",

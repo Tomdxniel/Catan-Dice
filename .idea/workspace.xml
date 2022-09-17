@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Task 4 is done">
-      <change afterPath="$PROJECT_DIR$/src/Action.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/comp1140/ass2/ActionType.java" afterDir="false" />
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class.">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/PieceType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/PieceType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/ActionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/ActionType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/PieceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/PieceType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/ResourceType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/comp1140/ass2/ExampleGames.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/comp1140/ass2/ExampleGames.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,15 +40,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Sam",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="JUnit.Task 3 isBoardStateWellFormed" />
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="comp1140.ass2" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.Task 4 isActionWellFormed" />
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -66,7 +71,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663121546041</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class.">
+      <created>1663409939301</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663409939301</updated>
+    </task>
+    <task id="LOCAL-00003" summary="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class.">
+      <created>1663409967591</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663409967591</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -82,6 +101,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Task 4 is done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Task 4 is done" />
+    <MESSAGE value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
+    <option name="LAST_COMMIT_MESSAGE" value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
   </component>
 </project>

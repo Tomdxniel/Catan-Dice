@@ -36,11 +36,136 @@ public class CatanDiceExtra {
 
 
 
-    //Loads action into aciton class
-    /*public static Action loadAction(String action)
+    //Loads action into action class
+    public static boolean loadAction(String actionString, Action action)
     {
+        //Check if action has type
+        if(actionString.length() < 4) return false;
+        String type;
+        String actionSubject;
+        if(actionString.charAt(3) == 'p')
+        {
+            actionSubject = actionString.substring(4);
+            type = actionString.substring(0,4);
+        }
+        else
+        {
+            actionSubject = actionString.substring(5);
+            type = actionString.substring(0,5);
+        }
+        ActionType actionType = ActionType.fromString(type);
+        if(actionType == null) return false;
+        int pos1;
+        int pos2;
+        char lastChar =' ';
+        int[] resourceArray = new int[] {0,0,0,0,0,0};
+        Piece piece;
+        switch (actionType)
+        {
+            case KEEP -> {
+                if (actionSubject.length() > 6) return false;
+                action.type = ActionType.KEEP;
+                if(actionSubject.length() > 0)
+                {
+                    lastChar = actionSubject.charAt(0);
+                }
+                for(char c : actionSubject.toCharArray())
+                {
+                    //If resources are not in order
+                    if((int) lastChar > (int) c)
+                    {
+                        return false;
+                    }
+                    //if resources is invalid
+                    if(Board.resourceArray.indexOf(c) < 0)
+                    {
+                        return false;
+                    }
+                    resourceArray[Board.resourceArray.indexOf(c)] ++;
+                    lastChar = c;
+                }
+                action.resourceArray = resourceArray;
+            }
+            case BUILD -> {
 
-    }*/
+                action.type = ActionType.BUILD;
+                switch (actionSubject.charAt(0))
+                {
+                    case 'R' -> {
+                        action.pieceType = PieceType.ROAD;
+                        if(actionSubject.length()!= 5)
+                        {
+                            return false;
+                        }
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        pos2 = Integer.parseInt(actionSubject.substring(3,5));
+                        if(!(pos1 < pos2 && pos1 >=0 && pos2 < 54))
+                        {
+                            return false;
+                        }
+                        action.pieceIndex = Integer.parseInt(actionSubject.substring(1,5));
+                    }
+                    case  'C' -> {
+                        action.pieceType = PieceType.CASTLE;
+                        if(actionSubject.length() != 2) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,2));
+                        if(!(pos1 >= 0 && pos1 < 4)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    case 'S' -> {
+                        action.pieceType = PieceType.SETTLEMENT;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 54)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    case 'T' -> {
+                        action.pieceType = PieceType.CITY;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 54)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    //Why K for knight
+                    case 'K' -> {
+                        action.pieceType = PieceType.KNIGHT;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 20)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    default ->
+                    {
+                        return false;
+                    }
+                }
+            }
+            case TRADE -> {
+                action.type = ActionType.TRADE;
+                lastChar = actionSubject.charAt(0);
+                for(char r : actionSubject.toCharArray())
+                {
+                    if((int) lastChar > r) return false;
+                    if(r == 'm') return false;
+                    if(Board.resourceArray.indexOf(r) == -1) return false;
+                    resourceArray[Board.resourceArray.indexOf(r)]++;
+                    resourceArray[3] -= 2;
+                }
+                action.resourceArray = resourceArray;
+            }
+            case SWAP -> {
+
+                action.type = ActionType.SWAP;
+                if (actionSubject.length() != 2) return false;
+                if(Board.resourceArray.indexOf(actionSubject.charAt(0)) == -1) return false;
+                if(Board.resourceArray.indexOf(actionSubject.charAt(1)) == -1) return false;
+                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(0))] --;
+                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(1))] ++;
+                action.resourceArray = resourceArray;
+            }
+        }
+        return true;
+    }
 
 
 
@@ -58,7 +183,6 @@ public class CatanDiceExtra {
      * a player action, false otherwise.
      */
     public static boolean isActionWellFormed(String action) {
-        // FIXME: Task 4
         boolean flag = false;
         String resources = "bglmow";
 
@@ -149,6 +273,7 @@ public class CatanDiceExtra {
             return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
         }
 	    return false;
+
     }
 
     /**
@@ -182,7 +307,7 @@ public class CatanDiceExtra {
      *
      * A. Roll Phase (keep action)
      * 1. A keep action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "keep[Resources]", and the
+     * - comp1140.ass2.Action follows the correct format : "keep[Resources]", and the
      *   current player has the resources specified.
      * - [Rolls Done] is less than 3
      *
@@ -190,7 +315,7 @@ public class CatanDiceExtra {
      * B. Build Phase (build, trade, and swap actions)
      *
      * 1. A build action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "build[Structure Identifier]"
+     * - comp1140.ass2.Action follows the correct format : "build[Structure Identifier]"
      * - The current player has sufficient resources available for building
      *   the structure.
      * - The structure satisfies the build constraints (is connected to the
@@ -198,12 +323,12 @@ public class CatanDiceExtra {
      * - See details of the cost of buildable structure in README.md.
      *
      * 2. A trade action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "trade[Resources]"
+     * - comp1140.ass2.Action follows the correct format : "trade[Resources]"
      * - The current player has sufficient resources available to pay for
      *   the trade.
      *
      * 3. A swap action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "swap[Resource Out][Resource In]"
+     * - comp1140.ass2.Action follows the correct format : "swap[Resource Out][Resource In]"
      * - The current player has sufficient resources available to swap out.
      * - The current player has an unused knight (resource joker) on the
      *   board which allows to swap for the desired resource.

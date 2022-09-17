@@ -345,7 +345,7 @@ title, while `X10RA` means player `X` has 10 points (they've won!) and has the
 both the longest road and largest army titles. Note that when a player holds
 both titles, we require `R` to come before `A`. 
 
-## Action
+## comp1140.ass2.Action
 
 We consider each turn in two phases. First is the roll phase, where the
 current player is deciding what dice to keep and re-rolling the others. After
