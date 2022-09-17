@@ -8,7 +8,7 @@ public class Piece extends Circle {
     public Player owner;
     public PieceType type;
     //Player color, Dark for usable piece light for un usable
-    private Color[] playerColor = {Color.GREEN,Color.LIGHTGREEN,//Player1
+    private static final Color[] playerColor = {Color.GREEN,Color.LIGHTGREEN,//Player1
                                    Color.BLUE,Color.LIGHTBLUE,//Player2
                                    Color.PINK,Color.LIGHTPINK,//Player3
                                    Color.YELLOW,Color.LIGHTYELLOW};//Player4
@@ -92,5 +92,18 @@ public class Piece extends Circle {
         this.type = type;
     }
 
+    @Override
+    public String toString()
+    {
+        return switch (this.type) {
+            case KNIGHT -> "J" + String.format("%2d",this.boardIndex).replace(' ','0');
+            case USEDKNIGHT -> "K" + String.format("%2d",this.boardIndex).replace(' ','0');
+            case SETTLEMENT -> "S" + String.format("%2d",this.boardIndex).replace(' ','0');
+            case CITY -> "T" + String.format("%2d",this.boardIndex).replace(' ','0');
+            case CASTLE -> "C" + this.boardIndex;
+            default -> null;
+        };
+
+    }
 
 }
