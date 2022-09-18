@@ -33,7 +33,7 @@ public class Viewer extends Application {
      * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
-        CatanDiceExtra.loadBoard(boardState,board);
+        board.loadBoard(boardState);
         for(Piece p : board.settlements)
         {
             p.updatePiece();
