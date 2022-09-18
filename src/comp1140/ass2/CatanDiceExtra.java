@@ -186,7 +186,7 @@ public class CatanDiceExtra {
                 try{
                     if(boardState.charAt(index) == 'R')
                     {
-                        //Duplicate  of longestRoad
+                        //Duplicate of longestRoad
                         if(hasLongestRoad)
                         {
                             return false;
@@ -511,7 +511,7 @@ public class CatanDiceExtra {
      * - Action follows the correct format : "trade[Resources]"
      * - The current player has sufficient resources available to pay for
      *   the trade.
-     *
+     * 
      * 3. A swap action is valid if it satisfies the following conditions:
      * - Action follows the correct format : "swap[Resource Out][Resource In]"
      * - The current player has sufficient resources available to swap out.
@@ -522,10 +522,139 @@ public class CatanDiceExtra {
      * @return true iff the action is executable, false otherwise.
      */
     public static boolean isActionValid(String boardState, String action) {
-        // FIXME: Task 7
-        return false;
+        boolean result = false;
+        boolean p1 = (boardState.indexOf("W") == 0);
+        String[] inland = new String[]{"08","12","17","22","28","34","39","44","40","45","41",
+                                        "36","31","25","19","14","09","13","18","23","29","35","30","24"};
+        String[] buildings = new String[]{"00","01","02","07","08","09","10","16","17","18","19","20","33",
+                                            "34","35","36","37","43","44","45","46","51","52","53"};
+        String[] woodKnights = new String[]{"K05","K08","K15","J09","J10","J05","J08","J15","K09","K10"};
+        String[] woolKnights = new String[]{"K06","K00","K19","K13","J09","J10","J06","J00","J19","J13","K09","K10"};
+        String[] oreKnights = new String[]{"K02","K03","K16","K17","J09","J10","J02","J03","J16","J17","K09","K10"};
+        String[] grainKnights = new String[]{"K01","K07","K12","K18","J09","J10","J01","J07","J12","J18","K09","K10"};
+        String[] brickKnights = new String[]{"K04","K11","K14","J09","J10","J04","J11","J14","K09","K10"};
+        String[] jokerKnights = new String[]{"J09","J10","K09","K10"};
+        String wString = boardState.substring(4,boardState.indexOf("X", 1));
+        String xString = boardState.substring(boardState.indexOf("X")+1);
+        if (boardState.substring(1,3).compareTo("00") == 0) {
+            if (action.substring(0, 6).compareTo("buildR") == 0){
+                if (boardState.contains(action.substring(6,8)) || (boardState.contains(action.substring(8,10)))){
+                } else {
+                    int cor1 = Integer.parseInt(action.substring(6,8));
+                    int cor2 = Integer.parseInt(action.substring(8,10));
+                    List<String> nameList = new ArrayList<>(Arrays.asList(inland));
+                    if (cor2 - cor1 <= 6 && cor2 - cor1 > 2 ){
+                        if (nameList.contains(action.substring(6,8)) || nameList.contains(action.substring(8,10))){
+                        } else{
+                         result = true;
+                        }
+                    }
+                }
+            }
+        } else {
+            char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
+            if (action.substring(0, 4).compareTo("keep") == 0 && Integer.parseInt(String.valueOf(boardState.charAt(2))) < 3) {
+                char[] req = action.substring(4).toCharArray();
+                int count = 0;
+                int start = 0;
+                for (int i = 0; i < resources.length; i++) {
+                    if (action.indexOf(resources[i], start) != -1) {
+                        count++;
+                        start = action.indexOf(resources[i]) + 1;
+                    }
+                }
+                result = count >= req.length;
+            } else if (action.substring(0, 5).compareTo("build") == 0) {
+                if (action.charAt(5) == 'R') {
+                    int cor1 = Integer.parseInt(action.substring(6,8));
+                    int cor2 = Integer.parseInt(action.substring(8,10));
+                    boolean conditions = cor2 - cor1 <= 6 && cor2 - cor1 > 2 && canBuild(boardState, "bl");
+                    List<String> buildList = new ArrayList<>(Arrays.asList(buildings));
+                    if (p1) {
+                        if (wString.contains(action.substring(6, 8)) || (wString.contains(action.substring(8, 10)))){
+                        if (buildList.contains(action.substring(6, 8))) {
+                            if (wString.contains(action.substring(6, 8)) && ! wString.contains(action.substring(8, 10))) {
+                                result = conditions && (wString.contains("S" + action.substring(6, 8)) || wString.contains("T" + action.substring(6, 8)));
+                            } else result = conditions;
+                        } else if (buildList.contains(action.substring(8, 10))) {
+                            if (wString.contains(action.substring(8, 10)) && ! wString.contains(action.substring(6, 8))) {
+                                result = conditions && (wString.contains("S" + action.substring(8, 10)) || wString.contains("T" + action.substring(8, 10)));
+                            } else result = conditions;
+                        } else result = conditions;
+                    }} else if (xString.contains(action.substring(6, 8)) || (xString.contains(action.substring(8, 10)))) {
+                        if (buildList.contains(action.substring(6, 8))) {
+                            if (xString.contains(action.substring(6, 8)) && ! xString.contains(action.substring(8, 10))) {
+                                result = conditions && (xString.contains("S" + action.substring(6, 8)) || xString.contains("T" + action.substring(6, 8)));
+                            } else result = conditions;
+                        } else if (buildList.contains(action.substring(8, 10))) {
+                            if (xString.contains(action.substring(8, 10)) && ! xString.contains(action.substring(6, 8))) {
+                                result = conditions && (xString.contains("S" + action.substring(8, 10)) || xString.contains("T" + action.substring(8, 10)));
+                            } else result =  conditions;
+                    } else result = conditions;
+                }}
+                if (action.charAt(5) == 'K') {
+                    result = canBuild(boardState, "gow");
+                }
+                if (action.charAt(5) == 'T') {
+                    result = canBuild(boardState, "ggooo");
+                }
+                if (action.charAt(5) == 'S') {
+                    result = canBuild(boardState, "bglw");
+                }
+            } else if (action.substring(0, 5).compareTo("trade") == 0) {
+                result = canBuild(boardState, "mm".repeat(action.length() - 5));
+
+            } else if (action.substring(0, 4).compareTo("swap") == 0) {
+                boolean valid = false;
+                char c = action.charAt(5);
+                if (p1) {
+                    switch (c) {
+                        case 'b' ->  valid = hasKnight(wString,brickKnights) ;
+                        case 'l' ->  valid = hasKnight(wString,woodKnights);
+                        case 'g' ->  valid = hasKnight(wString,grainKnights);
+                        case 'o' ->  valid = hasKnight(wString,oreKnights);
+                        case 'w' ->  valid = hasKnight(wString,woolKnights);
+                        case 'm' ->  valid = hasKnight(wString,jokerKnights);
+                    }
+                } else {
+                    switch (c) {
+                        case 'b' ->  valid = hasKnight(xString,brickKnights) ;
+                        case 'l' ->  valid = hasKnight(xString,woodKnights);
+                        case 'g' ->  valid = hasKnight(xString,grainKnights);
+                        case 'o' ->  valid = hasKnight(xString,oreKnights);
+                        case 'w' ->  valid = hasKnight(xString,woolKnights);
+                        case 'm' ->  valid = hasKnight(xString,jokerKnights);
+                }}
+                result = valid && canBuild(boardState, String.valueOf(action.charAt(4)));
+            }
+        }return result;
+    }
+    public static boolean canBuild(String boardState, String needs) {
+        boolean buildable;
+        char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
+        char[] req = needs.toCharArray();
+        int count = 0;
+        int start = 0;
+        for (int i = 0; i < resources.length; i++){
+            if (needs.indexOf(resources[i], start) != -1){
+                count++;
+                start = needs.indexOf(resources[i])+1;
+            }
+        }
+        buildable = count >= req.length;
+        return buildable;
     }
 
+    public static boolean hasKnight(String string, String[] knights) {
+        boolean found = false;
+        for (String knight : knights) {
+            if (string.contains(knight)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
     /**
      * Return an integer array containing the length of the longest contiguous
      * road owned by each player.
@@ -608,7 +737,7 @@ public class CatanDiceExtra {
             for(Piece p : board.knights)
             {
                 //FIXME does the first statement always process before the second one? if owner is null indexOf will give an error
-                if(p.owner != null && "WXYZ".indexOf(p.owner.playerID) == i)
+                 if(p.owner != null && "WXYZ".indexOf(p.owner.playerID) == i)
                 {
                     output[i] ++;
                 }
