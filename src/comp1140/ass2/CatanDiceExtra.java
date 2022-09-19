@@ -341,7 +341,7 @@ public class CatanDiceExtra {
      * @param action: string representation of the player action.
      * @return true iff the action is executable, false otherwise.
      */
-    public static boolean isActionValid(String boardState, String actionString) {
+    public static boolean alternativeActionValid(String boardState, String actionString) {
         Board board = new Board(0,0);
         //Check if board string is wellFormed
         if(!board.loadBoard(boardState)) return false;
