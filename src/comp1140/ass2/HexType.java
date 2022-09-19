@@ -1,5 +1,8 @@
 package comp1140.ass2;
 
+import com.sun.source.tree.CaseTree;
+import javafx.scene.paint.Color;
+
 public enum HexType {
     LUMBER, WOOL, GRAIN, ORE, BRICK, WILD
     ;
@@ -14,5 +17,19 @@ public enum HexType {
             case 'z' -> WILD;
             default -> null;
         };
+    }
+    public static Color toColor(HexType type)
+    {
+        return switch (type)
+            {
+                case BRICK -> Color.BROWN;
+                case GRAIN -> Color.YELLOW;
+                case LUMBER -> Color.DARKGREEN;
+                case ORE -> Color.SILVER;
+                case WOOL -> Color.GREENYELLOW;
+                case WILD -> Color.LIGHTYELLOW;
+            };
+
+
     }
 }

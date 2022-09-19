@@ -22,7 +22,7 @@ public class Piece extends Polygon {
         this.setLayoutX(x);
         this.setLayoutY(y);
         updatePiece();
-        this.setFill(Color.WHITE);
+        this.setFill(Color.LIGHTGRAY);
 
     }
     public Piece(int boardIndex, PieceType type, double startX, double startY, double endX, double endY)
@@ -34,11 +34,12 @@ public class Piece extends Polygon {
             case ROAD -> drawRoad(startX,startY,endX,endY);
         }
 
-        this.setFill(Color.WHITE);
+        this.setFill(Color.LIGHTGRAY);
 
     }
 
     public void updatePiece(){
+        this.setFill(Color.LIGHTGRAY);
         if(owner != null)
         {
             if(type == PieceType.USEDKNIGHT)
@@ -66,7 +67,8 @@ public class Piece extends Polygon {
     }
 
     public void drawCity(){
-        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
+        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,0.0,-15.0,10.0,-10.0};
+        this.getPoints().clear();
         this.getPoints().addAll(points);
     }
 
@@ -75,8 +77,9 @@ public class Piece extends Polygon {
         this.getPoints().addAll(points);
     }
 
-    public void drawCastle(){
-
+    public void drawCastle(){;
+        Double[] points = new Double[]{15.0,15.0,-15.0,15.0,-15.0,-15.0,0.0,-30.0,15.0,-15.0};
+        this.getPoints().addAll(points);
     }
 
     public void drawRoad(double startX,double startY, double endX, double endY)
@@ -108,13 +111,6 @@ public class Piece extends Polygon {
         this.getPoints().addAll(points);
     }
 
-    public PieceType getType() {
-        return type;
-    }
-
-    public void setType(PieceType type) {
-        this.type = type;
-    }
 
     @Override
     public String toString()

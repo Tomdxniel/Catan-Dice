@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Viewer extends Application {
@@ -33,12 +34,17 @@ public class Viewer extends Application {
      * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
+        newBoard();
         board.loadBoard(boardState);
         for(Piece p : board.settlements)
         {
             p.updatePiece();
         }
         for(Piece p : board.knights)
+        {
+            p.updatePiece();
+        }
+        for(Piece p : board.castles)
         {
             p.updatePiece();
         }
@@ -65,7 +71,22 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
+    private void newBoard(){
+        //Hex Tiles
+        root.getChildren().remove(board.hexPlate);
+        root.getChildren().remove(board.settlementLayer);
+        root.getChildren().remove(board.castleLayer);
+        root.getChildren().remove(board.knightLayer);
+        root.getChildren().remove(board.roadLayer);
 
+        board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
+
+        root.getChildren().add(board.hexPlate);
+        root.getChildren().add(board.settlementLayer);
+        root.getChildren().add(board.castleLayer);
+        root.getChildren().add(board.knightLayer);
+        root.getChildren().add(board.roadLayer);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -76,7 +97,7 @@ public class Viewer extends Application {
         root.getChildren().add(controls);
         //Hex Tiles
         root.getChildren().add(board.hexPlate);
-        //root.getChildren().add(board.settlementLayer);
+        root.getChildren().add(board.settlementLayer);
         root.getChildren().add(board.castleLayer);
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);

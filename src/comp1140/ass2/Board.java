@@ -112,7 +112,10 @@ public class Board {
     public static final String resourceArray = "bglmow";
     public static final String playerIDArray = "WXYZ";
 
+    public double BOARD_HEIGHT,BOARD_WIDTH;
     public Board(double VIEWER_HEIGHT, double VIEWER_WIDTH){
+        this.BOARD_HEIGHT = VIEWER_HEIGHT;
+        this.BOARD_WIDTH = VIEWER_WIDTH;
         Hex.setUpHex(hexSize,VIEWER_HEIGHT,VIEWER_WIDTH);
         this.createHexes();
     }
@@ -146,7 +149,7 @@ public class Board {
                     outLineHex.setFill(Color.BLACK);
                     hexPlate.getChildren().add(outLineHex);
                     //Main hexes
-                    hexes[r+2][q+2] = new Hex(q,r,null,hexSize*0.95);
+                    hexes[r+2][q+2] = new Hex(q,r,hexTypeArray[knightIndex],hexSize*0.95);
                     hexPlate.getChildren().add(hexes[r+2][q+2]);
                     x = hexes[r+2][q+2].getLayoutX();
                     y = hexes[r+2][q+2].getLayoutY();
@@ -198,7 +201,6 @@ public class Board {
 
                     pieceIndex += 6;
                     hexes[r+2][q+2].index = knightIndex;
-                    hexes[r+2][q+2].type = hexTypeArray[knightIndex];
                     if(knightIndex != 9)//The two knights at Pos 9 & 10 are handled separately
                     {
 
@@ -227,11 +229,11 @@ public class Board {
             }
 
         }
-        //FIXME incomplete implementation of castle
-        for(int i = 0; i < 4; i++)
-        {
-            castles[i] = new Piece(i,PieceType.CASTLE,0,0);
-        }
+        castles[0] = new Piece(0,PieceType.CASTLE,BOARD_WIDTH/10,BOARD_HEIGHT/10);
+        castles[1] = new Piece(1,PieceType.CASTLE,BOARD_WIDTH -BOARD_WIDTH/10,BOARD_HEIGHT/10);
+        castles[2] = new Piece(2,PieceType.CASTLE,BOARD_WIDTH - BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
+        castles[3] = new Piece(3,PieceType.CASTLE,BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
+        castleLayer.getChildren().addAll(castles);
 
     }
 

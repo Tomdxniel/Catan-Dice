@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
@@ -46,7 +47,11 @@ public class Hex extends Polygon {
         this.getPoints().addAll(generatePoints(size));
         this.setLayoutX(qLengthX * q + rLengthX * r + startX);
         this.setLayoutY(rLengthY * r + startY);
-        this.setFill(Board.hexColor);
+        this.setFill(Color.BLUE);
+        if(type != null)
+        {
+            this.setFill(HexType.toColor(type));
+        }
 
 
     }
