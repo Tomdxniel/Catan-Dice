@@ -2,6 +2,13 @@ package comp1140.ass2;
 import java.sql.SQLOutput;
 import java.util.*;
 public class CatanDiceExtra {
+    //Required resources to build objects
+    //Knight Road Settlement City
+    public static int[][] reqResources = {
+            {0,1,0,0,1,1},
+            {1,0,1,0,0,0,},
+            {1,1,1,0,0,1},
+            {0,2,0,0,3,0}};
 
 
     /**
@@ -20,19 +27,8 @@ public class CatanDiceExtra {
 
     public static boolean isBoardStateWellFormed(String boardState) {
         Board board = new Board(700,1200);
-        //FIXME remove when finished editing board states
-        boolean bool = board.loadBoard(boardState);
-        if(bool && !board.toString().equals(boardState))
-        {
-            System.out.println(boardState);
-            System.out.println(board.toString());
-        }
-        return  bool;
+        return  board.loadBoard(boardState);
     }
-
-
-
-
 
 
 
@@ -59,7 +55,6 @@ public class CatanDiceExtra {
         int pos2;
         char lastChar =' ';
         int[] resourceArray = new int[] {0,0,0,0,0,0};
-        Piece piece;
         switch (actionType)
         {
             case KEEP -> {
@@ -286,7 +281,6 @@ public class CatanDiceExtra {
      * 'b', 'l', 'w', 'g', 'o', 'm'.
      */
     public static String rollDice(int numOfDice) {
-        // FIXME: Task 5
         Random rand = new Random();
         char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
         char[] output = new char[numOfDice];
@@ -470,6 +464,214 @@ public class CatanDiceExtra {
             }
             return found;
         }
+
+
+        // Alternative version of is action valid that relies on Board, and action Class
+    public static boolean isActionValidAlternative(String boardState, String actionString) {
+        Board board = new Board(0,0);
+        //Check if board string is wellFormed
+        if(!board.loadBoard(boardState)) return false;
+        Action action = new Action();
+        //Check if action is wellFormed
+        if(!loadAction(actionString,action)) return false;
+        int pos1;
+        int pos2;
+
+        //SetupPhase
+        if(board.setupPhase)
+        {
+            int index;
+            int roadIndex;
+            if(action.type != ActionType.BUILD) return false;
+            if(action.pieceType != PieceType.ROAD) return false;
+            pos1 = action.pieceIndex % 100;
+            pos2 = action.pieceIndex / 100;
+
+            if(!Board.coastRoads.contains(pos1)) return false;
+            if(!Board.coastRoads.contains(pos2)) return false;
+            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1) return false;
+
+            //FIXME how do you properly wrap around
+            //Clockwise
+            index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
+            if(pos1 == 0 && pos2 == 29)
+            {
+                index = 0;
+            }
+            for(int y = 0; y < 5; y++)
+            {
+
+                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30));
+                if(!board.roadsMap.containsKey(roadIndex)) return false;
+                if(board.roadsMap.get(roadIndex).owner != null)
+                {
+                    return false;
+                }
+                index++;
+            }
+            //AntiClockwise
+            index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
+            if(pos1 == 0 && pos2 == 29)
+            {
+                index = 29;
+            }
+            index = index + 30;
+            for(int y = 0; y < 5; y++)
+            {
+                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30));
+                if(!board.roadsMap.containsKey(roadIndex)) return false;
+                if(board.roadsMap.get(roadIndex).owner != null)
+                {
+                    return false;
+                }
+                index--;
+            }
+            return true;
+
+        }
+
+        //Roll phase
+        if(board.rollsDone < 3)
+        {
+            return (action.type == ActionType.KEEP && hasMaterials(board.resources,action.resourceArray,true));
+        }
+
+        boolean flag;
+
+        //Build phase
+        switch (action.type)
+        {
+            case BUILD -> {
+                switch (action.pieceType)
+                {
+                    case CASTLE -> {
+                        flag = false;
+                        for(int i = 0; i < 6; i ++)
+                        {
+                            if(board.resources[i] > 5)
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) return false;
+                        if(board.castles[action.pieceIndex].owner != null) return false;
+                    }
+                    case KNIGHT -> {
+                        if(!hasMaterials(board.resources,reqResources[0],true)) return false;
+                        if(board.knights[action.pieceIndex].owner != null) return false;
+                        flag = false;
+                        for(Hex[] hexArray : board.hexes)
+                        {
+                            for(Hex hex : hexArray)
+                            {
+                                if(hex != null &&
+                                        (hex.index == action.pieceIndex
+                                                || (hex.index == 9 && action.pieceIndex == 10)))
+                                {
+                                    for(Piece piece : hex.settlement)
+                                    {
+                                        if(piece.owner == board.playerTurn)
+                                        {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    for(Piece road : hex.roads)
+                                    {
+                                        if(road.owner == board.playerTurn)
+                                        {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!flag) return false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    case ROAD -> {
+                        if(!hasMaterials(board.resources,reqResources[1],true)) return false;
+                        if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
+                        pos1 = action.pieceIndex % 100;
+                        pos2 = action.pieceIndex / 100;
+                        if(board.settlements[pos1].owner != null
+                                && board.settlements[pos2].owner != null) return false;
+                    }
+                    case SETTLEMENT -> {
+                        if(!hasMaterials(board.resources,reqResources[2],true)) return false;
+                        if(board.settlements[action.pieceIndex].owner != null) return false;
+                        Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
+                        flag = false;
+                        for(Piece road : roads)
+                        {
+                            pos1 = road.boardIndex % 100;
+                            pos2 = (int)road.boardIndex / 100;
+                            if(road.owner == board.playerTurn
+                                    && (pos1 == action.pieceIndex || pos2 == action.pieceIndex))
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) return false;
+                    }
+                    case CITY -> {
+                        if(!hasMaterials(board.resources,reqResources[3],true)) return false;
+                        if(board.settlements[action.pieceIndex].owner != board.playerTurn) return false;
+                    }
+                }
+
+            }
+            case TRADE -> {
+                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+            }
+            case SWAP -> {
+                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+                flag = false;
+                for(Piece knight : board.knights)
+                {
+                    if(knight.owner == board.playerTurn
+                            && knight.type == PieceType.KNIGHT
+                            && (Board.hexTypeArray[knight.boardIndex] == action.requiredType
+                            || Board.hexTypeArray[knight.boardIndex] == HexType.WILD))
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) return false;
+            }
+        }
+
+        return true;
+    }
+
+    //Returns whether the required materials are available
+    private static boolean hasMaterials(int[] available, int[] required, boolean negate)
+    {
+        if(available.length != required.length) return false;
+        if(negate)
+        {
+            for(int i = 0; i < required.length; i++)
+            {
+                required[i] = -required[i];
+            }
+        }
+        //Check player has the resources to keep
+        for(int i = 0; i < available.length; i++)
+        {
+            if(available[i] + required[i] < 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
     /**
