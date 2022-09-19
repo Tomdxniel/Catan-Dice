@@ -15,17 +15,12 @@ declaration: >-
 
 
 
-# I wish to submit the following classes as entirely my own (remove this if
-# you want to just submit methods):
-class:
-  -
-  -
 
-    # I wish to submit the following methods as entirely my own (remove this if
-  # you want to just submit classes):
+# I wish to submit the following methods as entirely my own (remove this if
+# you want to just submit classes):
 method:
-  -
-  -
+  -  isActionWellFormed(String action) in CatanDiceExtra.java
+  -  rollDice(int numOfDice) in CatanDiceExtra.java 
 
   # sign *your* name and uid here
 name: Eliz So
