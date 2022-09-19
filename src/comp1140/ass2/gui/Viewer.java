@@ -76,7 +76,7 @@ public class Viewer extends Application {
         root.getChildren().add(controls);
         //Hex Tiles
         root.getChildren().add(board.hexPlate);
-        root.getChildren().add(board.settlementLayer);
+        //root.getChildren().add(board.settlementLayer);
         root.getChildren().add(board.castleLayer);
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);

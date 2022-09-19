@@ -3,7 +3,7 @@ package comp1140.ass2;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
-public class Piece extends Circle {
+public class Piece extends Polygon {
     public int boardIndex;
     public Player owner;
     public PieceType type;
@@ -19,14 +19,11 @@ public class Piece extends Circle {
     public Piece(int boardIndex, PieceType type,double x, double y) {
         this.boardIndex = boardIndex;
         this.type = type;
-        switch(this.type)
-        {
-            case KNIGHT -> drawKnight(x,y);
-            case USEDKNIGHT -> drawKnight(x,y);
-            case SETTLEMENT -> drawSettlement(x,y);
-            case CITY -> drawCity(x,y);
-            case CASTLE -> drawCastle(x,y);
-        }
+        this.setLayoutX(x);
+        this.setLayoutY(y);
+        updatePiece();
+        this.setFill(Color.WHITE);
+
     }
     public Piece(int boardIndex, PieceType type, double startX, double startY, double endX, double endY)
     {
@@ -36,6 +33,8 @@ public class Piece extends Circle {
         {
             case ROAD -> drawRoad(startX,startY,endX,endY);
         }
+
+        this.setFill(Color.WHITE);
 
     }
 
@@ -51,38 +50,63 @@ public class Piece extends Circle {
                 this.setFill(playerColor["WXYZ".indexOf(owner.playerID)*2]);
             }
         }
+        switch(this.type)
+        {
+            case KNIGHT -> drawKnight();
+            case USEDKNIGHT -> drawKnight();
+            case SETTLEMENT -> drawSettlement();
+            case CITY -> drawCity();
+            case CASTLE -> drawCastle();
+        }
     }
 
-    public void drawKnight(double x,double y){
-        this.setRadius(10);
-        this.setLayoutX(x);
-        this.setLayoutY(y);
+    public void drawKnight(){
+        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
+        this.getPoints().addAll(points);
     }
 
-    public void drawCity(double x,double y){
-
+    public void drawCity(){
+        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
+        this.getPoints().addAll(points);
     }
 
-    public void drawSettlement(double x,double y){
-        this.setRadius(15);
-        this.setLayoutX(x);
-        this.setLayoutY(y);
-        this.setFill(Color.AQUA);
+    public void drawSettlement(){
+        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
+        this.getPoints().addAll(points);
     }
 
-    public void drawCastle(double x,double y){
+    public void drawCastle(){
 
     }
 
     public void drawRoad(double startX,double startY, double endX, double endY)
     {
-        this.setRadius(10);
+        double roadWidth = 0.03;//roadWidth is 0.1 of length
+        double roadLength = 0.3;//roadLength is 0.5 of length
+        double vecX = endX-startX;
+        double vecY = endY-startY;
+        double invecX = startY - endY;
+        double invecY = endX-startX;
+        Double[] points = new Double[]{
+                roadLength * vecX + roadWidth * invecX,roadLength * vecY + roadWidth * invecY,
+                roadLength * vecX + -roadWidth * invecX,roadLength * vecY + -roadWidth * invecY,
+                -roadLength * vecX + -roadWidth * invecX,-roadLength * vecY + -roadWidth * invecY ,
+                -roadLength * vecX + roadWidth * invecX,-roadLength * vecY + roadWidth * invecY};
+        this.getPoints().addAll(points);
         this.setLayoutX(startX + (endX-startX)/2);
         this.setLayoutY(startY + (endY-startY)/2);
-        this.setFill(Color.RED);
     }
 
-
+    public void scale(double scale)
+    {
+        Double[] points = this.getPoints().toArray(new Double[0]);
+        for(int i = 0; i < points.length; i++)
+        {
+            points[i] = points[i] * scale/100;
+        }
+        this.getPoints().clear();
+        this.getPoints().addAll(points);
+    }
 
     public PieceType getType() {
         return type;

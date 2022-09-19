@@ -24,7 +24,61 @@ public class Board {
                                                  39,44,48,51,47,43,
                                                  40,45,49,52,48,44,
                                                  41,46,50,53,49,45};
-//FIXME theres a typo in positional indexing, coordinate 50 does not exist
+    public static final HexType[] hexTypeArray = {
+            HexType.WOOL,
+            HexType.GRAIN,
+            HexType.ORE,
+            HexType.ORE,
+            HexType.BRICK,
+            HexType.LUMBER,
+            HexType.WOOL,
+            HexType.GRAIN,
+            HexType.LUMBER,
+            HexType.WILD,
+            HexType.WILD,
+            HexType.BRICK,
+            HexType.GRAIN,
+            HexType.WOOL,
+            HexType.BRICK,
+            HexType.LUMBER,
+            HexType.ORE,
+            HexType.ORE,
+            HexType.GRAIN,
+            HexType.WOOL
+    };
+    public static List<Integer> coastRoads = new ArrayList<>(Arrays.asList(
+                    00,
+                    04,
+                    01,
+                    05,
+                    02,
+                    06,
+                    10,
+                    15,
+                    20,
+                    26,
+                    32,
+                    37,
+                    42,
+                    46,
+                    50,
+                    53,
+                    49,
+                    52,
+                    48,
+                    51,
+                    47,
+                    43,
+                    38,
+                    33,
+                    27,
+                    21,
+                    16,
+                    11,
+                    07,
+                    03
+    ));
+//FIXME theres a typo in positional indexing in readme, coordinate 50 does not exist
 
     public Hex[][] hexes = new Hex[5][5];
     public Piece[] castles = new Piece[4];
@@ -51,7 +105,7 @@ public class Board {
     public Player playerTurn;
     public int numDice;
     public int rollsDone;
-
+    public static final double boarderScale = 0.3;
     public final int playerCount = 2;
     public Player[] players = new Player[playerCount];
     private static final String[] names = {"Sam","Jim","Eliz","Tom"};
@@ -79,6 +133,7 @@ public class Board {
         //location of hex on window
         double x;
         double y;
+
         for(int r = -2; r <= 2; r++)
         {
             for(int q = -2; q <=2; q++)
@@ -87,11 +142,11 @@ public class Board {
                 {
                    //FIXME im not storing the objects anywhere for the large hexes, is this bad practice?
                     //create Hex for black border
-                    outLineHex = new Hex(q,r,null,hexSize+3);
+                    outLineHex = new Hex(q,r,null,hexSize * 1.05);
                     outLineHex.setFill(Color.BLACK);
                     hexPlate.getChildren().add(outLineHex);
                     //Main hexes
-                    hexes[r+2][q+2] = new Hex(q,r,null,hexSize-3);
+                    hexes[r+2][q+2] = new Hex(q,r,null,hexSize*0.95);
                     hexPlate.getChildren().add(hexes[r+2][q+2]);
                     x = hexes[r+2][q+2].getLayoutX();
                     y = hexes[r+2][q+2].getLayoutY();
@@ -105,7 +160,17 @@ public class Board {
                         //Set settlements/Citites at hex vertexes
                         if(settlements[coordinate] == null)
                         {
-                            settlements[coordinate] = new Piece(coordinate,PieceType.SETTLEMENT,x + hexPoints[i*2],y + hexPoints[i*2 + 1]);
+                            createOutlinePiece(
+                                    PieceType.SETTLEMENT,//Piece type
+                                    x + hexPoints[i*2],//startX
+                                    y + hexPoints[i*2 + 1],//startY
+                                    settlementLayer);//Group
+
+                            settlements[coordinate] = new Piece(
+                                    coordinate,//Piece index
+                                    PieceType.SETTLEMENT,//Piece type
+                                    x + hexPoints[i*2],//startX
+                                    y + hexPoints[i*2 + 1]);//startY
                             settlementLayer.getChildren().add(settlements[coordinate]);
                         }
                         hexes[r+2][q+2].settlement[i] = settlements[coordinate];
@@ -132,16 +197,25 @@ public class Board {
                     }
 
                     pieceIndex += 6;
+                    hexes[r+2][q+2].index = knightIndex;
+                    hexes[r+2][q+2].type = hexTypeArray[knightIndex];
                     if(knightIndex != 9)//The two knights at Pos 9 & 10 are handled separately
                     {
+
+                        createOutlinePiece(PieceType.KNIGHT,x,y,knightLayer);
+
                         knights[knightIndex] = new Piece(knightIndex, PieceType.KNIGHT,x,y);
                         knightLayer.getChildren().add(knights[knightIndex]);
 
                     }
                     else
                     {
+                        createOutlinePiece(PieceType.KNIGHT,x-15,y,knightLayer);
+                        createOutlinePiece(PieceType.KNIGHT,x+15,y,knightLayer);
+
                         knights[9] = new Piece(9,PieceType.KNIGHT,x-15,y);
                         knights[10] = new Piece(10,PieceType.KNIGHT,x+15,y);
+
                         knightLayer.getChildren().add(knights[9]);
                         knightLayer.getChildren().add(knights[10]);
                         knightIndex++;
@@ -160,6 +234,16 @@ public class Board {
         }
 
     }
+
+    private void createOutlinePiece(PieceType type,double x, double y, Group group)
+    {
+        Piece outlinePiece = new Piece(0,type,x,y);
+        outlinePiece.scale(boarderScale);
+        outlinePiece.setFill(Color.DARKGREY);
+        group.getChildren().add(outlinePiece);
+    }
+
+
 
     /*
     Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
