@@ -9,6 +9,8 @@ public class Action {
     public PieceType pieceType;
     public ActionType type;
 
+    public HexType requiredType;
+
     @Override
     public String toString()
     {

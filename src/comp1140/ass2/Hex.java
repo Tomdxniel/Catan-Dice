@@ -21,7 +21,8 @@ public class Hex extends Polygon {
     //Hex coordinate for drawing hex
     //Layoutx
     //Layouty
-    private HexType type;
+    public HexType type;
+    public int index;
     public Piece knights;
     public Piece[] settlement = new Piece[6];
     public Piece[] roads = new Piece[6];
@@ -37,7 +38,7 @@ public class Hex extends Polygon {
     //FIXME why does .getPoints().add() require Double (capital D)?
     //Points is used to first store all the points of the
 
-    public Hex(int q, int r, HexType type,int size) {
+    public Hex(int q, int r, HexType type,double size) {
         this.type = type;
         this.q = q;
         this.r = r;
@@ -50,7 +51,7 @@ public class Hex extends Polygon {
 
     }
 
-    public static Double[] generatePoints(int size)
+    public static Double[] generatePoints(double size)
     {
         Double[] points = new Double[12];
         for(int i = 0; i < 6; i++)
@@ -65,7 +66,7 @@ public class Hex extends Polygon {
         return points;
     }
     //FIXME setup hex will need to be called before initialising a hex, is this okay?
-    public static void setUpHex(int size,double boardHeight,double boardWidth)
+    public static void setUpHex(double size,double boardHeight,double boardWidth)
     {
         //To get to the next q hex add cos(30)*2*size to x coordinate
         qLengthX = Math.cos((double) 1/6 * Math.PI) * 2 * size;
