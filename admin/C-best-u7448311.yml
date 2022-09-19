@@ -18,7 +18,6 @@ declaration: >-
 # you want to just submit classes):
 method:
    - https://gitlab.cecs.anu.edu.au/u7448311/comp1140-ass2/-/blob/main/src/comp1140/ass2/Board.java#L123
-   - 
 
 # sign *your* name and uid here
 name: Sam Liersch
