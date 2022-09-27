@@ -203,7 +203,19 @@ public class CatanDiceExtra {
 
             return true;
 
-        } else if (action.substring(0, 5).compareTo("build") == 0){
+        } else if (action.substring(0,4).compareTo("swap")== 0){
+
+            if (action.length() != 6) return false;
+
+            char in = action.charAt(4);
+            char out = action.charAt(5);
+
+            return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
+        }
+        if (action.length() < 5) return false;
+        else if (action.substring(0, 5).compareTo("build") == 0){
+
+            if (action.length() <= 5) return false;
 
             char struct = action.charAt(5);
             if (struct == 'R'){
@@ -242,6 +254,9 @@ public class CatanDiceExtra {
 
         }else if (action.substring(0,5).compareTo("trade") == 0){
 
+
+            if (action.length() == 5) return false;
+
             char[] sort = action.substring(5).toCharArray();
             char[] res = action.substring(5).toCharArray();
             Arrays.sort(sort);
@@ -258,14 +273,6 @@ public class CatanDiceExtra {
 
             return true;
 
-        } else if (action.substring(0,4).compareTo("swap")== 0){
-
-            if (action.length() != 6) return false;
-
-            char in = action.charAt(4);
-            char out = action.charAt(5);
-
-            return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
         }
 	    return false;
 
@@ -281,6 +288,9 @@ public class CatanDiceExtra {
      * 'b', 'l', 'w', 'g', 'o', 'm'.
      */
     public static String rollDice(int numOfDice) {
+
+        if (numOfDice < 1 || numOfDice > 6) return null;
+
         Random rand = new Random();
         char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
         char[] output = new char[numOfDice];

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="l">
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Created unit tests for rollDice and edited the method.">
+      <change afterPath="$PROJECT_DIR$/admin/D-newcode-u7489812.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin/D-originality-u7489812.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,22 +35,113 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam/Documents/ANUWork/COMP1140 LABS/comp1110-labs&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ToolWindowRun.ShowToolbar": "false",
+    "last_opened_file_path": "C:/Users/Eliz/Documents/ANU/COMP1140/comp1140-ass2/admin",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Eliz\Documents\ANU\COMP1140\comp1140-ass2\admin" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Viewer" />
+  <component name="RunManager" selected="JUnit.TestRollDice">
+    <configuration name="TestIsActionWellFormed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRollDice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRollDice.correctLength" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="correctLength" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRollDice.correctOrder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="correctOrder" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRollDice.incorrectNumOfDice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="incorrectNumOfDice" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestRollDice" />
+        <item itemvalue="JUnit.TestRollDice.correctOrder" />
+        <item itemvalue="JUnit.TestRollDice.correctLength" />
+        <item itemvalue="JUnit.TestRollDice.incorrectNumOfDice" />
+        <item itemvalue="JUnit.TestIsActionWellFormed" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -93,18 +186,41 @@
       <option name="project" value="LOCAL" />
       <updated>1663558612997</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="C-best document">
+      <created>1663563506251</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1663563506251</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Created unit tests for isActionWellFormed and edited the method.">
+      <created>1664282929439</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1664282929439</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Created unit tests for rollDice and edited the method.">
+      <created>1664284485054</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1664284485054</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Created unit tests for rollDice and edited the method.">
+      <created>1664284491712</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1664284491712</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-        <entry key="a082c60d-f4dd-40a7-ad34-017e0d09ed40">
           <value>
             <State />
           </value>
@@ -117,6 +233,9 @@
     <MESSAGE value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
     <MESSAGE value="Created loadAction method in CatandDiceExtra, added classes Action, ActionType" />
     <MESSAGE value="Added alternative version of isActionValid that can be easily modified to be apply action" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added alternative version of isActionValid that can be easily modified to be apply action" />
+    <MESSAGE value="C-best document" />
+    <MESSAGE value="Created unit tests for isActionWellFormed and edited the method." />
+    <MESSAGE value="Created unit tests for rollDice and edited the method." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created unit tests for rollDice and edited the method." />
   </component>
 </project>
