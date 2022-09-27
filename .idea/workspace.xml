@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Created unit tests for rollDice and edited the method.">
-      <change afterPath="$PROJECT_DIR$/admin/D-newcode-u7489812.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/D-originality-u7489812.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/comp1140/ass2/TestIsActionValid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +36,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ToolWindowRun.ShowToolbar": "false",
-    "last_opened_file_path": "C:/Users/Eliz/Documents/ANU/COMP1140/comp1140-ass2/admin",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Eliz/Documents/ANU/COMP1140/comp1140-ass2/admin&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Eliz\Documents\ANU\COMP1140\comp1140-ass2\admin" />
@@ -53,8 +54,8 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestRollDice">
-    <configuration name="TestIsActionWellFormed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.TestIsActionValid">
+    <configuration name="TestIsActionValid" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -63,8 +64,24 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionValid" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestIsActionValid.testBoardStateWithInvalidActions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionValid" />
+      <option name="METHOD_NAME" value="testBoardStateWithInvalidActions" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -116,29 +133,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestRollDice.incorrectNumOfDice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="comp1140-ass2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="comp1140.ass2.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
-      <option name="METHOD_NAME" value="incorrectNumOfDice" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestIsActionValid" />
+        <item itemvalue="JUnit.TestIsActionValid.testBoardStateWithInvalidActions" />
         <item itemvalue="JUnit.TestRollDice" />
         <item itemvalue="JUnit.TestRollDice.correctOrder" />
         <item itemvalue="JUnit.TestRollDice.correctLength" />
-        <item itemvalue="JUnit.TestRollDice.incorrectNumOfDice" />
-        <item itemvalue="JUnit.TestIsActionWellFormed" />
       </list>
     </recent_temporary>
   </component>
@@ -221,6 +222,11 @@
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="a082c60d-f4dd-40a7-ad34-017e0d09ed40">
           <value>
             <State />
           </value>
