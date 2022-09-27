@@ -467,13 +467,13 @@ public class CatanDiceExtra {
 
 
         // Alternative version of is action valid that relies on Board, and action Class
-    public static boolean isActionValidAlternative(String boardState, String actionString) {
-        Board board = new Board(0,0);
-        //Check if board string is wellFormed
-        if(!board.loadBoard(boardState)) return false;
-        Action action = new Action();
-        //Check if action is wellFormed
-        if(!loadAction(actionString,action)) return false;
+    public static boolean checkActionValid(Board board, Action action) {
+//        Board board = new Board(0,0);
+//        //Check if board string is wellFormed
+//        if(!board.loadBoard(boardState)) return false;
+//        Action action = new Action();
+//        //Check if action is wellFormed
+//        if(!loadAction(actionString,action)) return false;
         int pos1;
         int pos2;
 
@@ -651,7 +651,7 @@ public class CatanDiceExtra {
     }
 
     //Returns whether the required materials are available
-    private static boolean hasMaterials(int[] available, int[] required, boolean negate)
+    public static boolean hasMaterials(int[] available, int[] required, boolean negate)
     {
         if(available.length != required.length) return false;
         if(negate)
@@ -746,7 +746,7 @@ public class CatanDiceExtra {
      * @return array of army sizes, one per player.
      */
     public static int[] largestArmy(String boardState) {
-        //Hight and width can be 0 as we are not
+        //Height and width can be 0 as we are not looking at the board
         Board board = new Board(0,0);
         board.loadBoard(boardState);
         int[] output = new int [board.playerCount];
