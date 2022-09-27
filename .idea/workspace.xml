@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Created unit tests for rollDice and edited the method.">
-      <change afterPath="$PROJECT_DIR$/tests/comp1140/ass2/TestIsActionValid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="TestIsActionValid done">
+      <change afterPath="$PROJECT_DIR$/admin/D-newcode-u7490675.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin/D-originality-u7490675.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664284491712</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="TestIsActionValid done">
+      <created>1664300447873</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1664300447873</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -242,6 +247,7 @@
     <MESSAGE value="C-best document" />
     <MESSAGE value="Created unit tests for isActionWellFormed and edited the method." />
     <MESSAGE value="Created unit tests for rollDice and edited the method." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created unit tests for rollDice and edited the method." />
+    <MESSAGE value="TestIsActionValid done" />
+    <option name="LAST_COMMIT_MESSAGE" value="TestIsActionValid done" />
   </component>
 </project>
