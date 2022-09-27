@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="C-best document">
-      <change afterPath="$PROJECT_DIR$/tests/comp1140/ass2/TestIsActionWellFormed.java" afterDir="false" />
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Created unit tests for isActionWellFormed and edited the method.">
       <change afterPath="$PROJECT_DIR$/tests/comp1140/ass2/TestRollDice.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
@@ -53,7 +52,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestIsActionWellFormed">
+  <component name="RunManager" selected="JUnit.TestRollDice">
     <configuration name="TestIsActionWellFormed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
@@ -69,22 +68,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestIsActionWellFormed.testNotWellFormedActions (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="comp1140.ass2.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
-      <option name="METHOD_NAME" value="testNotWellFormedActions" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestIsActionWellFormed.testSimpleNotWellFormedActions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestRollDice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -93,14 +77,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
-      <option name="METHOD_NAME" value="testSimpleNotWellFormedActions" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestIsActionWellFormed.testSimpleWellFormedActions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestRollDice.correctLength" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -109,14 +92,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
-      <option name="METHOD_NAME" value="testSimpleWellFormedActions" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="correctLength" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestIsActionWellFormed.testSimpleWellFormedStates" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestRollDice.correctOrder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -125,8 +108,24 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionWellFormed" />
-      <option name="METHOD_NAME" value="testSimpleWellFormedStates" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="correctOrder" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRollDice.incorrectNumOfDice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="comp1140-ass2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="comp1140.ass2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestRollDice" />
+      <option name="METHOD_NAME" value="incorrectNumOfDice" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -134,11 +133,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestRollDice" />
+        <item itemvalue="JUnit.TestRollDice.correctOrder" />
+        <item itemvalue="JUnit.TestRollDice.correctLength" />
+        <item itemvalue="JUnit.TestRollDice.incorrectNumOfDice" />
         <item itemvalue="JUnit.TestIsActionWellFormed" />
-        <item itemvalue="JUnit.TestIsActionWellFormed.testSimpleWellFormedActions" />
-        <item itemvalue="JUnit.TestIsActionWellFormed.testNotWellFormedActions (1)" />
-        <item itemvalue="JUnit.TestIsActionWellFormed.testSimpleWellFormedStates" />
-        <item itemvalue="JUnit.TestIsActionWellFormed.testSimpleNotWellFormedActions" />
       </list>
     </recent_temporary>
   </component>
@@ -193,7 +192,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663563506251</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Created unit tests for isActionWellFormed and edited the method.">
+      <created>1664282929439</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1664282929439</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +219,7 @@
     <MESSAGE value="Created loadAction method in CatandDiceExtra, added classes Action, ActionType" />
     <MESSAGE value="Added alternative version of isActionValid that can be easily modified to be apply action" />
     <MESSAGE value="C-best document" />
-    <option name="LAST_COMMIT_MESSAGE" value="C-best document" />
+    <MESSAGE value="Created unit tests for isActionWellFormed and edited the method." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created unit tests for isActionWellFormed and edited the method." />
   </component>
 </project>

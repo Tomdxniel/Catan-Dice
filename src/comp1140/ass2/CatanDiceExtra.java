@@ -288,6 +288,9 @@ public class CatanDiceExtra {
      * 'b', 'l', 'w', 'g', 'o', 'm'.
      */
     public static String rollDice(int numOfDice) {
+
+        if (numOfDice < 1 || numOfDice > 6) return null;
+
         Random rand = new Random();
         char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
         char[] output = new char[numOfDice];
