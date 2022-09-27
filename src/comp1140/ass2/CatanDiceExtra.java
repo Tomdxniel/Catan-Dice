@@ -1,235 +1,14 @@
 package comp1140.ass2;
+import java.sql.SQLOutput;
 import java.util.*;
 public class CatanDiceExtra {
-    private static final String[] names = {"Sam","Jim","Eliz","Tom"};
-    public static final int playerCount = 2;
-
-
-    /*
-    Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
-    then does checks to see if boardstate is valid
-     */
-    public static boolean loadBoard(String boardState,Board board)
-    {
-        int index = 0;
-        boolean winner = false;
-        boolean hasLongestRoad = false;
-        boolean hasLargestArmy = false;
-        for(int i = 0; i < playerCount; i++)
-        {
-            board.players[i] = new Player(names[i],"WXYZ".charAt(i));
-        }
-        board.resources = new ResourceType[6];
-
-        //FIXME do I have to be careful of attacks such as loading a half state that errors out then loading a full state
-        //FIXME are we supposed to have definitions of @param and @return for each method we create
-        try {
-            for(int i = 0; i < playerCount; i++)
-            {
-                if( board.players[i].playerID == boardState.charAt(0))
-                {
-                    board.playerTurn = board.players[i];
-                }
-            }
-            //if no valid playerTurn return false
-            if("WXYZ".indexOf(board.playerTurn.playerID) < 0)
-            {
-                return false;
-            }
-            index++;
-            if("03456".contains(boardState.substring(index, index + 1)))
-            {
-                board.numDice = Integer.parseInt(boardState.substring(index, index + 1));
-                if('0' == boardState.charAt(index))
-                {
-                    board.setupPhase = true;
-                }
-            }
-            else
-            {
-                return false;
-            }
-            index++;
-            if("0123".contains(boardState.substring(index, index + 1)))
-            {
-                board.numDice = Integer.parseInt(boardState.substring(index, index + 1));
-                if('0' == boardState.charAt(index) && !board.setupPhase)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-            board.rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
-            index++;
-            //FIXME is testing whether resources are in alphanumeric order required
-
-            char prevChar = '\u0000';
-            for(int i = 0; i < 6; i++)
-            {
-                if( "bglmow".indexOf(boardState.charAt(index)) < 0 || board.setupPhase)
-                {
-                    break;
-                }
-                //Testing whether resources are in order
-                if(prevChar != '\u0000' && (int)prevChar > (int) boardState.charAt(index))
-                {
-                    return false;
-                }
-                prevChar = boardState.charAt(index);
-
-                board.resources[i] = ResourceType.fromChar(boardState.charAt(index));
-                index++;
-            }
-
-            int pos;
-            for (int i = 0; i < playerCount; i++) {
-                //[ID]
-
-                //Make sure first Player is W next player is X
-                if(!("WXYZ".charAt(i) == boardState.charAt(index)))
-                {
-                    return false;
-                }
-                index++;
-                //[Placement]
-                //Castle
-                while (boardState.charAt(index) == 'C') {
-                    index++;
-                    pos = (int) boardState.charAt(index) - 48;
-                    //FIXME Is referencing a variable of player1 directly and not using a function of player one bad practice
-                    if(board.castles[pos].owner == null)
-                    {
-                        board.castles[pos].owner = board.players[i];
-                    }
-                    index++;
-                }
-
-                //Used/Unused Knight
-                while (boardState.charAt(index) == 'J' || boardState.charAt(index) == 'K') {
-                    index++;
-                    pos = Integer.parseInt(boardState.substring(index, index + 2));
-                    if (board.knights[pos].owner == null) {
-                        board.knights[pos].type = (boardState.charAt(index-1) == 'J') ? PieceType.USEDKNIGHT : PieceType.KNIGHT ;
-                        board.knights[pos].owner = board.players[i];
-                    }
-                    index += 2;
-                }
-
-                //Road
-                //FIXME Why is road R0440 valid?
-                while (boardState.charAt(index) == 'R') {
-                    index++;
-                    pos = Integer.parseInt(boardState.substring(index, index + 4));
-                    if(pos%100 < 54 && pos/100 < 54 && pos/100 < pos%100) {
-                        if (board.roadsMap.containsKey(pos)) {
-                            if (board.roadsMap.get(pos).owner == null) {
-                                board.roadsMap.get(pos).owner = board.players[i];
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                    //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
-                    index += 4;
-
-                }
-
-                //Settlement
-                while (boardState.charAt(index) == 'S' || boardState.charAt(index) == 'T') {
-                    index++;
-                    pos = Integer.parseInt(boardState.substring(index, index + 2));
-                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
-                    if (board.settlements[pos].owner == null) {
-                        board.settlements[pos].type = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
-                        board.settlements[pos].owner = board.players[i];;
-                    }
-                    index += 2;
-                }
-
-
-            }
-            for(int i = 0; i < playerCount; i++)
-            {
-                //-------------------------------------
-                //Player Score
-                //Make sure first Player is W next player is X
-                if(!(board.players[i].playerID == boardState.charAt(index)))
-                {
-                    return false;
-                }
-                index++;
-
-                board.players[i].score = Integer.parseInt(boardState.substring(index, index + 2));
-                //2 winners cant exist
-                if(board.players[i].score >= 10)
-                {
-                    if(winner)
-                    {
-                        return false;
-                    }
-                    winner = true;
-                }
-                //Final score always less than 13
-                if(board.players[i].score > 12)
-                {
-                    return false;
-                }
-                index += 2;
-                //FIXME Is there a more efficient way to do this without using try catch
-                try{
-                    if(boardState.charAt(index) == 'R')
-                    {
-                        //Duplicate  of longestRoad
-                        if(hasLongestRoad)
-                        {
-                            return false;
-                        }
-                        hasLongestRoad = true;
-                        board.players[i].longestRoad = true;
-                        index++;
-                    }
-
-                    if(boardState.charAt(index) == 'A'){
-                        //Duplicate  of largestArmy
-                        if(hasLargestArmy)
-                        {
-                            return false;
-                        }
-                        hasLargestArmy = true;
-                        board.players[i].largestArmy = true;
-                        index++;
-                    }
-
-                }
-                catch (StringIndexOutOfBoundsException e)
-                {
-                    //String is finished
-                }
-
-            }
-            //Check if no extra characters on end
-            if(boardState.length() != index)
-            {
-                return false;
-            }
-
-
-
-        }
-        catch (Exception e)
-        {
-            //FIXME why is the to string method here showing a warning of redundant
-            return false;
-        }
-        return true;
-    }
-
+    //Required resources to build objects
+    //Knight Road Settlement City
+    public static int[][] reqResources = {
+            {0,1,0,0,1,1},
+            {1,0,1,0,0,0,},
+            {1,1,1,0,0,1},
+            {0,2,0,0,3,0}};
 
 
     /**
@@ -248,108 +27,140 @@ public class CatanDiceExtra {
 
     public static boolean isBoardStateWellFormed(String boardState) {
         Board board = new Board(700,1200);
-        return loadBoard(boardState, board);
+        return  board.loadBoard(boardState);
     }
 
 
 
-
-    // rebuilds board string of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score]
-    public static String boardToString(Board board){
-        StringBuilder output = new StringBuilder();
-        output.append(board.playerTurn.playerID);
-        output.append(board.numDice);
-        output.append(board.rollsDone);
-
-        Integer[] roadSort = new Integer[board.roadsMap.keySet().size()];
-        for(ResourceType r : board.resources)
+    //Loads action into action class
+    public static boolean loadAction(String actionString, Action action)
+    {
+        //Check if action has type
+        if(actionString.length() < 4) return false;
+        String type;
+        String actionSubject;
+        if(actionString.charAt(3) == 'p')
         {
-            if(r != null)
-            {
-                output.append(r.toChar());
+            actionSubject = actionString.substring(4);
+            type = actionString.substring(0,4);
+        }
+        else
+        {
+            actionSubject = actionString.substring(5);
+            type = actionString.substring(0,5);
+        }
+        ActionType actionType = ActionType.fromString(type);
+        if(actionType == null) return false;
+        int pos1;
+        int pos2;
+        char lastChar =' ';
+        int[] resourceArray = new int[] {0,0,0,0,0,0};
+        switch (actionType)
+        {
+            case KEEP -> {
+                if (actionSubject.length() > 6) return false;
+                action.type = ActionType.KEEP;
+                if(actionSubject.length() > 0)
+                {
+                    lastChar = actionSubject.charAt(0);
+                }
+                for(char c : actionSubject.toCharArray())
+                {
+                    //If resources are not in order
+                    if((int) lastChar > (int) c)
+                    {
+                        return false;
+                    }
+                    //if resources is invalid
+                    if(Board.resourceArray.indexOf(c) < 0)
+                    {
+                        return false;
+                    }
+                    resourceArray[Board.resourceArray.indexOf(c)] ++;
+                    lastChar = c;
+                }
+                action.resourceArray = resourceArray;
+            }
+            case BUILD -> {
+
+                action.type = ActionType.BUILD;
+                switch (actionSubject.charAt(0))
+                {
+                    case 'R' -> {
+                        action.pieceType = PieceType.ROAD;
+                        if(actionSubject.length()!= 5)
+                        {
+                            return false;
+                        }
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        pos2 = Integer.parseInt(actionSubject.substring(3,5));
+                        if(!(pos1 < pos2 && pos1 >=0 && pos2 < 54))
+                        {
+                            return false;
+                        }
+                        action.pieceIndex = Integer.parseInt(actionSubject.substring(1,5));
+                    }
+                    case  'C' -> {
+                        action.pieceType = PieceType.CASTLE;
+                        if(actionSubject.length() != 2) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,2));
+                        if(!(pos1 >= 0 && pos1 < 4)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    case 'S' -> {
+                        action.pieceType = PieceType.SETTLEMENT;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 54)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    case 'T' -> {
+                        action.pieceType = PieceType.CITY;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 54)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    //Why K for knight
+                    case 'K' -> {
+                        action.pieceType = PieceType.KNIGHT;
+                        if(actionSubject.length() != 3) return false;
+                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
+                        if(!(pos1 >= 0 && pos1 < 20)) return false;
+                        action.pieceIndex = pos1;
+                    }
+                    default ->
+                    {
+                        return false;
+                    }
+                }
+            }
+            case TRADE -> {
+                action.type = ActionType.TRADE;
+                lastChar = actionSubject.charAt(0);
+                for(char r : actionSubject.toCharArray())
+                {
+                    if((int) lastChar > r) return false;
+                    if(r == 'm') return false;
+                    if(Board.resourceArray.indexOf(r) == -1) return false;
+                    resourceArray[Board.resourceArray.indexOf(r)]++;
+                    resourceArray[3] -= 2;
+                }
+                action.resourceArray = resourceArray;
+            }
+            case SWAP -> {
+
+                action.type = ActionType.SWAP;
+                if (actionSubject.length() != 2) return false;
+                if(Board.resourceArray.indexOf(actionSubject.charAt(0)) == -1) return false;
+                if(Board.resourceArray.indexOf(actionSubject.charAt(1)) == -1) return false;
+                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(0))] --;
+                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(1))] ++;
+                action.resourceArray = resourceArray;
             }
         }
-        for(int i = 0; i < playerCount; i++)
-        {
-            output.append(board.players[i].playerID);
-            for(int j = 0; j < board.castles.length; j++)
-            {
-                if(board.castles[j].owner == board.players[i])
-                {
-                    output.append("C");
-                    output.append(j);
-                }
-            }
-            //USED KNIGHT
-            for(int j = 0; j < board.knights.length; j++)
-            {
-                if(board.knights[j].owner == board.players[i] && board.knights[j].type == PieceType.USEDKNIGHT)
-                {
-                    output.append(board.knights[j].type.toChar());
-                    //FIXME is this a valid way to ensure string is of good length
-                    output.append(String.format("%2d",j).replace(' ','0'));
-                }
-            }
-            //KNIGHT
-            for(int j = 0; j < board.knights.length; j++)
-            {
-                if(board.knights[j].owner ==  board.players[i]&& board.knights[j].type == PieceType.KNIGHT)
-                {
-                    output.append(board.knights[j].type.toChar());
-                    //FIXME is this a valid way to ensure string is of good length
-                    output.append(String.format("%2d",j).replace(' ','0'));
-                }
-            }
-
-            //ROADS
-            //FIXME is there anyway to map through the hashMap without using lambda calculus or converting to an array first
-            board.roadsMap.keySet().toArray(roadSort);
-            Arrays.sort(roadSort);
-            for(int j : roadSort) {
-                if (board.roadsMap.get(j).owner  == board.players[i]) {
-                    output.append("R");
-                    output.append(String.format("%4d", j).replace(' ', '0'));
-                }
-            }
-            //SETTLEMENTS
-            for(int j = 0; j < board.settlements.length; j++)
-            {
-                if(board.settlements[j].type == PieceType.SETTLEMENT && board.settlements[j].owner == board.players[i])
-                {
-                    output.append(board.settlements[j].type.toChar());
-                    output.append(String.format("%2d",j).replace(' ','0'));
-                }
-            }
-            //CITIES
-            for(int j = 0; j < board.settlements.length; j++)
-            {
-                if(board.settlements[j].type == PieceType.CITY && board.settlements[j].owner == board.players[i])
-                {
-                    output.append(board.settlements[j].type.toChar());
-                    output.append(String.format("%2d",j).replace(' ','0'));
-                }
-            }
-        }
-        for(int i = 0; i < playerCount; i++)
-        {
-            output.append(board.players[i].playerID);
-            output.append(String.format("%2d",board.players[i].score).replace(' ','0'));
-            if(board.players[i].longestRoad)
-            {
-                output.append('R');
-            }
-            if(board.players[i].largestArmy)
-            {
-                output.append('A');
-            }
-
-        }
-        return output.toString();
+        return true;
     }
-
-
-
-
 
 
 
@@ -367,8 +178,97 @@ public class CatanDiceExtra {
      * a player action, false otherwise.
      */
     public static boolean isActionWellFormed(String action) {
-        // FIXME: Task 4
+        boolean flag = false;
+        String resources = "bglmow";
+
+        if (action.length() < 4) return false;
+
+        if (action.substring(0,4).compareTo("keep") == 0){
+
+            if (action.length() == 4) return true;
+
+            char[] sort = action.substring(4).toCharArray();
+            char[] res = action.substring(4).toCharArray();
+            Arrays.sort(sort);
+
+            if (Arrays.compare(sort, res) != 0){
+                return false;
+            }
+
+            for (int i = 4; i < action.length(); i++){
+                char c = action.charAt(i);
+                int index = resources.indexOf(c);
+                if (index == -1) return false;
+            }
+
+            return true;
+
+        } else if (action.substring(0, 5).compareTo("build") == 0){
+
+            char struct = action.charAt(5);
+            if (struct == 'R'){
+
+                if (action.length() != 10) return false;
+
+                int fir = Integer.parseInt(action.substring(6,8));
+                int sec = Integer.parseInt(action.substring(8,10));
+
+                return (fir < sec && fir >= 0 && sec <= 53);
+
+
+            } else if (struct == 'C'){
+
+                if (action.length() != 7) return false;
+                // 0, 1, 2, 3
+                int n = action.charAt(6)-48;
+                return (n <= 3);
+
+            } else if (struct == 'S' || struct == 'T') {
+
+                if (action.length() != 8) return false;
+                // 00 - 53
+                int n = Integer.parseInt(action.substring(6, 8));
+                return (n >= 0 && n <= 53);
+
+
+            } else if (struct == 'K'){
+
+                if (action.length() != 8) return false;
+                // 00 - 19
+                int n = Integer.parseInt(action.substring(6,8));
+                return (n >= 0 && n <= 19);
+
+            }
+
+        }else if (action.substring(0,5).compareTo("trade") == 0){
+
+            char[] sort = action.substring(5).toCharArray();
+            char[] res = action.substring(5).toCharArray();
+            Arrays.sort(sort);
+
+            if (Arrays.compare(sort, res) != 0){
+                return false;
+            }
+
+            for (int i = 5; i < action.length(); i++){
+                char c = action.charAt(i);
+                if (c == 'm') return false;
+                if (resources.indexOf(c) == -1) return false;
+            }
+
+            return true;
+
+        } else if (action.substring(0,4).compareTo("swap")== 0){
+
+            if (action.length() != 6) return false;
+
+            char in = action.charAt(4);
+            char out = action.charAt(5);
+
+            return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
+        }
 	    return false;
+
     }
 
     /**
@@ -381,8 +281,17 @@ public class CatanDiceExtra {
      * 'b', 'l', 'w', 'g', 'o', 'm'.
      */
     public static String rollDice(int numOfDice) {
-        // FIXME: Task 5
-        return "";
+        Random rand = new Random();
+        char[] resources = new char[]{'b', 'l', 'w', 'g', 'o', 'm'};
+        char[] output = new char[numOfDice];
+
+        for (int i = 0; i < numOfDice; i++){
+            output[i] = resources[rand.nextInt(6)];
+        }
+
+        Arrays.sort(output);
+
+        return new String(output);
     }
 
     /**
@@ -392,7 +301,7 @@ public class CatanDiceExtra {
      *
      * A. Roll Phase (keep action)
      * 1. A keep action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "keep[Resources]", and the
+     * - comp1140.ass2.Action follows the correct format : "keep[Resources]", and the
      *   current player has the resources specified.
      * - [Rolls Done] is less than 3
      *
@@ -400,7 +309,7 @@ public class CatanDiceExtra {
      * B. Build Phase (build, trade, and swap actions)
      *
      * 1. A build action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "build[Structure Identifier]"
+     * - comp1140.ass2.Action follows the correct format : "build[Structure Identifier]"
      * - The current player has sufficient resources available for building
      *   the structure.
      * - The structure satisfies the build constraints (is connected to the
@@ -408,12 +317,12 @@ public class CatanDiceExtra {
      * - See details of the cost of buildable structure in README.md.
      *
      * 2. A trade action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "trade[Resources]"
+     * - comp1140.ass2.Action follows the correct format : "trade[Resources]"
      * - The current player has sufficient resources available to pay for
      *   the trade.
      *
      * 3. A swap action is valid if it satisfies the following conditions:
-     * - Action follows the correct format : "swap[Resource Out][Resource In]"
+     * - comp1140.ass2.Action follows the correct format : "swap[Resource Out][Resource In]"
      * - The current player has sufficient resources available to swap out.
      * - The current player has an unused knight (resource joker) on the
      *   board which allows to swap for the desired resource.
@@ -422,9 +331,348 @@ public class CatanDiceExtra {
      * @return true iff the action is executable, false otherwise.
      */
     public static boolean isActionValid(String boardState, String action) {
-        // FIXME: Task 7
-        return false;
+            boolean result = false;
+            boolean p1 = (boardState.indexOf("W") == 0);
+            String[] inland = new String[]{"08","12","17","22","28","34","39","44","40","45","41",
+                    "36","31","25","19","14","09","13","18","23","29","35","30","24"};
+            String[] buildings = new String[]{"00","01","02","07","08","09","10","16","17","18","19","20","33",
+                    "34","35","36","37","43","44","45","46","51","52","53"};
+            String[] woodKnights = new String[]{"K05","K08","K15","J09","J10","J05","J08","J15","K09","K10"};
+            String[] woolKnights = new String[]{"K06","K00","K19","K13","J09","J10","J06","J00","J19","J13","K09","K10"};
+            String[] oreKnights = new String[]{"K02","K03","K16","K17","J09","J10","J02","J03","J16","J17","K09","K10"};
+            String[] grainKnights = new String[]{"K01","K07","K12","K18","J09","J10","J01","J07","J12","J18","K09","K10"};
+            String[] brickKnights = new String[]{"K04","K11","K14","J09","J10","J04","J11","J14","K09","K10"};
+            String[] jokerKnights = new String[]{"J09","J10","K09","K10"};
+            String wString = boardState.substring(4,boardState.indexOf("X", 1));
+            String xString = boardState.substring(boardState.indexOf("X")+1);
+            if (boardState.substring(1,3).compareTo("00") == 0) {
+                if (action.substring(0, 6).compareTo("buildR") == 0){
+                    if (boardState.contains(action.substring(6,8)) || (boardState.contains(action.substring(8,10)))){
+                    } else {
+                        int cor1 = Integer.parseInt(action.substring(6,8));
+                        int cor2 = Integer.parseInt(action.substring(8,10));
+                        List<String> nameList = new ArrayList<>(Arrays.asList(inland));
+                        if (cor2 - cor1 <= 6 && cor2 - cor1 > 2 ){
+                            if (nameList.contains(action.substring(6,8)) || nameList.contains(action.substring(8,10))){
+                            } else{
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            } else {
+                char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
+                if (action.substring(0, 4).compareTo("keep") == 0 && Integer.parseInt(String.valueOf(boardState.charAt(2))) < 3) {
+                    char[] req = action.substring(4).toCharArray();
+                    int count = 0;
+                    int start = 0;
+                    for (int i = 0; i < resources.length; i++) {
+                        if (action.indexOf(resources[i], start) != -1) {
+                            count++;
+                            start = action.indexOf(resources[i]) + 1;
+                        }
+                    }
+                    result = count >= req.length;
+                } else if (action.substring(0, 5).compareTo("build") == 0) {
+                    if (action.charAt(5) == 'R') {
+                        int cor1 = Integer.parseInt(action.substring(6,8));
+                        int cor2 = Integer.parseInt(action.substring(8,10));
+                        boolean conditions = cor2 - cor1 <= 6 && cor2 - cor1 > 2 && canBuild(boardState, "bl");
+                        List<String> buildList = new ArrayList<>(Arrays.asList(buildings));
+                        if (p1) {
+                            if (wString.contains(action.substring(6, 8)) || (wString.contains(action.substring(8, 10)))){
+                                if (buildList.contains(action.substring(6, 8))) {
+                                    if (wString.contains(action.substring(6, 8)) && ! wString.contains(action.substring(8, 10))) {
+                                        result = conditions && (wString.contains("S" + action.substring(6, 8)) || wString.contains("T" + action.substring(6, 8)));
+                                    } else result = conditions;
+                                } else if (buildList.contains(action.substring(8, 10))) {
+                                    if (wString.contains(action.substring(8, 10)) && ! wString.contains(action.substring(6, 8))) {
+                                        result = conditions && (wString.contains("S" + action.substring(8, 10)) || wString.contains("T" + action.substring(8, 10)));
+                                    } else result = conditions;
+                                } else result = conditions;
+                            }} else if (xString.contains(action.substring(6, 8)) || (xString.contains(action.substring(8, 10)))) {
+                            if (buildList.contains(action.substring(6, 8))) {
+                                if (xString.contains(action.substring(6, 8)) && ! xString.contains(action.substring(8, 10))) {
+                                    result = conditions && (xString.contains("S" + action.substring(6, 8)) || xString.contains("T" + action.substring(6, 8)));
+                                } else result = conditions;
+                            } else if (buildList.contains(action.substring(8, 10))) {
+                                if (xString.contains(action.substring(8, 10)) && ! xString.contains(action.substring(6, 8))) {
+                                    result = conditions && (xString.contains("S" + action.substring(8, 10)) || xString.contains("T" + action.substring(8, 10)));
+                                } else result =  conditions;
+                            } else result = conditions;
+                        }}
+                    if (action.charAt(5) == 'K') {
+                        result = canBuild(boardState, "gow");
+                    }
+                    if (action.charAt(5) == 'T') {
+                        result = canBuild(boardState, "ggooo");
+                    }
+                    if (action.charAt(5) == 'S') {
+                        result = canBuild(boardState, "bglw");
+                    }
+                } else if (action.substring(0, 5).compareTo("trade") == 0) {
+                    result = canBuild(boardState, "mm".repeat(action.length() - 5));
+
+                } else if (action.substring(0, 4).compareTo("swap") == 0) {
+                    boolean valid = false;
+                    char c = action.charAt(5);
+                    if (p1) {
+                        switch (c) {
+                            case 'b' ->  valid = hasKnight(wString,brickKnights) ;
+                            case 'l' ->  valid = hasKnight(wString,woodKnights);
+                            case 'g' ->  valid = hasKnight(wString,grainKnights);
+                            case 'o' ->  valid = hasKnight(wString,oreKnights);
+                            case 'w' ->  valid = hasKnight(wString,woolKnights);
+                            case 'm' ->  valid = hasKnight(wString,jokerKnights);
+                        }
+                    } else {
+                        switch (c) {
+                            case 'b' ->  valid = hasKnight(xString,brickKnights) ;
+                            case 'l' ->  valid = hasKnight(xString,woodKnights);
+                            case 'g' ->  valid = hasKnight(xString,grainKnights);
+                            case 'o' ->  valid = hasKnight(xString,oreKnights);
+                            case 'w' ->  valid = hasKnight(xString,woolKnights);
+                            case 'm' ->  valid = hasKnight(xString,jokerKnights);
+                        }}
+                    result = valid && canBuild(boardState, String.valueOf(action.charAt(4)));
+                }
+            }return result;
+        }
+        public static boolean canBuild(String boardState, String needs) {
+            boolean buildable;
+            char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
+            char[] req = needs.toCharArray();
+            int count = 0;
+            int start = 0;
+            for (int i = 0; i < resources.length; i++){
+                if (needs.indexOf(resources[i], start) != -1){
+                    count++;
+                    start = needs.indexOf(resources[i])+1;
+                }
+            }
+            buildable = count >= req.length;
+            return buildable;
+        }
+
+        public static boolean hasKnight(String string, String[] knights) {
+            boolean found = false;
+            for (String knight : knights) {
+                if (string.contains(knight)) {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
+
+
+        // Alternative version of is action valid that relies on Board, and action Class
+    public static boolean isActionValidAlternative(String boardState, String actionString) {
+        Board board = new Board(0,0);
+        //Check if board string is wellFormed
+        if(!board.loadBoard(boardState)) return false;
+        Action action = new Action();
+        //Check if action is wellFormed
+        if(!loadAction(actionString,action)) return false;
+        int pos1;
+        int pos2;
+
+        //SetupPhase
+        if(board.setupPhase)
+        {
+            int index;
+            int roadIndex;
+            if(action.type != ActionType.BUILD) return false;
+            if(action.pieceType != PieceType.ROAD) return false;
+            pos1 = action.pieceIndex % 100;
+            pos2 = action.pieceIndex / 100;
+
+            if(!Board.coastRoads.contains(pos1)) return false;
+            if(!Board.coastRoads.contains(pos2)) return false;
+            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1) return false;
+
+            //FIXME how do you properly wrap around
+            //Clockwise
+            index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
+            if(pos1 == 0 && pos2 == 29)
+            {
+                index = 0;
+            }
+            for(int y = 0; y < 5; y++)
+            {
+
+                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30));
+                if(!board.roadsMap.containsKey(roadIndex)) return false;
+                if(board.roadsMap.get(roadIndex).owner != null)
+                {
+                    return false;
+                }
+                index++;
+            }
+            //AntiClockwise
+            index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
+            if(pos1 == 0 && pos2 == 29)
+            {
+                index = 29;
+            }
+            index = index + 30;
+            for(int y = 0; y < 5; y++)
+            {
+                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30));
+                if(!board.roadsMap.containsKey(roadIndex)) return false;
+                if(board.roadsMap.get(roadIndex).owner != null)
+                {
+                    return false;
+                }
+                index--;
+            }
+            return true;
+
+        }
+
+        //Roll phase
+        if(board.rollsDone < 3)
+        {
+            return (action.type == ActionType.KEEP && hasMaterials(board.resources,action.resourceArray,true));
+        }
+
+        boolean flag;
+
+        //Build phase
+        switch (action.type)
+        {
+            case BUILD -> {
+                switch (action.pieceType)
+                {
+                    case CASTLE -> {
+                        flag = false;
+                        for(int i = 0; i < 6; i ++)
+                        {
+                            if(board.resources[i] > 5)
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) return false;
+                        if(board.castles[action.pieceIndex].owner != null) return false;
+                    }
+                    case KNIGHT -> {
+                        if(!hasMaterials(board.resources,reqResources[0],true)) return false;
+                        if(board.knights[action.pieceIndex].owner != null) return false;
+                        flag = false;
+                        for(Hex[] hexArray : board.hexes)
+                        {
+                            for(Hex hex : hexArray)
+                            {
+                                if(hex != null &&
+                                        (hex.index == action.pieceIndex
+                                                || (hex.index == 9 && action.pieceIndex == 10)))
+                                {
+                                    for(Piece piece : hex.settlement)
+                                    {
+                                        if(piece.owner == board.playerTurn)
+                                        {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    for(Piece road : hex.roads)
+                                    {
+                                        if(road.owner == board.playerTurn)
+                                        {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!flag) return false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    case ROAD -> {
+                        if(!hasMaterials(board.resources,reqResources[1],true)) return false;
+                        if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
+                        pos1 = action.pieceIndex % 100;
+                        pos2 = action.pieceIndex / 100;
+                        if(board.settlements[pos1].owner != null
+                                && board.settlements[pos2].owner != null) return false;
+                    }
+                    case SETTLEMENT -> {
+                        if(!hasMaterials(board.resources,reqResources[2],true)) return false;
+                        if(board.settlements[action.pieceIndex].owner != null) return false;
+                        Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
+                        flag = false;
+                        for(Piece road : roads)
+                        {
+                            pos1 = road.boardIndex % 100;
+                            pos2 = (int)road.boardIndex / 100;
+                            if(road.owner == board.playerTurn
+                                    && (pos1 == action.pieceIndex || pos2 == action.pieceIndex))
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) return false;
+                    }
+                    case CITY -> {
+                        if(!hasMaterials(board.resources,reqResources[3],true)) return false;
+                        if(board.settlements[action.pieceIndex].owner != board.playerTurn) return false;
+                    }
+                }
+
+            }
+            case TRADE -> {
+                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+            }
+            case SWAP -> {
+                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+                flag = false;
+                for(Piece knight : board.knights)
+                {
+                    if(knight.owner == board.playerTurn
+                            && knight.type == PieceType.KNIGHT
+                            && (Board.hexTypeArray[knight.boardIndex] == action.requiredType
+                            || Board.hexTypeArray[knight.boardIndex] == HexType.WILD))
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) return false;
+            }
+        }
+
+        return true;
     }
+
+    //Returns whether the required materials are available
+    private static boolean hasMaterials(int[] available, int[] required, boolean negate)
+    {
+        if(available.length != required.length) return false;
+        if(negate)
+        {
+            for(int i = 0; i < required.length; i++)
+            {
+                required[i] = -required[i];
+            }
+        }
+        //Check player has the resources to keep
+        for(int i = 0; i < available.length; i++)
+        {
+            if(available[i] + required[i] < 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     /**
      * Return an integer array containing the length of the longest contiguous
@@ -439,11 +687,11 @@ public class CatanDiceExtra {
      */
     public static int[] longestRoad(String boardState) {
         Board board = new Board(0,0);
-        loadBoard(boardState,board);
-        int[] output = new int [playerCount];
+        board.loadBoard(boardState);
+        int[] output = new int [board.playerCount];
         List<Integer> visited = new ArrayList<>();
         List<Integer> roads = new ArrayList<>();
-        for(int i = 0; i < playerCount; i++)
+        for(int i = 0; i < board.playerCount; i++)
         {
             for(Integer y : board.roadsMap.keySet())
             {
@@ -500,9 +748,9 @@ public class CatanDiceExtra {
     public static int[] largestArmy(String boardState) {
         //Hight and width can be 0 as we are not
         Board board = new Board(0,0);
-        loadBoard(boardState,board);
-        int[] output = new int [playerCount];
-        for(int i = 0; i < playerCount; i ++)
+        board.loadBoard(boardState);
+        int[] output = new int [board.playerCount];
+        for(int i = 0; i < board.playerCount; i ++)
         {
             output[i] = 0;
             for(Piece p : board.knights)

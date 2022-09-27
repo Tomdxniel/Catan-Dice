@@ -10,17 +10,15 @@
 #
 
 declaration: >-
-  We declare that everything we have submitted for Stage C of this assignment
-  and all stages before it is entirely our own work, with the following
-  exceptions:
+  I submit the work below for assessment as my best work. I declare that this
+  is entirely my own work, with the following documented exceptions:
 
 
-# Sign *your* name and uids here. (Remove entries if you have fewer
-# than three members.)
-signatures:
-  - name: Sam Liersch
-    uid: u7448311
-  - name: Tom Daniel
-    uid: u7490675
-  - name: Eliz So
-    uid: u7489812
+# I wish to submit the following methods as entirely my own (remove this if
+# you want to just submit classes):
+method:
+   - createHexes() in Board.java
+
+# sign *your* name and uid here
+name: Sam Liersch
+uid: u7448311

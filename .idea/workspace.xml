@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6c27ce0c-ffee-4b70-8bad-204244fb1a2a" name="Changes" comment="Refined isBoardStateWellFormed() so it catches all but 1 test case">
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Added alternative version of isActionValid that can be easily modified to be apply action">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/HexType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/HexType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,13 +28,21 @@
       </list>
     </option>
   </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/alternativeIsAcitonValid" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_1367_CatanDiceExtra.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_139_CatanDiceExtra.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_316_CatanDiceExtra.class" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2DbgmC2hZIlyr48sLjx6LKjNnbm" />
+  <component name="ProjectId" id="2EiQsKnnH4OKFTeJLfug5OPKmbI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -30,101 +50,67 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam/Documents/ANUWork/COMP1140 LABS/comp1140-ass2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ToolWindowRun.ShowToolbar": "false",
+    "last_opened_file_path": "C:/Users/Sam/Documents/ANUWork/COMP1140 LABS/comp1110-labs",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
-  <component name="RunManager" selected="Application.Game">
-    <configuration name="Hex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.Hex" />
-      <module name="comp1140-ass2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="comp1140.ass2.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Hex" />
-      </list>
-    </recent_temporary>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="comp1140.ass2" />
+    </key>
   </component>
+  <component name="RunManager" selected="Application.Viewer" />
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6c27ce0c-ffee-4b70-8bad-204244fb1a2a" name="Changes" comment="" />
-      <created>1660973354653</created>
+      <changelist id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="" />
+      <created>1663076130526</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1660973354653</updated>
+      <updated>1663076130526</updated>
     </task>
-    <task id="LOCAL-00001" summary="Updated from master repo">
-      <created>1661773209659</created>
+    <task id="LOCAL-00001" summary="Task 4 is done">
+      <created>1663121546041</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1661773209659</updated>
+      <updated>1663121546041</updated>
     </task>
-    <task id="LOCAL-00002" summary="Created and implemented methods loadBoard and boardToString">
-      <created>1661799604030</created>
+    <task id="LOCAL-00002" summary="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class.">
+      <created>1663409939301</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1661799604030</updated>
+      <updated>1663409939301</updated>
     </task>
-    <task id="LOCAL-00003" summary="Started creating template for base viewer. Reconfiguring CatanDiceExtra to be an instance class vs static class">
-      <created>1661935950195</created>
+    <task id="LOCAL-00003" summary="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class.">
+      <created>1663409967591</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1661935950195</updated>
+      <updated>1663409967591</updated>
     </task>
-    <task id="LOCAL-00004" summary="Created the basic template for the Viewer, implemented the Hex class and Piece class">
-      <created>1661966121960</created>
+    <task id="LOCAL-00004" summary="Created loadAction method in CatandDiceExtra, added classes Action, ActionType">
+      <created>1663435141949</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1661966121960</updated>
+      <updated>1663435141949</updated>
     </task>
-    <task id="LOCAL-00005" summary="Rewrote CatanDiceExtra so it no longer contains any static variables so it can become an instance class">
-      <created>1662060645760</created>
+    <task id="LOCAL-00005" summary="Added alternative version of isActionValid that can be easily modified to be apply action">
+      <created>1663558612997</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1662060645760</updated>
+      <updated>1663558612997</updated>
     </task>
-    <task id="LOCAL-00006" summary="Rewrote CatanDiceExtra so it no longer contains any static variables so it can become an instance class">
-      <created>1662061347250</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1662061347250</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Completed longest road and largest Army">
-      <created>1662079338076</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1662079338076</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Refined isBoardStateWellFormed() so it catches all but 1 test case">
-      <created>1662139594948</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1662139594948</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -132,55 +118,17 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/main" />
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="text">
-                    <value>
-                      <list>
-                        <option value="add" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-        <entry key="a082c60d-f4dd-40a7-ad34-017e0d09ed40">
-          <value>
             <State />
           </value>
         </entry>
-        <entry key="fd61f599-8caa-44dc-ba31-947745de90a6">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="a082c60d-f4dd-40a7-ad34-017e0d09ed40" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated from master repo" />
-    <MESSAGE value="Created and implemented methods loadBoard and boardToString" />
-    <MESSAGE value="Started creating template for base viewer. Reconfiguring CatanDiceExtra to be an instance class vs static class" />
-    <MESSAGE value="Created the basic template for the Viewer, implemented the Hex class and Piece class" />
-    <MESSAGE value="Rewrote CatanDiceExtra so it no longer contains any static methods" />
-    <MESSAGE value="Rewrote CatanDiceExtra so it no longer contains any static variables so it can become an instance class" />
-    <MESSAGE value="Completed longest road and largest Army" />
-    <MESSAGE value="Refined isBoardStateWellFormed() so it catches all but 1 test case" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refined isBoardStateWellFormed() so it catches all but 1 test case" />
+    <MESSAGE value="Task 4 is done" />
+    <MESSAGE value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
+    <MESSAGE value="Created loadAction method in CatandDiceExtra, added classes Action, ActionType" />
+    <MESSAGE value="Added alternative version of isActionValid that can be easily modified to be apply action" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added alternative version of isActionValid that can be easily modified to be apply action" />
   </component>
 </project>
