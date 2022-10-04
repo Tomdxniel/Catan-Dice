@@ -12,7 +12,7 @@ contributions:
     contribution: 33 
   - uid: u7489812
     contribution: 33
-  - uid:
+  - uid: u7448311
     contribution: 33
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
@@ -22,5 +22,5 @@ signatures:
     uid:u7490675
   - name:Eliz So
     uid:u7489812
-  - name:
-    uid:
+  - name:Sam Liersch
+    uid:u7448311
