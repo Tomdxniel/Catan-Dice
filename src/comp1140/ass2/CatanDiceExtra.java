@@ -25,6 +25,15 @@ public class CatanDiceExtra {
      * a board state, false otherwise.
      */
 
+    public static void main(String[] args) {
+        System.out.println(isActionValid("X00WR0004XW00X00","buildR0105"));
+        System.out.println(isActionValid("W00WXW00X00","buildR4752"));
+
+        System.out.println(isActionValid("W33ggoooWS00XW00X00","buildT00"));
+        //System.out.println(isActionValid("W33blWR1217XW00X00","buildR1722"));
+        System.out.println(isActionValid("W33ggoooWXW00X00","buildT01"));
+        System.out.println(isActionValid("W33gowWJ04XW00X00","buildK04"));
+    }
     public static boolean isBoardStateWellFormed(String boardState) {
         Board board = new Board(700,1200);
         return  board.loadBoard(boardState);
@@ -33,7 +42,7 @@ public class CatanDiceExtra {
 
 
     //Loads action into action class
-    public static boolean loadAction(String actionString, Action action)
+    public static boolean loadActionValid(String actionString, Action action)
     {
         //Check if action has type
         if(actionString.length() < 4) return false;
@@ -547,7 +556,6 @@ public class CatanDiceExtra {
         {
             return (action.type == ActionType.KEEP && hasMaterials(board.resources,action.resourceArray,true));
         }
-
         boolean flag;
 
         //Build phase
@@ -616,6 +624,7 @@ public class CatanDiceExtra {
                         if(board.settlements[action.pieceIndex].owner != null) return false;
                         Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
                         flag = false;
+                        //Add a check here if a settlement/city can be built
                         for(Piece road : roads)
                         {
                             pos1 = road.boardIndex % 100;
