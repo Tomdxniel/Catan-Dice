@@ -6,11 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Added authorship details">
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Rebuilt Game.jar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/E-review-u7448311.md" beforeDir="false" afterPath="$PROJECT_DIR$/admin/E-review-u7448311.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,7 +228,21 @@
       <option name="project" value="LOCAL" />
       <updated>1664894900722</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added comments to uncommented code">
+      <created>1664896945835</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1664896945835</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Rebuilt Game.jar">
+      <created>1664897151512</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1664897151512</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -260,6 +272,8 @@
     <MESSAGE value="TestIsActionValid done" />
     <MESSAGE value="Created Jar File/Added some basic board images to game.jar" />
     <MESSAGE value="Added authorship details" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added authorship details" />
+    <MESSAGE value="Added comments to uncommented code" />
+    <MESSAGE value="Rebuilt Game.jar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rebuilt Game.jar" />
   </component>
 </project>

@@ -7,24 +7,30 @@ Reviewing code written by: Tom Daniel u7490675
 Component: isActionValid
 
 ### Comments 
-Coding Style:
-The lack of comments and reliance on else-if statements makes the code extremely hard to read and understand
+Best features: The handling of checking whether the road is a coast road is both fast and efficient.
+
+Decomposition: canBuild and hasKnight are good examples of decomposition within the code.
+
+Coding Style: The lack of comments and reliance on else-if statements makes the code extremely hard to read and understand.
+
+Java conventions: Methods and variables are properly named and consistent throughout 
 
 In this section of code especially there is a bunch of if,else and else-if statements in a stack with no comments given describing what is happening
 https://gitlab.cecs.anu.edu.au/-/ide/project/u7448311/comp1140-ass2/edit/main/-/src/comp1140/ass2/CatanDiceExtra.java#L392
 
 
 Bugs:
-1)To check if its a road that appears on the board this code is used.
+
+1)To check if a road that appears on the board is valid this code is used.
 `if (cor2 - cor1 <= 6 && cor2 - cor1 > 2 )`
 https://gitlab.cecs.anu.edu.au/u7448311/comp1140-ass2/-/blob/main/src/comp1140/ass2/CatanDiceExtra.java#L365
-However this does not work as with boardState "W00WXW00X00" acitons "buildR4750","buildR4751","buildR4752" are valid even though they do not appear on the board.
+However this does not work as with boardState "W00WXW00X00" actions "buildR4750","buildR4751","buildR4752" are valid even though they do not appear on the board.
 
-2)There is no code to ensure roads are at least 5 units apart from eachother in setup
+2)There is no code to ensure roads are at least 5 units apart from each other in setup
 
-Test cases to show this is a boardState of "X00WR0004XW00X00" with action buildR0105" should evaluate to false as the roads only have 1 space inbetween however it evaluates as true.
+Test cases to show this is a boardState of "X00WR0004XW00X00" with action buildR0105" should evaluate to false as the roads only have 1 space in between however it evaluates as true.
 
-3)xString contains the score 
+3)xString contains the score when it should only contain the pieces built by x
 `String xString = boardState.substring(boardState.indexOf("X")+1);`
 https://gitlab.cecs.anu.edu.au/-/ide/project/u7448311/comp1140-ass2/edit/main/-/src/comp1140/ass2/CatanDiceExtra.java#L357
 This causes problems with checks involving xString.contains()
@@ -40,3 +46,5 @@ Test case boardState "W33ggoooWXW00X00" action "buildT11" should evaluate to fal
 
 7)Cities can be placed not on settlements
 Test case boardState "W33ggoooWXW00X00" action "buildT01" should evaluate to false as 01 does not contain a settlement
+
+
