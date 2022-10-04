@@ -358,9 +358,10 @@ public class CatanDiceExtra {
      * @param action: string representation of the player action.
      * @return true iff the action is executable, false otherwise.
      */
+    // isActionValid created by Thomas Daniel, u7490675
     public static boolean isActionValid(String boardState, String action) {
             boolean result = false;
-            boolean p1 = (boardState.indexOf("W") == 0);
+            boolean p1 = (boardState.indexOf("W") == 0);  // checks what players turn
             String[] inland = new String[]{"08","12","17","22","28","34","39","44","40","45","41",
                     "36","31","25","19","14","09","13","18","23","29","35","30","24"};
             String[] buildings = new String[]{"00","01","02","07","08","09","10","16","17","18","19","20","33",
@@ -373,8 +374,8 @@ public class CatanDiceExtra {
             String[] jokerKnights = new String[]{"J09","J10","K09","K10"};
             String wString = boardState.substring(4,boardState.indexOf("X", 1));
             String xString = boardState.substring(boardState.indexOf("X")+1);
-            if (boardState.substring(1,3).compareTo("00") == 0) {
-                if (action.substring(0, 6).compareTo("buildR") == 0){
+            if (boardState.substring(1,3).compareTo("00") == 0) { // condition for set up phase
+                if (action.substring(0, 6).compareTo("buildR") == 0){ // condition for Building road
                     if (boardState.contains(action.substring(6,8)) || (boardState.contains(action.substring(8,10)))){
                     } else {
                         int cor1 = Integer.parseInt(action.substring(6,8));
@@ -401,13 +402,13 @@ public class CatanDiceExtra {
                         }
                     }
                     result = count >= req.length;
-                } else if (action.substring(0, 5).compareTo("build") == 0) {
+                } else if (action.substring(0, 5).compareTo("build") == 0) { // Build action condition
                     if (action.charAt(5) == 'R') {
                         int cor1 = Integer.parseInt(action.substring(6,8));
                         int cor2 = Integer.parseInt(action.substring(8,10));
                         boolean conditions = cor2 - cor1 <= 6 && cor2 - cor1 > 2 && canBuild(boardState, "bl");
                         List<String> buildList = new ArrayList<>(Arrays.asList(buildings));
-                        if (p1) {
+                        if (p1) { // if player 1 check valid for wStrings, else xStrings
                             if (wString.contains(action.substring(6, 8)) || (wString.contains(action.substring(8, 10)))){
                                 if (buildList.contains(action.substring(6, 8))) {
                                     if (wString.contains(action.substring(6, 8)) && ! wString.contains(action.substring(8, 10))) {
@@ -429,13 +430,13 @@ public class CatanDiceExtra {
                                 } else result =  conditions;
                             } else result = conditions;
                         }}
-                    if (action.charAt(5) == 'K') {
+                    if (action.charAt(5) == 'K') { // building knight
                         result = canBuild(boardState, "gow");
                     }
-                    if (action.charAt(5) == 'T') {
+                    if (action.charAt(5) == 'T') { // building city
                         result = canBuild(boardState, "ggooo");
                     }
-                    if (action.charAt(5) == 'S') {
+                    if (action.charAt(5) == 'S') { // building settlement
                         result = canBuild(boardState, "bglw");
                     }
                 } else if (action.substring(0, 5).compareTo("trade") == 0) {
@@ -466,6 +467,7 @@ public class CatanDiceExtra {
                 }
             }return result;
         }
+    // canBuild created by Thomas Daniel, u7490675
         public static boolean canBuild(String boardState, String needs) {
             boolean buildable;
             char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
@@ -481,7 +483,7 @@ public class CatanDiceExtra {
             buildable = count >= req.length;
             return buildable;
         }
-
+    // hasKnight created by Thomas Daniel, u7490675
         public static boolean hasKnight(String string, String[] knights) {
             boolean found = false;
             for (String knight : knights) {
