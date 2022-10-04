@@ -27,7 +27,8 @@ public class CatanDiceExtra {
 
     //isBoardStateWellFormed created by Sam Liersch u7448311
     public static boolean isBoardStateWellFormed(String boardState) {
-        Board board = new Board(700,1200);
+        //Create a model board from the board string and check if its valid
+        Board board = new Board(0,0);
         return  board.loadBoard(boardState);
     }
 
@@ -40,6 +41,7 @@ public class CatanDiceExtra {
         if(actionString.length() < 4) return false;
         String type;
         String actionSubject;
+        //Swap is the only 4 letter action all other actions are 5 letters
         if(actionString.charAt(3) == 'p')
         {
             actionSubject = actionString.substring(4);
@@ -59,6 +61,7 @@ public class CatanDiceExtra {
         switch (actionType)
         {
             case KEEP -> {
+                //Check if correct length
                 if (actionSubject.length() > 6) return false;
                 action.type = ActionType.KEEP;
                 if(actionSubject.length() > 0)
@@ -88,6 +91,7 @@ public class CatanDiceExtra {
                 switch (actionSubject.charAt(0))
                 {
                     case 'R' -> {
+                        //Road
                         action.pieceType = PieceType.ROAD;
                         if(actionSubject.length()!= 5)
                         {
@@ -95,6 +99,7 @@ public class CatanDiceExtra {
                         }
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
                         pos2 = Integer.parseInt(actionSubject.substring(3,5));
+                        //Check if road is in correct format and within the index bounds
                         if(!(pos1 < pos2 && pos1 >=0 && pos2 < 54))
                         {
                             return false;
@@ -102,6 +107,7 @@ public class CatanDiceExtra {
                         action.pieceIndex = Integer.parseInt(actionSubject.substring(1,5));
                     }
                     case  'C' -> {
+                        //Castle
                         action.pieceType = PieceType.CASTLE;
                         if(actionSubject.length() != 2) return false;
                         pos1 = Integer.parseInt(actionSubject.substring(1,2));
@@ -109,6 +115,7 @@ public class CatanDiceExtra {
                         action.pieceIndex = pos1;
                     }
                     case 'S' -> {
+                        //Settlement
                         action.pieceType = PieceType.SETTLEMENT;
                         if(actionSubject.length() != 3) return false;
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
@@ -116,14 +123,15 @@ public class CatanDiceExtra {
                         action.pieceIndex = pos1;
                     }
                     case 'T' -> {
+                        //City
                         action.pieceType = PieceType.CITY;
                         if(actionSubject.length() != 3) return false;
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
                         if(!(pos1 >= 0 && pos1 < 54)) return false;
                         action.pieceIndex = pos1;
                     }
-                    //Why K for knight
                     case 'K' -> {
+                        //Knight
                         action.pieceType = PieceType.KNIGHT;
                         if(actionSubject.length() != 3) return false;
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
@@ -139,20 +147,26 @@ public class CatanDiceExtra {
             case TRADE -> {
                 action.type = ActionType.TRADE;
                 lastChar = actionSubject.charAt(0);
+                //Check resources are in order
                 for(char r : actionSubject.toCharArray())
                 {
                     if((int) lastChar > r) return false;
+                    //Cannot trade money for money
                     if(r == 'm') return false;
+                    //Ensure resource is of the valid type
                     if(Board.resourceArray.indexOf(r) == -1) return false;
                     resourceArray[Board.resourceArray.indexOf(r)]++;
                     resourceArray[3] -= 2;
+
                 }
                 action.resourceArray = resourceArray;
             }
             case SWAP -> {
 
                 action.type = ActionType.SWAP;
+                //Can only saw 1 resource for 1 resource
                 if (actionSubject.length() != 2) return false;
+                //Check if it's a valid resource
                 if(Board.resourceArray.indexOf(actionSubject.charAt(0)) == -1) return false;
                 if(Board.resourceArray.indexOf(actionSubject.charAt(1)) == -1) return false;
                 resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(0))] --;
@@ -504,7 +518,7 @@ public class CatanDiceExtra {
             if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1) return false;
 
             //FIXME how do you properly wrap around
-            //Clockwise
+            //check no road is within 5 pieces clockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
             if(pos1 == 0 && pos2 == 29)
             {
@@ -522,7 +536,7 @@ public class CatanDiceExtra {
                 }
                 index++;
             }
-            //AntiClockwise
+            //check no road is within 5 pieces AntiClockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
             if(pos1 == 0 && pos2 == 29)
             {
@@ -555,10 +569,13 @@ public class CatanDiceExtra {
         switch (action.type)
         {
             case BUILD -> {
+                //First Check if req resources are met
+                //Also Check if no player has already built on piece
                 switch (action.pieceType)
                 {
                     case CASTLE -> {
                         flag = false;
+
                         for(int i = 0; i < 6; i ++)
                         {
                             if(board.resources[i] > 5)
@@ -574,6 +591,7 @@ public class CatanDiceExtra {
                         if(!hasMaterials(board.resources,reqResources[0],true)) return false;
                         if(board.knights[action.pieceIndex].owner != null) return false;
                         flag = false;
+                        //Check at least 1 piece surrounding knight hex is built by player
                         for(Hex[] hexArray : board.hexes)
                         {
                             for(Hex hex : hexArray)
@@ -609,15 +627,16 @@ public class CatanDiceExtra {
                         if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
-                        if(board.settlements[pos1].owner != null
-                                && board.settlements[pos2].owner != null) return false;
+                        //Check that on of the neighbouring settlements is owned
+                        if(board.settlements[pos1].owner != board.playerTurn
+                                && board.settlements[pos2].owner != board.playerTurn) return false;
                     }
                     case SETTLEMENT -> {
                         if(!hasMaterials(board.resources,reqResources[2],true)) return false;
                         if(board.settlements[action.pieceIndex].owner != null) return false;
                         Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
                         flag = false;
-                        //Add a check here if a settlement/city can be built
+                        //FIXME make sure to reconstruct road, setttlement,city to only be able to be placed on valid placements and for roads not to require a settlement neighbour if it cant exist
                         for(Piece road : roads)
                         {
                             pos1 = road.boardIndex % 100;
@@ -644,6 +663,7 @@ public class CatanDiceExtra {
             case SWAP -> {
                 if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
                 flag = false;
+                //Check if correct knight is owned for trade
                 for(Piece knight : board.knights)
                 {
                     if(knight.owner == board.playerTurn
@@ -705,6 +725,7 @@ public class CatanDiceExtra {
         int[] output = new int [board.playerCount];
         List<Integer> visited = new ArrayList<>();
         List<Integer> roads = new ArrayList<>();
+        //Iterate through all owned roads and find the longest road from that road
         for(int i = 0; i < board.playerCount; i++)
         {
             for(Integer y : board.roadsMap.keySet())
@@ -721,6 +742,7 @@ public class CatanDiceExtra {
     }
 
     // findMaxRoad created by Sam Liersch u7448311
+    // Given a list of roads owned by a player finds the road with the max length
     private static int findMaxRoad(List<Integer> roads, List<Integer> visited,int lastPos)
     {
         //FIXME Im using lastPos -1 to start the recursion is this bad practice?
@@ -768,6 +790,7 @@ public class CatanDiceExtra {
         Board board = new Board(0,0);
         board.loadBoard(boardState);
         int[] output = new int [board.playerCount];
+        //counts the number of knights owned by a player
         for(int i = 0; i < board.playerCount; i ++)
         {
             output[i] = 0;

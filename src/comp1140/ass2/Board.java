@@ -7,6 +7,7 @@ import java.util.*;
 
 // Board.java created by Sam Liersch u7448311
 public class Board {
+    //Coordinates of the points bordering each hex, north first and then clockwise
     public static final int[] coordinateArray = {0,4,8,12,7,3,
                                                  1,5,9,13,8,4,
                                                  2,6,10,14,9,5,
@@ -26,6 +27,7 @@ public class Board {
                                                  39,44,48,51,47,43,
                                                  40,45,49,52,48,44,
                                                  41,46,50,53,49,45};
+    //Array specifying the type of each hex
     public static final HexType[] hexTypeArray = {
             HexType.WOOL,
             HexType.GRAIN,
@@ -48,13 +50,14 @@ public class Board {
             HexType.GRAIN,
             HexType.WOOL
     };
+    //List of all the points on the coast
     public static List<Integer> coastRoads = new ArrayList<>(Arrays.asList(
-                    00,
-                    04,
-                    01,
-                    05,
-                    02,
-                    06,
+                    0,
+                    4,
+                    1,
+                    5,
+                    2,
+                    6,
                     10,
                     15,
                     20,
@@ -77,8 +80,8 @@ public class Board {
                     21,
                     16,
                     11,
-                    07,
-                    03
+                    7,
+                    3
     ));
 //FIXME theres a typo in positional indexing in readme, coordinate 50 does not exist
 
@@ -95,22 +98,20 @@ public class Board {
 
     //FIXME whats the difference between map and hashMap
     public HashMap<Integer,Piece> roadsMap = new HashMap<>();
-    //FIXME are constants all caps
+    //FIXME are constants names all caps
     //FIXME How do you replace all of a variable with the same name with a different name
+    //FIXME should these be public // should a getter class be used
     public static final int hexSize = 75;
-    public static final Color hexColor = Color.LIGHTGRAY;
-
-
     public boolean setupPhase = false;
     public int[] resources;           //"bglmow" corresponding to resource,{b,g,l,m,o,w}
-    //FIXME should these be public or should a getter class be used
+
     public Player playerTurn;
     public int numDice;
     public int rollsDone;
     public static final double boarderScale = 0.3;
     public final int playerCount = 2;
     public Player[] players = new Player[playerCount];
-    private static final String[] names = {"Sam","Jim","Eliz","Tom"};
+    private static final String[] names = {"Sam","Jim","Eliz","Tom"}; //Names of each player, Jim is just filler
     public static final String resourceArray = "bglmow";
     public static final String playerIDArray = "WXYZ";
 
@@ -203,6 +204,8 @@ public class Board {
 
                     pieceIndex += 6;
                     hexes[r+2][q+2].index = knightIndex;
+
+                    //For each hex create a slightly bigger hex and have it be completely black to create a border
                     if(knightIndex != 9)//The two knights at Pos 9 & 10 are handled separately
                     {
 
@@ -231,6 +234,7 @@ public class Board {
             }
 
         }
+        //Castles are always static and appear on the four corners of the board
         castles[0] = new Piece(0,PieceType.CASTLE,BOARD_WIDTH/10,BOARD_HEIGHT/10);
         castles[1] = new Piece(1,PieceType.CASTLE,BOARD_WIDTH -BOARD_WIDTH/10,BOARD_HEIGHT/10);
         castles[2] = new Piece(2,PieceType.CASTLE,BOARD_WIDTH - BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
@@ -239,6 +243,7 @@ public class Board {
 
     }
 
+    //To create a boarder for a piece create a new piece of different colour that's slightly bigger and underneath
     private void createOutlinePiece(PieceType type,double x, double y, Group group)
     {
         Piece outlinePiece = new Piece(0,type,x,y);
@@ -280,6 +285,7 @@ public class Board {
                 return false;
             }
             index++;
+            //Test dice number is valid
             if("03456".contains(boardState.substring(index, index + 1)))
             {
                 this.numDice = Integer.parseInt(boardState.substring(index, index + 1));
@@ -293,6 +299,7 @@ public class Board {
                 return false;
             }
             index++;
+            //Test Rolls done is valid
             if("0123".contains(boardState.substring(index, index + 1)))
             {
                 this.rollsDone = Integer.parseInt(boardState.substring(index, index + 1));
@@ -306,11 +313,11 @@ public class Board {
                 return false;
             }
             index++;
-            //FIXME is testing whether resources are in alphanumeric order required
 
             this.resources = new int[]{0,0,0,0,0,0};
             char currentChar;
             char prevChar = boardState.charAt(index);
+            //Check resources are in the correct order and valid
             for(int i = 0; i < 6; i++)
             {
                 currentChar = boardState.charAt(index);
@@ -380,7 +387,6 @@ public class Board {
                     {
                         return false;
                     }
-                    //position2 = Integer.parseInt(boardState.substring(index + 2, index + 4));
                     index += 4;
 
                 }
@@ -469,7 +475,6 @@ public class Board {
         }
         catch (Exception e)
         {
-            //FIXME why is the to string method here showing a warning of redundant
             return false;
         }
         return true;

@@ -23,10 +23,14 @@ public class Piece extends Polygon {
         this.type = type;
         this.setLayoutX(x);
         this.setLayoutY(y);
+        //Update piece to move it to the correct position
         updatePiece();
+        //Default colour is gray
         this.setFill(Color.LIGHTGRAY);
 
     }
+
+    //For pieces that require two points eg Roads with a point from and a point to
     public Piece(int boardIndex, PieceType type, double startX, double startY, double endX, double endY)
     {
         this.boardIndex = boardIndex;
@@ -92,6 +96,7 @@ public class Piece extends Polygon {
         double vecY = endY-startY;
         double invecX = startY - endY;
         double invecY = endX-startX;
+        //points of the four corners of a road
         Double[] points = new Double[]{
                 roadLength * vecX + roadWidth * invecX,roadLength * vecY + roadWidth * invecY,
                 roadLength * vecX + -roadWidth * invecX,roadLength * vecY + -roadWidth * invecY,
@@ -104,6 +109,7 @@ public class Piece extends Polygon {
 
     public void scale(double scale)
     {
+        //scale the piece up from the centre of the piece outwards
         Double[] points = this.getPoints().toArray(new Double[0]);
         for(int i = 0; i < points.length; i++)
         {
