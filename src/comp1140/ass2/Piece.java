@@ -3,11 +3,13 @@ package comp1140.ass2;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
+
+// Piece.java created by Sam Liersch u7448311
 public class Piece extends Polygon {
     public int boardIndex;
     public Player owner;
     public PieceType type;
-    //Player color, Dark for usable piece light for un usable
+    //Player color, Dark for usable piece light for used pieces
     private static final Color[] playerColor = {Color.GREEN,Color.LIGHTGREEN,//Player1
                                    Color.BLUE,Color.LIGHTBLUE,//Player2
                                    Color.PINK,Color.LIGHTPINK,//Player3

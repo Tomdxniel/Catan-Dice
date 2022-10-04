@@ -15,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
+
+// Hex.java created by Sam Liersch u7448311
 public class Hex extends Polygon {
     //Hex coordinate for neighbours & storage
     public int q;

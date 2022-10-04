@@ -25,22 +25,14 @@ public class CatanDiceExtra {
      * a board state, false otherwise.
      */
 
-    public static void main(String[] args) {
-        System.out.println(isActionValid("X00WR0004XW00X00","buildR0105"));
-        System.out.println(isActionValid("W00WXW00X00","buildR4752"));
-
-        System.out.println(isActionValid("W33ggoooWS00XW00X00","buildT00"));
-        //System.out.println(isActionValid("W33blWR1217XW00X00","buildR1722"));
-        System.out.println(isActionValid("W33ggoooWXW00X00","buildT01"));
-        System.out.println(isActionValid("W33gowWJ04XW00X00","buildK04"));
-    }
+    //isBoardStateWellFormed created by Sam Liersch u7448311
     public static boolean isBoardStateWellFormed(String boardState) {
         Board board = new Board(700,1200);
         return  board.loadBoard(boardState);
     }
 
 
-
+    //loadActionValid created by Sam Liersch u7448311
     //Loads action into action class
     public static boolean loadActionValid(String actionString, Action action)
     {
@@ -485,6 +477,7 @@ public class CatanDiceExtra {
         }
 
 
+    //checkActionValid created by Sam Liersch u7448311
         // Alternative version of is action valid that relies on Board, and action Class
     public static boolean checkActionValid(Board board, Action action) {
 //        Board board = new Board(0,0);
@@ -669,6 +662,7 @@ public class CatanDiceExtra {
         return true;
     }
 
+    // hasMaterials created by Sam Liersch u7448311
     //Returns whether the required materials are available
     public static boolean hasMaterials(int[] available, int[] required, boolean negate)
     {
@@ -704,6 +698,7 @@ public class CatanDiceExtra {
      * @param boardState: string representation of the board state.
      * @return array of contiguous road lengths, one per player.
      */
+    // longest Road created by Sam Liersch u7448311
     public static int[] longestRoad(String boardState) {
         Board board = new Board(0,0);
         board.loadBoard(boardState);
@@ -724,6 +719,8 @@ public class CatanDiceExtra {
         }
         return output;
     }
+
+    // findMaxRoad created by Sam Liersch u7448311
     private static int findMaxRoad(List<Integer> roads, List<Integer> visited,int lastPos)
     {
         //FIXME Im using lastPos -1 to start the recursion is this bad practice?
@@ -764,6 +761,8 @@ public class CatanDiceExtra {
      * @param boardState: string representation of the board state.
      * @return array of army sizes, one per player.
      */
+
+    // largestArmy created by Sam Liersch u7448311
     public static int[] largestArmy(String boardState) {
         //Height and width can be 0 as we are not looking at the board
         Board board = new Board(0,0);

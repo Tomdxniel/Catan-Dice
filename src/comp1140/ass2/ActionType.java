@@ -1,5 +1,7 @@
 package comp1140.ass2;
 
+
+// ActionType.java created by Sam Liersch u7448311
 public enum ActionType {
     KEEP, BUILD, TRADE, SWAP;
     public static ActionType fromString(String str) {

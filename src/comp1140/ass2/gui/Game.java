@@ -7,7 +7,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
+// Game.java originally created Patrik Haslum
+// Edited by Sam Liersch u7448311
 public class Game extends Application {
     // FIXME Task 11: implement a playable game
     private final Group root = new Group();
