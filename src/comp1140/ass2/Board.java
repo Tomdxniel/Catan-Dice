@@ -4,6 +4,8 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 import java.util.*;
+
+// Board.java created by Sam Liersch u7448311
 public class Board {
     public static final int[] coordinateArray = {0,4,8,12,7,3,
                                                  1,5,9,13,8,4,

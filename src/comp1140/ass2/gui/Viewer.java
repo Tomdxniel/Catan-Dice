@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+// Viewer.java originally created Patrik Haslum
+// Edited by Sam Liersch u7448311
 public class Viewer extends Application {
 
     private static final int VIEWER_WIDTH = 1200;

@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
 
+// Player.java created by Sam Liersch u7448311
 public class Player {
 
     String name;

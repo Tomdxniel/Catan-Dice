@@ -3,6 +3,8 @@ package comp1140.ass2;
 import com.sun.source.tree.CaseTree;
 import javafx.scene.paint.Color;
 
+
+// HexType.java created by Sam Liersch u7448311
 public enum HexType {
     LUMBER, WOOL, GRAIN, ORE, BRICK, WILD
     ;
