@@ -178,8 +178,10 @@ public class CatanDiceExtra {
      * @return true iff the string is a well-formed representation of
      * a player action, false otherwise.
      */
+
+    //isActionWellFormed created by Eliz So, u7489812
     public static boolean isActionWellFormed(String action) {
-        boolean flag = false;
+
         String resources = "bglmow";
 
         if (action.length() < 4) return false;
@@ -288,6 +290,7 @@ public class CatanDiceExtra {
      * @return alphabetically ordered [Resources] with characters
      * 'b', 'l', 'w', 'g', 'o', 'm'.
      */
+    //rollDice created by Eliz So, u7489812
     public static String rollDice(int numOfDice) {
 
         if (numOfDice < 1 || numOfDice > 6) return null;
