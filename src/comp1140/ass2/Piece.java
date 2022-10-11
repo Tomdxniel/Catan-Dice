@@ -2,7 +2,6 @@ package comp1140.ass2;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Circle;
 
 // Piece.java created by Sam Liersch u7448311
 public class Piece extends Polygon {

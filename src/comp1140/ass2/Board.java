@@ -2,6 +2,9 @@ package comp1140.ass2;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.shape.Polygon;
 
 import java.util.*;
 
@@ -89,13 +92,16 @@ public class Board {
     public Piece[] castles = new Piece[4];
     public Piece[] knights = new Piece[20];
     public Piece[] settlements = new Piece[54];
-
+    public Text turnText = new Text();
+    public Text scoreText = new Text();
+    public Text resourceLabel = new Text();
+    public ResourcePiece[] resourceDisplay = new ResourcePiece[6];
     public Group hexPlate = new Group();
     public Group castleLayer = new Group();
     public Group knightLayer = new Group();
     public Group settlementLayer = new Group();
     public Group roadLayer = new Group();
-
+    public Group turnLayer = new Group();
     //FIXME whats the difference between map and hashMap
     public HashMap<Integer,Piece> roadsMap = new HashMap<>();
     //FIXME are constants names all caps
@@ -240,6 +246,68 @@ public class Board {
         castles[2] = new Piece(2,PieceType.CASTLE,BOARD_WIDTH - BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
         castles[3] = new Piece(3,PieceType.CASTLE,BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
         castleLayer.getChildren().addAll(castles);
+
+        //Create text of whose turn it is
+        turnText.setX(BOARD_WIDTH/20);
+        turnText.setY(BOARD_HEIGHT/10 * 4.75);
+        turnText.setFont(Font.font(20));
+        turnLayer.getChildren().add(turnText);
+
+        //Create text of what the score is
+        scoreText.setX(BOARD_WIDTH/20);
+        scoreText.setY(BOARD_HEIGHT/10 * 5.25);
+        scoreText.setFont(Font.font(20));
+        turnLayer.getChildren().add(scoreText);
+
+        //Create label for resource list
+        resourceLabel.setX(BOARD_WIDTH/10 * 8);
+        resourceLabel.setY(BOARD_HEIGHT/10 * 2.5);
+        resourceLabel.setText("Resources:");
+        resourceLabel.setFont(Font.font(20));
+        turnLayer.getChildren().add(resourceLabel);
+
+
+        //Add 6 resource squares
+        for(int i = 0; i < 6; i++)
+        {
+
+            resourceDisplay[i] = new ResourcePiece(-1,BOARD_WIDTH/10 * 9,BOARD_HEIGHT/10 * (i + 2.5));
+
+            turnLayer.getChildren().add(resourceDisplay[i].outline);
+            turnLayer.getChildren().add(resourceDisplay[i]);
+        }
+
+
+    }
+    public void updateTurnInfo()
+    {
+        //Add text to say players turn
+        turnText.setText("Players Turn: " + this.playerTurn.name + " (" + this.playerTurn.playerID + ").");
+        scoreText.setText("Players Score: " + this.playerTurn.score);
+        int count = 0;
+        for(int i = 0 ; i < 6; i++)
+        {
+            for(int y = 0; y < resources[i]; y++)
+            {
+                if(count > 5)
+                {
+                    throw new RuntimeException();
+                    //If color index > 5 total resources in resource list > max resource number
+                    //FIXME create proper error message
+                }
+                this.resourceDisplay[count].type = i;
+                count ++;
+            }
+        }
+        while (count < 6)
+        {
+            this.resourceDisplay[count].type = -1;
+            count++;
+        }
+        for(ResourcePiece r : resourceDisplay)
+        {
+            r.updateColor();
+        }
 
     }
 

@@ -17,8 +17,8 @@ public class Game extends Application {
 
     Board board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
 
-    void displayState(String boardState) {
-        newBoard();
+    void updateState(String boardState) {
+
         board.loadBoard(boardState);
         for(Piece p : board.settlements)
         {
@@ -42,6 +42,7 @@ public class Game extends Application {
         root.getChildren().remove(board.castleLayer);
         root.getChildren().remove(board.knightLayer);
         root.getChildren().remove(board.roadLayer);
+        root.getChildren().remove(board.turnLayer);
 
         board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
 
@@ -50,6 +51,7 @@ public class Game extends Application {
         root.getChildren().add(board.castleLayer);
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);
+        root.getChildren().add(board.turnLayer);
     }
     @Override
     public void start(Stage stage) throws Exception {
@@ -58,13 +60,7 @@ public class Game extends Application {
 
         Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-
-        //Hex Tiles
-        root.getChildren().add(board.hexPlate);
-        root.getChildren().add(board.settlementLayer);
-        root.getChildren().add(board.castleLayer);
-        root.getChildren().add(board.knightLayer);
-        root.getChildren().add(board.roadLayer);
+        newBoard();
 
 
         stage.setScene(scene);

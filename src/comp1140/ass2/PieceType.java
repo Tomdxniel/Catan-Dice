@@ -13,6 +13,7 @@ public enum PieceType {
             case 'J' -> USEDKNIGHT;
             case 'R' -> ROAD;
             case 'C' -> CASTLE;
+
             default -> null;
         };
     }

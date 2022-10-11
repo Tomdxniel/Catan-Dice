@@ -49,7 +49,6 @@ public class Hex extends Polygon {
         this.getPoints().addAll(generatePoints(size));
         this.setLayoutX(qLengthX * q + rLengthX * r + startX);
         this.setLayoutY(rLengthY * r + startY);
-        this.setFill(Color.BLUE);
         if(type != null)
         {
             this.setFill(HexType.toColor(type));

@@ -6,8 +6,7 @@ import javafx.scene.paint.Color;
 
 // HexType.java created by Sam Liersch u7448311
 public enum HexType {
-    LUMBER, WOOL, GRAIN, ORE, BRICK, WILD
-    ;
+    LUMBER, WOOL, GRAIN, ORE, BRICK, WILD;
 
     public static HexType fromChar(char c) {
         return switch (c) {

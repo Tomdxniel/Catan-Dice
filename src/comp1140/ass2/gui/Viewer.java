@@ -36,7 +36,6 @@ public class Viewer extends Application {
      * @param boardState The string representation of the board state.
      */
     void displayState(String boardState) {
-        newBoard();
         board.loadBoard(boardState);
         for(Piece p : board.settlements)
         {
@@ -51,6 +50,7 @@ public class Viewer extends Application {
             p.updatePiece();
         }
         board.roadsMap.forEach((key,value)-> value.updatePiece());
+        board.updateTurnInfo();
     }
 
     /**
@@ -80,6 +80,7 @@ public class Viewer extends Application {
         root.getChildren().remove(board.castleLayer);
         root.getChildren().remove(board.knightLayer);
         root.getChildren().remove(board.roadLayer);
+        root.getChildren().remove(board.turnLayer);
 
         board = new Board(VIEWER_HEIGHT,VIEWER_WIDTH);
 
@@ -88,6 +89,7 @@ public class Viewer extends Application {
         root.getChildren().add(board.castleLayer);
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);
+        root.getChildren().add(board.turnLayer);
     }
 
     @Override
@@ -103,6 +105,7 @@ public class Viewer extends Application {
         root.getChildren().add(board.castleLayer);
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);
+        root.getChildren().add(board.turnLayer);
         makeControls();
 
         primaryStage.setScene(scene);
