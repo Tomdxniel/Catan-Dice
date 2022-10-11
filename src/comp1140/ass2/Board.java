@@ -548,8 +548,21 @@ public class Board {
         return true;
     }
 
+    public String resourceString()
+    {
+        StringBuilder output = new StringBuilder();
+        for(int i = 0; i < 6; i++)
+        {
+            for(int y = 0; y < this.resources[i]; y++)
+            {
+                output.append(resourceArray.charAt(i));
+            }
+        }
+        return output.toString();
+    }
+
     @Override
-    // rebuilds board string of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score]
+    // rebuilds board string of [ID],[# Dice],[Rolls Done],[Resources],[ID],[Placement],[Score]
     public String toString(){
         StringBuilder output = new StringBuilder();
         output.append(this.playerTurn.playerID);

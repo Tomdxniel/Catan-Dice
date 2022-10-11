@@ -15,7 +15,7 @@ public class ResourcePiece extends Polygon {
         this.setLayoutY(y);
         this.setFill(null);
 
-
+        //create Outline red square to see which resources are selected
         this.outline = new Polygon();
         this.outline.getPoints().addAll(-12.0,12.0,12.0,12.0,12.0,-12.0,-12.0,-12.0);
         this.outline.setLayoutX(x);
@@ -46,7 +46,7 @@ public class ResourcePiece extends Polygon {
                     default -> null;
                 }
         );
-        //Remove highlight square main square is null
+        //Remove highlight square if main square is null
         if(this.getFill() == null)
         {
             this.outline.setFill(null);

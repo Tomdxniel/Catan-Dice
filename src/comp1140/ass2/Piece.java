@@ -1,7 +1,10 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gui.Game;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+
+import java.util.Arrays;
 
 // Piece.java created by Sam Liersch u7448311
 public class Piece extends Polygon {
@@ -26,6 +29,63 @@ public class Piece extends Polygon {
         updatePiece();
         //Default colour is gray
         this.setFill(Color.LIGHTGRAY);
+        this.setOnMouseClicked((event) ->
+        {
+
+            //FIXME move loadBoard to be a constructor and remove
+            if(Game.board.resources != null && this.type!=null)
+            {
+                int count = 0;
+                int lastType = -1;
+                //If player selects a resource then knight
+                Action action = new Action();
+                StringBuilder actionString = new StringBuilder();
+                actionString.append("build");
+                actionString.append(this);
+                if(this.type == PieceType.KNIGHT || this.type == PieceType.USEDKNIGHT)
+                {
+                    actionString.replace(5,6,"K");
+
+                    for(ResourcePiece r: Game.board.resourceDisplay)
+                    {
+                        if(r.clicked)
+                        {
+                            lastType = r.type;
+                            count ++;
+                        }
+                    }
+
+                }
+                if(count == 1)
+                {
+
+                    actionString.setLength(0);
+                    actionString.append("swap");
+                    actionString.append(Board.resourceArray.charAt(lastType));
+                    actionString.append(Board.hexTypeArray[this.boardIndex].toString());
+                    if(Board.hexTypeArray[this.boardIndex] != HexType.WILD && actionString.charAt(4) != actionString.charAt(5))
+                    {
+                        //FIXME create a propper error message;
+                        if(!CatanDiceExtra.loadAction(actionString.toString(),action))
+                        {
+                            throw new RuntimeException();
+                        }
+                        Game.applyAction(action);
+                    }
+
+                }
+                else
+                {
+                    //FIXME create a propper error message;
+                    if(!CatanDiceExtra.loadAction(actionString.toString(),action))
+                    {
+                        throw new RuntimeException();
+                    }
+
+                    Game.applyAction(action);
+                }
+            }
+        });
 
     }
 
@@ -41,6 +101,25 @@ public class Piece extends Polygon {
 
         this.setFill(Color.LIGHTGRAY);
 
+
+        this.setOnMouseClicked((event) ->
+        {
+
+            if (Game.board.resources != null && this.type != null) {
+                Action action = new Action();
+                StringBuilder actionString = new StringBuilder();
+                actionString.append("build");
+                actionString.append("R");
+                actionString.append(String.format("%4d", this.boardIndex).replace(' ', '0'));
+                //FIXME create a propper error message;
+                if (!CatanDiceExtra.loadAction(actionString.toString(), action)) {
+                    throw new RuntimeException();
+                }
+
+                Game.applyAction(action);
+
+            }
+        });
     }
 
     public void updatePiece(){

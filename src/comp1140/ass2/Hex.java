@@ -1,5 +1,6 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gui.Game;
 import javafx.application.Application;
 
 import javafx.application.Application;
@@ -51,10 +52,29 @@ public class Hex extends Polygon {
         this.setLayoutY(rLengthY * r + startY);
         if(type != null)
         {
+
+
             this.setFill(HexType.toColor(type));
+            this.setOnMouseClicked((event) -> {
+                //FIXME move loadBoard to be a constructor and remove
+                if(Game.board.resources != null)
+                {
+                    Action action = new Action();
+                    StringBuilder actionString = new StringBuilder();
+                    actionString.append("trade");
+                    actionString.append(this.type.toString());
+                    if(this.type != HexType.WILD)
+                    {
+                        //FIXME create a propper error message;
+                        if(!CatanDiceExtra.loadAction(actionString.toString(),action))
+                        {
+                            throw new RuntimeException();
+                        }
+                        Game.applyAction(action);
+                    }
+                }
+            });
         }
-
-
     }
 
     public static Double[] generatePoints(double size)

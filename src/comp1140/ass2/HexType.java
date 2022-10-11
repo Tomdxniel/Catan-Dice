@@ -33,4 +33,17 @@ public enum HexType {
 
 
     }
+    public String toString() {
+        return switch (this)
+                {
+                    case BRICK -> "b";
+                    case GRAIN -> "g";
+                    case LUMBER -> "l";
+                    case WILD -> "Wild";
+                    case ORE -> "o";
+                    case WOOL -> "w";
+                };
+
+    }
+
 }

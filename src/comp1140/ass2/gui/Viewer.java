@@ -33,10 +33,9 @@ public class Viewer extends Application {
     /**
      * Show the state of a (single player's) board in the window.
      *
-     * @param boardState The string representation of the board state.
      */
-    void displayState(String boardState) {
-        board.loadBoard(boardState);
+    void displayState() {
+
         for(Piece p : board.settlements)
         {
             p.updatePiece();
@@ -64,7 +63,9 @@ public class Viewer extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                displayState(boardTextField.getText());
+                newBoard();
+                board.loadBoard(boardTextField.getText());
+                displayState();
             }
         });
         HBox hb = new HBox();

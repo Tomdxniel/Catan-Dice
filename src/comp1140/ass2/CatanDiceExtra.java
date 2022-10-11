@@ -1,6 +1,9 @@
 package comp1140.ass2;
 import java.sql.SQLOutput;
 import java.util.*;
+
+import static comp1140.ass2.HexType.BRICK;
+
 public class CatanDiceExtra {
     //Required resources to build objects
     //Knight Road Settlement City
@@ -33,9 +36,16 @@ public class CatanDiceExtra {
     }
 
 
+    public static boolean isActionWellFormed(String actionString)
+    {
+        Action action = new Action();
+        return loadAction(actionString,action);
+    }
+
+
     //loadActionValid created by Sam Liersch u7448311
     //Loads action into action class
-    public static boolean loadActionValid(String actionString, Action action)
+    public static boolean loadAction(String actionString, Action action)
     {
         //Check if action has type
         if(actionString.length() < 4) return false;
@@ -164,11 +174,16 @@ public class CatanDiceExtra {
             case SWAP -> {
 
                 action.type = ActionType.SWAP;
-                //Can only saw 1 resource for 1 resource
+
+                //Can only swap 1 resource for 1 resource
                 if (actionSubject.length() != 2) return false;
+                //Can't Swap 1 resource for the same resource
+                if(actionSubject.charAt(0) == actionSubject.charAt(1)) return false;
                 //Check if it's a valid resource
                 if(Board.resourceArray.indexOf(actionSubject.charAt(0)) == -1) return false;
                 if(Board.resourceArray.indexOf(actionSubject.charAt(1)) == -1) return false;
+
+                action.requiredType = HexType.fromChar(actionSubject.charAt(1));
                 resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(0))] --;
                 resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(1))] ++;
                 action.resourceArray = resourceArray;
@@ -194,7 +209,7 @@ public class CatanDiceExtra {
      */
 
     //isActionWellFormed created by Eliz So, u7489812
-    public static boolean isActionWellFormed(String action) {
+    public static boolean ActionWellFormed(String action) {
 
         String resources = "bglmow";
 
@@ -359,7 +374,7 @@ public class CatanDiceExtra {
      * @return true iff the action is executable, false otherwise.
      */
     // isActionValid created by Thomas Daniel, u7490675
-    public static boolean isActionValid(String boardState, String action) {
+    public static boolean ActionValid(String boardState, String action) {
             boolean result = false;
             boolean p1 = (boardState.indexOf("W") == 0);  // checks what players turn
             String[] inland = new String[]{"08","12","17","22","28","34","39","44","40","45","41",
@@ -496,15 +511,34 @@ public class CatanDiceExtra {
         }
 
 
+
+        public static boolean isActionValid(String boardState, String actionState)
+        {
+            Board board = new Board(0,0);
+            Action action = new Action();
+            //Check board state is wellformed
+            if(!board.loadBoard(boardState))
+            {
+                return false;
+            }
+            //Check action is wellformed
+
+            if(!loadAction(actionState, action))
+            {
+                return false;
+            }
+            //Check action is valid
+            if(!checkActionValid(board,action))
+            {
+                return false;
+            }
+            return true;
+        }
+
     //checkActionValid created by Sam Liersch u7448311
         // Alternative version of is action valid that relies on Board, and action Class
     public static boolean checkActionValid(Board board, Action action) {
-//        Board board = new Board(0,0);
-//        //Check if board string is wellFormed
-//        if(!board.loadBoard(boardState)) return false;
-//        Action action = new Action();
-//        //Check if action is wellFormed
-//        if(!loadAction(actionString,action)) return false;
+
         int pos1;
         int pos2;
 
@@ -633,8 +667,9 @@ public class CatanDiceExtra {
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
                         //Check that on of the neighbouring settlements is owned
-                        if(board.settlements[pos1].owner != board.playerTurn
-                                && board.settlements[pos2].owner != board.playerTurn) return false;
+                        //FIXME Correct implementation needed
+                        if(board.settlements[pos1].owner != null // ==board.playerTurn
+                                && board.settlements[pos2].owner != null) return false;// ==board.playerTurn
                     }
                     case SETTLEMENT -> {
                         if(!hasMaterials(board.resources,reqResources[2],true)) return false;
@@ -843,6 +878,12 @@ public class CatanDiceExtra {
         return null;
     }
 
+
+    public static void applyBoardAction(Board board, Action action)
+    {
+        System.out.println(board.toString());
+        System.out.println(action.toString());
+    }
     /**
      * Given valid board state, this method checks if a sequence of player
      * actions is executable.
