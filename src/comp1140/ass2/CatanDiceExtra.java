@@ -891,7 +891,7 @@ public class CatanDiceExtra {
             }
         }
         for (Player p : board1.players) {
-            if (p.score == 10) {
+            if (p.score >= 10) {
                 return boardState;
             }
         }
@@ -983,7 +983,92 @@ public class CatanDiceExtra {
                 }
             }
         }
-         // FIXME: Longest road and largest army need to apply properly
+        if (action1.type == ActionType.BUILD){
+        int longest = longestRoad(board1.toString())[0];
+        int maxIdroad = 0;
+        for(int i = 1; i <longestRoad(board1.toString()).length; i++) {
+            if(longestRoad(board1.toString())[i] > longest) {
+                longest = longestRoad(board1.toString())[i];
+                maxIdroad = i;
+            }
+            if(longestRoad(board1.toString())[i] == longest && lRoad1 == board1.players[i]) {
+                longest = longestRoad(board1.toString())[i];
+                maxIdroad = i;
+            }
+        }
+        if (longest >= 5){
+        if ( maxIdroad == 0 && lRoad1 != board1.players[0] && board1.players[0] == board1.playerTurn) {
+            board1.players[0].longestRoad = true;
+            board1.players[0].score += 2;
+            if (lRoad1 != null){
+            lRoad1.score -=2;
+            lRoad1.longestRoad = false;}
+        }
+        if (maxIdroad == 1 && lRoad1 != board1.players[1] && board1.players[1] == board1.playerTurn) {
+            board1.players[1].longestRoad = true;
+            board1.players[1].score += 2;
+            if (lRoad1 != null){
+            lRoad1.score -=2;
+            lRoad1.longestRoad = false;}
+        }
+        if ( maxIdroad == 2 && lRoad1 != board1.players[2] && board1.players[2] == board1.playerTurn) {
+            board1.players[2].longestRoad = true;
+            board1.players[2].score += 2;
+            if (lRoad1 != null){
+            lRoad1.score -=2;
+            lRoad1.longestRoad = false;}
+        }
+        if ( maxIdroad == 3 && lRoad1 != board1.players[3] && board1.players[3] == board1.playerTurn) {
+            board1.players[3].longestRoad = true;
+            board1.players[3].score += 2;
+            if (lRoad1 != null){
+            lRoad1.score -=2;
+            lRoad1.longestRoad = false;}
+        }}
+
+        int largest = largestArmy(board1.toString())[0];
+        int maxIdarmy = 0;
+        for(int i = 1; i <largestArmy(board1.toString()).length; i++) {
+            if(largestArmy(board1.toString())[i] > largest) {
+                largest = largestArmy(board1.toString())[i];
+                maxIdarmy = i;
+            }
+            if (largestArmy(board1.toString())[i] == largest && lArmy1 == board1.players[i]){
+                largest = largestArmy(board1.toString())[i];
+                maxIdarmy = i;
+            }
+        }
+        if (action1.type == ActionType.BUILD && largest >= 3){
+        if ( maxIdarmy == 0 && lArmy1 != board1.players[0] && board1.players[0] == board1.playerTurn) {
+            board1.players[0].largestArmy = true;
+            board1.players[0].score += 2;
+            if (lArmy1 != null){
+            lArmy1.score -=2;
+            lArmy1.largestArmy = false;}
+        }
+        if ( maxIdarmy == 1 && lArmy1 != board1.players[1] && board1.players[1] == board1.playerTurn) {
+            board1.players[1].largestArmy = true;
+            board1.players[1].score += 2;
+            if (lArmy1 != null){
+            lArmy1.score -=2;
+            lArmy1.largestArmy = false;}
+        }
+        if ( maxIdarmy == 2 && lArmy1 != board1.players[2] && board1.players[2] == board1.playerTurn) {
+            board1.players[2].largestArmy = true;
+            board1.players[2].score += 2;
+            if (lArmy1 != null){
+            lArmy1.score -=2;
+            lArmy1.largestArmy = false;}
+        }
+        if ( maxIdarmy == 3 && lArmy1 != board1.players[3] && board1.players[3] == board1.playerTurn) {
+            board1.players[3].largestArmy = true;
+            board1.players[3].score += 2;
+            if (lArmy1 != null){
+            lArmy1.score -=2;
+            lArmy1.largestArmy = false;}
+        }
+        }
+        }
         return board1.toString();
     }
 
