@@ -5,7 +5,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.shape.Polygon;
 
 import java.util.*;
 
@@ -120,10 +119,10 @@ public class Board {
     public Group turnLayer = new Group();
     public VBox turnBox = new VBox();
     //FIXME whats the difference between map and hashMap
-    public HashMap<Integer,Piece> roadsMap = new HashMap<>();
     //FIXME are constants names all caps
     //FIXME How do you replace all of a variable with the same name with a different name
     //FIXME should these be public // should a getter class be used
+    public HashMap<Integer,Piece> roadsMap = new HashMap<>();
     public static final int hexSize = 75;
     public boolean setupPhase = false;
     public int[] resources;           //"bglmow" corresponding to resource,{b,g,l,m,o,w}
@@ -131,8 +130,7 @@ public class Board {
     public Player playerTurn;
     public int numDice;
     public int rollsDone;
-    public static final double boarderScale = 0.3;
-    public final int playerCount = 2;
+    public final int playerCount = 4;
     public Player[] players = new Player[playerCount];
     private static final String[] names = {"Sam","Jim","Eliz","Tom"}; //Names of each player, Jim is just filler
     public static final String resourceArray = "bglmow";
@@ -169,7 +167,6 @@ public class Board {
             {
                 if(Math.abs(r+q) < 3)
                 {
-                   //FIXME im not storing the objects anywhere for the large hexes, is this bad practice?
                     //create Hex for black border
                     outLineHex = new Hex(q,r,null,hexSize * 1.05);
                     outLineHex.setFill(Color.BLACK);
@@ -185,16 +182,9 @@ public class Board {
                     {
                         coordinate = coordinateArray[pieceIndex + i];
 
-                        //FIXME would settlements only be null if it was not initialized?
-                        //Set settlements/Citites at hex vertexes
+                        //Set settlements/Cities at hex vertexes
                         if(settlements[coordinate] == null)
                         {
-                            createOutlinePiece(
-                                    PieceType.SETTLEMENT,//Piece type
-                                    x + hexPoints[i*2],//startX
-                                    y + hexPoints[i*2 + 1],//startY
-                                    settlementLayer);//Group
-
                             settlements[coordinate] = new Piece(
                                     coordinate,//Piece index
                                     PieceType.SETTLEMENT,//Piece type
@@ -234,7 +224,6 @@ public class Board {
                     if(knightIndex != 9)//The two knights at Pos 9 & 10 are handled separately
                     {
 
-                        createOutlinePiece(PieceType.KNIGHT,x,y,knightLayer);
 
                         knights[knightIndex] = new Piece(knightIndex, PieceType.KNIGHT,x,y);
                         knightLayer.getChildren().add(knights[knightIndex]);
@@ -242,8 +231,6 @@ public class Board {
                     }
                     else
                     {
-                        createOutlinePiece(PieceType.KNIGHT,x-15,y,knightLayer);
-                        createOutlinePiece(PieceType.KNIGHT,x+15,y,knightLayer);
 
                         knights[9] = new Piece(9,PieceType.KNIGHT,x-15,y);
                         knights[10] = new Piece(10,PieceType.KNIGHT,x+15,y);
@@ -343,22 +330,15 @@ public class Board {
 
     }
 
-    //To create a boarder for a piece create a new piece of different colour that's slightly bigger and underneath
-    private void createOutlinePiece(PieceType type,double x, double y, Group group)
-    {
-//        Piece outlinePiece = new Piece(0,type,x,y);
-//        outlinePiece.scale(boarderScale);
-//        outlinePiece.setFill(Color.DARKGREY);
-//        group.getChildren().add(outlinePiece);
-    }
 
 
 
     /*
     Breaks the board state into section of [ID],[# Dice],[Rolls Done],[Resources],[Placement],[Score] and stores it in respective places
-    then does checks to see if boardstate is valid
+    then does checks to see if board state is valid
      */
 
+    //FIXME are we supposed to have definitions of @param and @return for each method we create
     public boolean loadBoard(String boardState)
     {
         int index = 0;
@@ -370,7 +350,6 @@ public class Board {
             this.players[i] = new Player(names[i],i);
         }
 
-        //FIXME are we supposed to have definitions of @param and @return for each method we create
         try {
             for(int i = 0; i < playerCount; i++)
             {
@@ -451,7 +430,6 @@ public class Board {
                 while (boardState.charAt(index) == 'C') {
                     index++;
                     pos = (int) boardState.charAt(index) - 48;
-                    //FIXME Is referencing a variable of player1 directly and not using a function of player one bad practice
                     if(this.castles[pos].owner == null)
                     {
                         this.castles[pos].owner = this.players[i];
@@ -495,7 +473,7 @@ public class Board {
                 while (boardState.charAt(index) == 'S' || boardState.charAt(index) == 'T') {
                     index++;
                     pos = Integer.parseInt(boardState.substring(index, index + 2));
-                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the positon isnt between 0 and 54 it would create an error
+                    //FIXME if its acceptable to check by try catch is it okay to simplify this as if the position isn't between 0 and 54 it would create an error
                     if (this.settlements[pos].owner == null) {
                         this.settlements[pos].type = (boardState.charAt(index-1) == 'S') ? PieceType.SETTLEMENT : PieceType.CITY ;
                         this.settlements[pos].owner = this.players[i];
@@ -532,7 +510,6 @@ public class Board {
                     return false;
                 }
                 index += 2;
-                //FIXME Is there a more efficient way to do this without using try catch
                 try{
                     if(boardState.charAt(index) == 'R')
                     {
@@ -580,19 +557,6 @@ public class Board {
         return true;
     }
 
-    public String resourceString()
-    {
-        StringBuilder output = new StringBuilder();
-        for(int i = 0; i < 6; i++)
-        {
-            for(int y = 0; y < this.resources[i]; y++)
-            {
-                output.append(resourceArray.charAt(i));
-            }
-        }
-        return output.toString();
-    }
-
     @Override
     // rebuilds board string of [ID],[# Dice],[Rolls Done],[Resources],[ID],[Placement],[Score]
     public String toString(){
@@ -603,40 +567,37 @@ public class Board {
         Integer[] roadSort = new Integer[this.roadsMap.keySet().size()];
         for(int i = 0; i < 6; i++)
         {
-            for(int y = 0; y < this.resources[i]; y++)
-            {
-                output.append(resourceArray.charAt(i));
-            }
+            output.append(resourceArray.substring(i,i+1).repeat(this.resources[i]));
         }
         for(int i = 0; i < this.playerCount; i++)
         {
             output.append(this.players[i].playerID);
-            for(int j = 0; j < this.castles.length; j++)
+            for(Piece c : castles)
             {
-                if(this.castles[j].owner == this.players[i])
+                if(c.owner == this.players[i])
                 {
-                    output.append(this.castles[j].toString());
+                    output.append(c);
                 }
             }
             //Knight
-            for(int j = 0; j < this.knights.length; j++)
+            for(Piece k : knights)
             {
-                if(this.knights[j].owner == this.players[i] && this.knights[j].type == PieceType.KNIGHT)
+                if(k.owner == this.players[i] && k.type == PieceType.KNIGHT)
                 {
-                    output.append(this.knights[j].toString());
+                    output.append(k);
                 }
             }
+
             //UsedKnight
-            for(int j = 0; j < this.knights.length; j++)
+            for(Piece k : knights)
             {
-                if(this.knights[j].owner ==  this.players[i]&& this.knights[j].type == PieceType.USEDKNIGHT)
+                if(k.owner == this.players[i] && k.type == PieceType.USEDKNIGHT)
                 {
-                    output.append(this.knights[j].toString());
+                    output.append(k);
                 }
             }
 
             //ROADS
-            //FIXME is there anyway to map through the hashMap without using lambda calculus or converting to an array first
             this.roadsMap.keySet().toArray(roadSort);
             Arrays.sort(roadSort);
             for(int j : roadSort) {
@@ -646,19 +607,19 @@ public class Board {
                 }
             }
             //SETTLEMENTS
-            for(int j = 0; j < this.settlements.length; j++)
+            for(Piece s : settlements)
             {
-                if(this.settlements[j].type == PieceType.SETTLEMENT && this.settlements[j].owner == this.players[i])
+                if(s.type == PieceType.SETTLEMENT && s.owner == this.players[i])
                 {
-                    output.append(this.settlements[j].toString());
+                    output.append(s);
                 }
             }
             //CITIES
-            for(int j = 0; j < this.settlements.length; j++)
+            for(Piece t : settlements)
             {
-                if(this.settlements[j].type == PieceType.CITY && this.settlements[j].owner == this.players[i])
+                if(t.type == PieceType.CITY && t.owner == this.players[i])
                 {
-                    output.append(this.settlements[j].toString());
+                    output.append(t);
                 }
             }
         }

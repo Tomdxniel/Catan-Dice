@@ -1,11 +1,8 @@
 package comp1140.ass2;
-import com.sun.javafx.logging.PlatformLogger;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static comp1140.ass2.Board.*;
-import static comp1140.ass2.HexType.BRICK;
 import static comp1140.ass2.HexType.WILD;
 
 public class CatanDiceExtra {
@@ -16,7 +13,6 @@ public class CatanDiceExtra {
      * Note that this does not mean checking if the state is valid
      * (represents a state that the player could get to in game play),
      * only that the string representation is syntactically well-formed.
-     *
      * A description of the board state string will be provided in a
      * later update of the project README.
      *
@@ -36,173 +32,11 @@ public class CatanDiceExtra {
     public static boolean isActionWellFormed(String actionString)
     {
         Action action = new Action();
-        return loadAction(actionString,action);
+        return action.loadAction(actionString);
     }
 
 
-    //loadActionValid created by Sam Liersch u7448311
-    //Loads action into action class
-    public static boolean loadAction(String actionString, Action action)
-    {
-        //Required resources for building
-        int[][] reqResources = {
-            {0,-1,0,0,-1,-1},//Knight
-            {-1,0,-1,0,0,0,},//Road
-            {-1,-1,-1,0,0,-1},//Settlement
-            {0,-2,0,0,-3,0}};//City
 
-
-        //Check if action has type
-        if(actionString.length() < 4) return false;
-        String type;
-        String actionSubject;
-        //Swap is the only 4 letter action all other actions are 5 letters
-        if(actionString.charAt(3) == 'p')
-        {
-            actionSubject = actionString.substring(4);
-            type = actionString.substring(0,4);
-        }
-        else
-        {
-            actionSubject = actionString.substring(5);
-            type = actionString.substring(0,5);
-        }
-        ActionType actionType = ActionType.fromString(type);
-        if(actionType == null) return false;
-        int pos1;
-        int pos2;
-        char lastChar =' ';
-        int[] resourceArray = new int[] {0,0,0,0,0,0};
-        switch (actionType)
-        {
-            case KEEP -> {
-                //Check if correct length
-                if (actionSubject.length() > 6) return false;
-                action.type = ActionType.KEEP;
-                if(actionSubject.length() > 0)
-                {
-                    lastChar = actionSubject.charAt(0);
-                }
-                for(char c : actionSubject.toCharArray())
-                {
-                    //If resources are not in order
-                    if((int) lastChar > (int) c)
-                    {
-                        return false;
-                    }
-                    //if resources is invalid
-                    if(Board.resourceArray.indexOf(c) < 0)
-                    {
-                        return false;
-                    }
-                    resourceArray[Board.resourceArray.indexOf(c)] ++;
-                    lastChar = c;
-                }
-                action.resourceArray = resourceArray;
-            }
-            case BUILD -> {
-
-                action.type = ActionType.BUILD;
-                switch (actionSubject.charAt(0))
-                {
-                    case 'R' -> {
-                        //Road
-                        action.pieceType = PieceType.ROAD;
-                        if(actionSubject.length()!= 5)
-                        {
-                            return false;
-                        }
-                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
-                        pos2 = Integer.parseInt(actionSubject.substring(3,5));
-                        //Check if road is in correct format and within the index bounds
-                        if(!(pos1 < pos2 && pos1 >=0 && pos2 < 54))
-                        {
-                            return false;
-                        }
-                        action.pieceIndex = Integer.parseInt(actionSubject.substring(1,5));
-                        action.resourceArray = reqResources[1];
-                    }
-                    case  'C' -> {
-                        //Castle
-                        action.pieceType = PieceType.CASTLE;
-                        if(actionSubject.length() != 2) return false;
-                        pos1 = Integer.parseInt(actionSubject.substring(1,2));
-                        if(!(pos1 >= 0 && pos1 < 4)) return false;
-                        action.pieceIndex = pos1;
-                        //Potential bug, ReqResources for castle can change depending on available resources
-                        //And so resource req is calculated when action is applied
-                        action.resourceArray = resourceArray;
-                    }
-                    case 'S' -> {
-                        //Settlement
-                        action.pieceType = PieceType.SETTLEMENT;
-                        if(actionSubject.length() != 3) return false;
-                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
-                        if(!(pos1 >= 0 && pos1 < 54)) return false;
-                        action.pieceIndex = pos1;
-                        action.resourceArray = reqResources[2];
-                    }
-                    case 'T' -> {
-                        //City
-                        action.pieceType = PieceType.CITY;
-                        if(actionSubject.length() != 3) return false;
-                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
-                        if(!(pos1 >= 0 && pos1 < 54)) return false;
-                        action.pieceIndex = pos1;
-                        action.resourceArray = reqResources[3];
-                    }
-                    case 'K' -> {
-                        //Knight
-                        action.pieceType = PieceType.KNIGHT;
-                        if(actionSubject.length() != 3) return false;
-                        pos1 = Integer.parseInt(actionSubject.substring(1,3));
-                        if(!(pos1 >= 0 && pos1 < 20)) return false;
-                        action.pieceIndex = pos1;
-                        action.resourceArray = reqResources[0];
-                    }
-                    default ->
-                    {
-                        return false;
-                    }
-                }
-            }
-            case TRADE -> {
-                action.type = ActionType.TRADE;
-                lastChar = actionSubject.charAt(0);
-                //Check resources are in order
-                for(char r : actionSubject.toCharArray())
-                {
-                    if((int) lastChar > r) return false;
-                    //Cannot trade money for money
-                    if(r == 'm') return false;
-                    //Ensure resource is of the valid type
-                    if(Board.resourceArray.indexOf(r) == -1) return false;
-                    resourceArray[Board.resourceArray.indexOf(r)]++;
-                    resourceArray[3] -= 2;
-
-                }
-                action.resourceArray = resourceArray;
-            }
-            case SWAP -> {
-
-                action.type = ActionType.SWAP;
-
-                //Can only swap 1 resource for 1 resource
-                if (actionSubject.length() != 2) return false;
-                //Can't Swap 1 resource for the same resource
-                if(actionSubject.charAt(0) == actionSubject.charAt(1)) return false;
-                //Check if it's a valid resource
-                if(Board.resourceArray.indexOf(actionSubject.charAt(0)) == -1) return false;
-                if(Board.resourceArray.indexOf(actionSubject.charAt(1)) == -1) return false;
-
-                action.requiredType = HexType.fromChar(actionSubject.charAt(1));
-                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(0))] --;
-                resourceArray[Board.resourceArray.indexOf(actionSubject.charAt(1))] ++;
-                action.resourceArray = resourceArray;
-            }
-        }
-        return true;
-    }
 
 
 
@@ -211,7 +45,7 @@ public class CatanDiceExtra {
      * Note that this does not mean checking if the action is valid
      * (represents a player action that the player could get to in game play),
      * only that the string representation is syntactically well-formed.
-     *
+     * <p>
      * A description of the board state string will be provided in a
      * later update of the project README.
      *
@@ -259,7 +93,7 @@ public class CatanDiceExtra {
         if (action.length() < 5) return false;
         else if (action.substring(0, 5).compareTo("build") == 0){
 
-            if (action.length() <= 5) return false;
+            if (action.length() == 5) return false;
 
             char struct = action.charAt(5);
             if (struct == 'R'){
@@ -353,16 +187,16 @@ public class CatanDiceExtra {
      * Given a valid board state and player action, determine whether the
      * action can be executed.
      * The permitted actions depend on the current game phase:
-     *
+     * <p>
      * A. Roll Phase (keep action)
      * 1. A keep action is valid if it satisfies the following conditions:
      * - comp1140.ass2.Action follows the correct format : "keep[Resources]", and the
      *   current player has the resources specified.
      * - [Rolls Done] is less than 3
-     *
+     * <p>
      *
      * B. Build Phase (build, trade, and swap actions)
-     *
+     * <p>
      * 1. A build action is valid if it satisfies the following conditions:
      * - comp1140.ass2.Action follows the correct format : "build[Structure Identifier]"
      * - The current player has sufficient resources available for building
@@ -370,172 +204,34 @@ public class CatanDiceExtra {
      * - The structure satisfies the build constraints (is connected to the
      *   current players road network).
      * - See details of the cost of buildable structure in README.md.
-     *
+     * <p>
      * 2. A trade action is valid if it satisfies the following conditions:
      * - comp1140.ass2.Action follows the correct format : "trade[Resources]"
      * - The current player has sufficient resources available to pay for
      *   the trade.
-     *
+     * <p>
      * 3. A swap action is valid if it satisfies the following conditions:
      * - comp1140.ass2.Action follows the correct format : "swap[Resource Out][Resource In]"
      * - The current player has sufficient resources available to swap out.
      * - The current player has an unused knight (resource joker) on the
      *   board which allows to swap for the desired resource.
      * @param boardState: string representation of the board state.
-     * @param action: string representation of the player action.
+     * @param actionState: string representation of the player action.
      * @return true iff the action is executable, false otherwise.
      */
-    // isActionValid created by Thomas Daniel, u7490675
-    public static boolean ActionValid(String boardState, String action) {
-            boolean result = false;
-            boolean p1 = (boardState.indexOf("W") == 0);  // checks what players turn
-            String[] inland = new String[]{"08","12","17","22","28","34","39","44","40","45","41",
-                    "36","31","25","19","14","09","13","18","23","29","35","30","24"};
-            String[] buildings = new String[]{"00","01","02","07","08","09","10","16","17","18","19","20","33",
-                    "34","35","36","37","43","44","45","46","51","52","53"};
-            String[] woodKnights = new String[]{"K05","K08","K15","J09","J10","J05","J08","J15","K09","K10"};
-            String[] woolKnights = new String[]{"K06","K00","K19","K13","J09","J10","J06","J00","J19","J13","K09","K10"};
-            String[] oreKnights = new String[]{"K02","K03","K16","K17","J09","J10","J02","J03","J16","J17","K09","K10"};
-            String[] grainKnights = new String[]{"K01","K07","K12","K18","J09","J10","J01","J07","J12","J18","K09","K10"};
-            String[] brickKnights = new String[]{"K04","K11","K14","J09","J10","J04","J11","J14","K09","K10"};
-            String[] jokerKnights = new String[]{"J09","J10","K09","K10"};
-            String wString = boardState.substring(4,boardState.indexOf("X", 1));
-            String xString = boardState.substring(boardState.indexOf("X")+1);
-            if (boardState.substring(1,3).compareTo("00") == 0) { // condition for set up phase
-                if (action.substring(0, 6).compareTo("buildR") == 0){ // condition for Building road
-                    if (boardState.contains(action.substring(6,8)) || (boardState.contains(action.substring(8,10)))){
-                    } else {
-                        int cor1 = Integer.parseInt(action.substring(6,8));
-                        int cor2 = Integer.parseInt(action.substring(8,10));
-                        List<String> nameList = new ArrayList<>(Arrays.asList(inland));
-                        if (cor2 - cor1 <= 6 && cor2 - cor1 > 2 ){
-                            if (nameList.contains(action.substring(6,8)) || nameList.contains(action.substring(8,10))){
-                            } else{
-                                result = true;
-                            }
-                        }
-                    }
-                }
-            } else {
-                char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
-                if (action.substring(0, 4).compareTo("keep") == 0 && Integer.parseInt(String.valueOf(boardState.charAt(2))) < 3) {
-                    char[] req = action.substring(4).toCharArray();
-                    int count = 0;
-                    int start = 0;
-                    for (int i = 0; i < resources.length; i++) {
-                        if (action.indexOf(resources[i], start) != -1) {
-                            count++;
-                            start = action.indexOf(resources[i]) + 1;
-                        }
-                    }
-                    result = count >= req.length;
-                } else if (action.substring(0, 5).compareTo("build") == 0) { // Build action condition
-                    if (action.charAt(5) == 'R') {
-                        int cor1 = Integer.parseInt(action.substring(6,8));
-                        int cor2 = Integer.parseInt(action.substring(8,10));
-                        boolean conditions = cor2 - cor1 <= 6 && cor2 - cor1 > 2 && canBuild(boardState, "bl");
-                        List<String> buildList = new ArrayList<>(Arrays.asList(buildings));
-                        if (p1) { // if player 1 check valid for wStrings, else xStrings
-                            if (wString.contains(action.substring(6, 8)) || (wString.contains(action.substring(8, 10)))){
-                                if (buildList.contains(action.substring(6, 8))) {
-                                    if (wString.contains(action.substring(6, 8)) && ! wString.contains(action.substring(8, 10))) {
-                                        result = conditions && (wString.contains("S" + action.substring(6, 8)) || wString.contains("T" + action.substring(6, 8)));
-                                    } else result = conditions;
-                                } else if (buildList.contains(action.substring(8, 10))) {
-                                    if (wString.contains(action.substring(8, 10)) && ! wString.contains(action.substring(6, 8))) {
-                                        result = conditions && (wString.contains("S" + action.substring(8, 10)) || wString.contains("T" + action.substring(8, 10)));
-                                    } else result = conditions;
-                                } else result = conditions;
-                            }} else if (xString.contains(action.substring(6, 8)) || (xString.contains(action.substring(8, 10)))) {
-                            if (buildList.contains(action.substring(6, 8))) {
-                                if (xString.contains(action.substring(6, 8)) && ! xString.contains(action.substring(8, 10))) {
-                                    result = conditions && (xString.contains("S" + action.substring(6, 8)) || xString.contains("T" + action.substring(6, 8)));
-                                } else result = conditions;
-                            } else if (buildList.contains(action.substring(8, 10))) {
-                                if (xString.contains(action.substring(8, 10)) && ! xString.contains(action.substring(6, 8))) {
-                                    result = conditions && (xString.contains("S" + action.substring(8, 10)) || xString.contains("T" + action.substring(8, 10)));
-                                } else result =  conditions;
-                            } else result = conditions;
-                        }}
-                    if (action.charAt(5) == 'K') { // building knight
-                        result = canBuild(boardState, "gow");
-                    }
-                    if (action.charAt(5) == 'T') { // building city
-                        result = canBuild(boardState, "ggooo");
-                    }
-                    if (action.charAt(5) == 'S') { // building settlement
-                        result = canBuild(boardState, "bglw");
-                    }
-                } else if (action.substring(0, 5).compareTo("trade") == 0) {
-                    result = canBuild(boardState, "mm".repeat(action.length() - 5));
-
-                } else if (action.substring(0, 4).compareTo("swap") == 0) {
-                    boolean valid = false;
-                    char c = action.charAt(5);
-                    if (p1) {
-                        switch (c) {
-                            case 'b' ->  valid = hasKnight(wString,brickKnights) ;
-                            case 'l' ->  valid = hasKnight(wString,woodKnights);
-                            case 'g' ->  valid = hasKnight(wString,grainKnights);
-                            case 'o' ->  valid = hasKnight(wString,oreKnights);
-                            case 'w' ->  valid = hasKnight(wString,woolKnights);
-                            case 'm' ->  valid = hasKnight(wString,jokerKnights);
-                        }
-                    } else {
-                        switch (c) {
-                            case 'b' ->  valid = hasKnight(xString,brickKnights) ;
-                            case 'l' ->  valid = hasKnight(xString,woodKnights);
-                            case 'g' ->  valid = hasKnight(xString,grainKnights);
-                            case 'o' ->  valid = hasKnight(xString,oreKnights);
-                            case 'w' ->  valid = hasKnight(xString,woolKnights);
-                            case 'm' ->  valid = hasKnight(xString,jokerKnights);
-                        }}
-                    result = valid && canBuild(boardState, String.valueOf(action.charAt(4)));
-                }
-            }return result;
-        }
-    // canBuild created by Thomas Daniel, u7490675
-        public static boolean canBuild(String boardState, String needs) {
-            boolean buildable;
-            char[] resources = boardState.substring(3, boardState.indexOf("W", 1)).toCharArray();
-            char[] req = needs.toCharArray();
-            int count = 0;
-            int start = 0;
-            for (int i = 0; i < resources.length; i++){
-                if (needs.indexOf(resources[i], start) != -1){
-                    count++;
-                    start = needs.indexOf(resources[i])+1;
-                }
-            }
-            buildable = count >= req.length;
-            return buildable;
-        }
-    // hasKnight created by Thomas Daniel, u7490675
-        public static boolean hasKnight(String string, String[] knights) {
-            boolean found = false;
-            for (String knight : knights) {
-                if (string.contains(knight)) {
-                    found = true;
-                    break;
-                }
-            }
-            return found;
-        }
-
-
 
         public static boolean isActionValid(String boardState, String actionState)
         {
             Board board = new Board(0,0);
             Action action = new Action();
-            //Check board state is wellformed
+            //Check board state is well-formed
             if(!board.loadBoard(boardState))
             {
                 return false;
             }
-            //Check action is wellformed
+            //Check action is well-formed
 
-            if(!loadAction(actionState, action))
+            if(action.loadAction(actionState))
             {
                 return false;
             }
@@ -567,8 +263,6 @@ public class CatanDiceExtra {
             if(!Board.coastRoads.contains(pos1)) return false;
             if(!Board.coastRoads.contains(pos2)) return false;
             if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1) return false;
-
-            //FIXME how do you properly wrap around
             //check no road is within 5 pieces clockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
             if(pos1 == 0 && pos2 == 29)
@@ -622,7 +316,7 @@ public class CatanDiceExtra {
 
             return (action.type == ActionType.KEEP);
         }
-        //Used if multipe check are needed
+        //Used if multiple check are needed
         boolean flag;
 
         //Build phase
@@ -702,7 +396,7 @@ public class CatanDiceExtra {
                             for(Piece road : roads)
                             {
                                 rPos1 = road.boardIndex % 100;
-                                rPos2 = (int)road.boardIndex / 100;
+                                rPos2 = road.boardIndex / 100;
                                 if(road.owner == board.playerTurn && road.boardIndex != action.pieceIndex)
                                 {
                                     if(!pos1Settlement && (rPos1 == pos1 || rPos2 == pos1))
@@ -737,7 +431,7 @@ public class CatanDiceExtra {
                         for(Piece road : roads)
                         {
                             pos1 = road.boardIndex % 100;
-                            pos2 = (int)road.boardIndex / 100;
+                            pos2 = road.boardIndex / 100;
                             if(road.owner == board.playerTurn
                                     && (pos1 == action.pieceIndex || pos2 == action.pieceIndex))
                             {
@@ -897,8 +591,7 @@ public class CatanDiceExtra {
             output[i] = 0;
             for(Piece p : board.knights)
             {
-                //FIXME does the first statement always process before the second one? if owner is null indexOf will give an error
-                if(p.owner != null && "WXYZ".indexOf(p.owner.playerID) == i)
+                if(p.owner != null && playerIDArray.indexOf(p.owner.playerID) == i)
                 {
                     output[i] ++;
                 }
@@ -912,20 +605,20 @@ public class CatanDiceExtra {
      * the next new board state that results from executing the action.
      * This method should both handle Start of the Game, Middle of the Game,
      * and Game End.
-     *
+     * <p>
      * A. Start of the Game
      * For example : given boardState = "W00WXW00X00", action = "buildR0205"
      * - Player 'W' builds a road from index 02 to 05
      * - The next boardState should be "X00WR0205XW00X00"
      * - Consult details of the rules for the Start of the Game in README.md
-     *
+     * <p>
      * B. Middle of the Game
      * For example : given boardState = "W61bbbgwwWR0205R0509S02XR3237W01X00", action = "keepbbbw"
      * - Player 'W' keeps three brick and one wool, and re-rolls two dice.
      * - The next boardState should be "W62[Next Resources]WR0205R0509S02XR3237W01X00"
      * - [Next Resources] can be any 6 resources that contain 3 bricks, 1 wool
      * - Some examples of [Next Resources] are "bbbbmw", "bbbglw", "bbblow", etc
-     *
+     * <p>
      * C. Game End
      * For example : given boardState = "X63lmoWK01K02K04K05K06R0105R0205R0206R0408R0509R0610R0812R0813R0913R0914R1014R1015R1318R1419R1520S01S02S08S09T10XJ09K10K11K12K15K16R1824R1924R1925R2025R2026R2430R2531R2632R3035R3036R3136R3137R3237R3641R3742R4145R4146R4246R4549S19S20S37S45T36W06X10RA"
      * - Player 'X' got the score 10 and game ended
@@ -938,7 +631,7 @@ public class CatanDiceExtra {
         Board  board = new Board(0,0);
         Action action = new Action();
         board.loadBoard(boardString);
-        loadAction(actionString,action);
+        action.loadAction(actionString);
 
         applyAction(board,action);
         return board.toString();
@@ -978,9 +671,7 @@ public class CatanDiceExtra {
             }
             case BUILD -> {
                 switch (action.pieceType) {
-                    case ROAD -> {
-                        board.roadsMap.get(action.pieceIndex).owner = board.playerTurn;
-                    }
+                    case ROAD -> board.roadsMap.get(action.pieceIndex).owner = board.playerTurn;
                     case SETTLEMENT -> {
                         board.playerTurn.score++;
                         board.settlements[action.pieceIndex].owner = board.playerTurn;
@@ -998,9 +689,7 @@ public class CatanDiceExtra {
                         board.playerTurn.score++;
                         board.settlements[action.pieceIndex].type = PieceType.CITY;
                     }
-                    case KNIGHT -> {
-                        board.knights[action.pieceIndex].owner = board.playerTurn;
-                    }
+                    case KNIGHT -> board.knights[action.pieceIndex].owner = board.playerTurn;
                 }
                 for (int i = 0; i < 6; i++) {
                     board.resources[i] += action.resourceArray[i];
@@ -1144,19 +833,19 @@ public class CatanDiceExtra {
      * Given a valid board state, return all applicable player action sequences.
      * The method should return an array of sequences, where each sequence is
      * an array of action string representations.
-     *
+     * <p>
      * If the current phase of the game is the Start of Game phase, each of
      * the sequences should contain just one road building action (that is
      * a permitted initial road for the player).
-     *
+     * <p>
      * If the current phase of the game is the Roll phase, each of the
      * sequences should contain just one action, specifying a possible
      * next roll (i.e., resources to keep).
-     *
+     * <p>
      * If the current phase is the Build phase, the sequences should be all
      * non-redundant sequences of trade, swap and build actions that the
      * player can take.
-     *
+     * <p>
      * In this context, an action sequence is considered non-redundant if
      * 1. All resources gained through trade and swap actions are totally used.
      *    i.e. the turn finishes with 0 of that resource.
@@ -1165,16 +854,16 @@ public class CatanDiceExtra {
      *    traded/swapped away.
      * 4. The empty sequence is always non-redundant (i.e. the player takes no
      *    action).
-     *
+     * <p>
      * Note, there are other sources of redundancy in action sequences besides the
      * ones that are listed here. One of the more noteworthy ones is the ordering of
      * actions within a sequence whereby two different action sequences may result
      * in the same state when applied. While this is not relevant for this task, it
      * may prove useful to consider this for your "smart" game AI in task 14.
-     *
+     * <p>
      * In the build phase, one of the possible sequences is always to end
      * the player's turn without taking any action, i.e., an empty sequence.
-     *
+     * <p>
      * The order of the action sequences in the return array is unspecified,
      * i.e., does not matter. (Of course, the order of actions within each
      * sequence does matter.)
@@ -1189,11 +878,11 @@ public class CatanDiceExtra {
 
     /**
      * Given a valid board state, return a valid action sequence.
-     *
+     * <p>
      * This method is the interface to your game AI. It is given the current
      * state of the game, and should return the sequence of actions your AI
      * chooses to take.
-     *
+     * <p>
      * An array of length 0 is interpreted as finishing the current turn
      * without taking any further action.
      *

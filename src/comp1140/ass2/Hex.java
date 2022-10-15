@@ -1,20 +1,7 @@
 package comp1140.ass2;
 
 import comp1140.ass2.gui.Game;
-import javafx.application.Application;
-
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.stage.Stage;
 
 
 // Hex.java created by Sam Liersch u7448311
@@ -23,11 +10,10 @@ public class Hex extends Polygon {
     public int q;
     public int r;
     //Hex coordinate for drawing hex
-    //Layoutx
-    //Layouty
+    //LayoutX
+    //LayoutY
     public HexType type;
     public int index;
-    public Piece knights;
     public Piece[] settlement = new Piece[6];
     public Piece[] roads = new Piece[6];
 
@@ -56,22 +42,18 @@ public class Hex extends Polygon {
 
             this.setFill(HexType.toColor(type));
             this.setOnMouseClicked((event) -> {
-                //FIXME move loadBoard to be a constructor and remove
-                if(Game.board.resources != null)
+                Action action = new Action();
+                StringBuilder actionString = new StringBuilder();
+                actionString.append("trade");
+                actionString.append(this.type.toString());
+                if(this.type != HexType.WILD)
                 {
-                    Action action = new Action();
-                    StringBuilder actionString = new StringBuilder();
-                    actionString.append("trade");
-                    actionString.append(this.type.toString());
-                    if(this.type != HexType.WILD)
+                    //FIXME create a proper error message;
+                    if(!action.loadAction(actionString.toString()))
                     {
-                        //FIXME create a propper error message;
-                        if(!CatanDiceExtra.loadAction(actionString.toString(),action))
-                        {
-                            throw new RuntimeException();
-                        }
-                        Game.applyGameAction(action);
+                        throw new RuntimeException();
                     }
+                    Game.applyGameAction(action);
                 }
             });
         }
@@ -82,11 +64,11 @@ public class Hex extends Polygon {
         Double[] points = new Double[12];
         for(int i = 0; i < 6; i++)
         {
-            //Ensure the points start at the top vertex and go anitclockwise
-            //Add x coord
+            //Ensure the points start at the top vertex and go anticlockwise
+            //Add x co-ord
             //FIXME what is a better way than just type casting?
             points[i*2] = Math.cos(Math.PI * ((double)1/2 + -(double)i/3))*size;
-            //Add y coord
+            //Add y co-ord
             points[i*2 + 1] = Math.sin(-Math.PI * ((double)1/2 +(double)i/3))*size;
         }
         return points;

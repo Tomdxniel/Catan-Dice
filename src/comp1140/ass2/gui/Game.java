@@ -17,7 +17,6 @@ import javafx.scene.text.Text;
 // Game.java originally created Patrik Haslum
 // Edited by Sam Liersch u7448311
 public class Game extends Application {
-    // FIXME Task 11: implement a playable game
     private final static Group root = new Group();
     private final static Group controls = new Group();
     private static final int WINDOW_WIDTH = 1200;
@@ -132,16 +131,16 @@ public class Game extends Application {
     private void newGame()
     {
         newBoard();
-        Game.board.loadBoard("W00WXW00X00");
+        Game.board.loadBoard("W00WXYZW00X00Y00Z00");
         Game.updateState();
     }
     @Override
     public void start(Stage stage) throws Exception {
         //Create reRoll action to be used
-        CatanDiceExtra.loadAction("keep", reRollBlank);
+        reRollBlank.loadAction("keep");
 
         //FIXME align button on centre
-        //Create winlayer
+        //Create win layer
         winText.setLayoutX(board.BOARD_WIDTH/10 * 4.75);
         winText.setLayoutY(board.BOARD_HEIGHT/2);
         winText.setFont(Font.font(30));
@@ -207,12 +206,6 @@ public class Game extends Application {
 
     public void reRoll()
     {
-        //FIXME move loadBoard to be a constructor and remove
-        if(board.resources == null)
-        {
-            return;
-        }
-
         if(board.rollsDone < 3)
         {
             Action action = new Action();
@@ -226,7 +219,7 @@ public class Game extends Application {
             }
             //Roll Phase
             action.type = ActionType.KEEP;
-            //Invert resources so highlighed resources are rerolled
+            //Invert resources so highlighted resources are rerolled
             for(int i = 0; i < 6; i++)
             {
                 keepResources[i] = board.resources[i] - keepResources[i];
