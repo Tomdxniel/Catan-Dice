@@ -6,12 +6,12 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Added most of a playable Game">
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="ApplyAction passes tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +63,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Game">
+  <component name="RunManager" selected="JUnit.Task 9 applyAction">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -109,16 +109,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.Game" />
+      <item itemvalue="Application.Viewer" />
       <item itemvalue="Application.CatanDiceExtra" />
-      <item itemvalue="JUnit.TestIsActionValid" />
       <item itemvalue="JAR Application.CatanDiceExtra.jar" />
       <item itemvalue="JAR Application.comp1140-ass2.jar" />
       <item itemvalue="JAR Application.game.jar" />
-      <item itemvalue="Application.Game" />
-      <item itemvalue="JUnit.Task 10a isActionSequenceValid" />
-      <item itemvalue="JUnit.Task 10b applyActionSequence" />
-      <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
-      <item itemvalue="JUnit.Task 13 generateAction Sanity" />
       <item itemvalue="JUnit.Task 3 isBoardStateWellFormed" />
       <item itemvalue="JUnit.Task 4 isActionWellFormed" />
       <item itemvalue="JUnit.Task 5 rollDice" />
@@ -126,7 +122,11 @@
       <item itemvalue="JUnit.Task 8a longestRoad" />
       <item itemvalue="JUnit.Task 8b largestArmy" />
       <item itemvalue="JUnit.Task 9 applyAction" />
-      <item itemvalue="Application.Viewer" />
+      <item itemvalue="JUnit.Task 10a isActionSequenceValid" />
+      <item itemvalue="JUnit.Task 10b applyActionSequence" />
+      <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
+      <item itemvalue="JUnit.Task 13 generateAction Sanity" />
+      <item itemvalue="JUnit.TestIsActionValid" />
     </list>
     <recent_temporary>
       <list>
@@ -252,14 +252,7 @@
       <option name="project" value="LOCAL" />
       <updated>1665491305904</updated>
     </task>
-    <task id="LOCAL-00016" summary="Added most of a playable Game">
-      <created>1665505624559</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1665505624559</updated>
-    </task>
-    <option name="localTasksCounter" value="17" />
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -292,15 +285,15 @@
     <MESSAGE value="Added comments to uncommented code" />
     <MESSAGE value="Rebuilt Game.jar" />
     <MESSAGE value="Added Resources and Score to Viewer" />
-    <MESSAGE value="Added most of a playable Game" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added most of a playable Game" />
+    <MESSAGE value="ApplyAction passes tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="ApplyAction passes tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java</url>
-          <line>663</line>
+          <line>665</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
