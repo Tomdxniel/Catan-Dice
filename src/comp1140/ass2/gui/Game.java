@@ -10,18 +10,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 // Game.java originally created Patrik Haslum
 // Edited by Sam Liersch u7448311
 public class Game extends Application {
     // FIXME Task 11: implement a playable game
-    private final Group root = new Group();
-    private final Group controls = new Group();
+    private final static Group root = new Group();
+    private final static Group controls = new Group();
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 700;
     private TextField boardTextField;
-
+    private final static Group winLayer = new Group();
+    private final static Text winText = new Text();
     public static Board board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
 
     private static final Action reRollBlank = new Action();
@@ -70,11 +73,24 @@ public class Game extends Application {
         controls.getChildren().add(hb);
     }
 
+    private void makeReplayGameButton(){
+        Button replayGame = new Button("Replay");
+        replayGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                newGame();
+            }
+        });
+        replayGame.setLayoutX(board.BOARD_WIDTH/2 );
+        replayGame.setLayoutY(board.BOARD_HEIGHT/10 * 5.5 );
+        winLayer.getChildren().add(replayGame);
+
+    }
     private void makeLoadGameButton() {
         Label boardLabel = new Label("Board State:");
         boardTextField = new TextField();
         boardTextField.setPrefWidth(500);
-        Button button = new Button("Show");
+        Button button = new Button("Load");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -99,6 +115,8 @@ public class Game extends Application {
         root.getChildren().remove(board.knightLayer);
         root.getChildren().remove(board.roadLayer);
         root.getChildren().remove(board.turnLayer);
+        root.getChildren().remove(controls);
+        root.getChildren().remove(winLayer);
 
         Game.board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
 
@@ -109,6 +127,7 @@ public class Game extends Application {
         root.getChildren().add(board.knightLayer);
         root.getChildren().add(board.roadLayer);
         root.getChildren().add(board.turnLayer);
+        root.getChildren().add(controls);
     }
     private void newGame()
     {
@@ -121,12 +140,18 @@ public class Game extends Application {
         //Create reRoll action to be used
         CatanDiceExtra.loadAction("keep", reRollBlank);
 
+        //FIXME align button on centre
+        //Create winlayer
+        winText.setLayoutX(board.BOARD_WIDTH/10 * 4.75);
+        winText.setLayoutY(board.BOARD_HEIGHT/2);
+        winText.setFont(Font.font(30));
+        winLayer.getChildren().add(winText);
+        makeReplayGameButton();
 
 
         stage.setTitle("Catan Dice Game XXL");
-        Scene scene = new Scene(this.root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        root.getChildren().add(controls);
         newGame();
 
         makeControlButtons();
@@ -145,7 +170,11 @@ public class Game extends Application {
         if(CatanDiceExtra.isActionValid(board,action))
         {
             CatanDiceExtra.applyAction(board,action);
-
+            //Player wins if score > 9
+            if(board.playerTurn.score > 9)
+            {
+                playerWin(board.playerTurn,board);
+            }
 
             if(board.setupPhase)
             {
@@ -207,15 +236,21 @@ public class Game extends Application {
 
         }
     }
+    public static void playerWin(Player player, Board board)
+    {
+        root.getChildren().remove(board.hexPlate);
+        root.getChildren().remove(board.settlementLayer);
+        root.getChildren().remove(board.castleLayer);
+        root.getChildren().remove(board.knightLayer);
+        root.getChildren().remove(board.roadLayer);
+        root.getChildren().remove(board.turnLayer);
+        root.getChildren().remove(controls);
+        winText.setText(player.name + " Wins");
+        root.getChildren().add(winLayer);
+
+    }
 
 
-//    root.getChildren().remove(board.hexPlate);
-//        root.getChildren().remove(board.settlementLayer);
-//        root.getChildren().remove(board.castleLayer);
-//        root.getChildren().remove(board.knightLayer);
-//        root.getChildren().remove(board.roadLayer);
-//        root.getChildren().remove(board.turnLayer);
-//        root.getChildren().remove(controls);
     public void endTurn()
     {
         if(!board.setupPhase)

@@ -1,6 +1,7 @@
 package comp1140.ass2;
 
 import javafx.scene.Group;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -109,6 +110,7 @@ public class Board {
     public Text turnText = new Text();
     public Text scoreText = new Text();
     public Text resourceLabel = new Text();
+    public Text rollText = new Text();
     public ResourcePiece[] resourceDisplay = new ResourcePiece[6];
     public Group hexPlate = new Group();
     public Group castleLayer = new Group();
@@ -116,6 +118,7 @@ public class Board {
     public Group settlementLayer = new Group();
     public Group roadLayer = new Group();
     public Group turnLayer = new Group();
+    public VBox turnBox = new VBox();
     //FIXME whats the difference between map and hashMap
     public HashMap<Integer,Piece> roadsMap = new HashMap<>();
     //FIXME are constants names all caps
@@ -263,17 +266,21 @@ public class Board {
         castles[3] = new Piece(3,PieceType.CASTLE,BOARD_WIDTH/10,BOARD_HEIGHT -BOARD_HEIGHT/10);
         castleLayer.getChildren().addAll(castles);
 
+        //Create box to store turn textInfo
+        turnBox.setSpacing(10);
+        turnBox.setLayoutX(BOARD_WIDTH/20);
+        turnBox.setLayoutY(BOARD_HEIGHT/10 * 3.75);
+        turnBox.getChildren().addAll(turnText,rollText,scoreText);
+        turnLayer.getChildren().add(turnBox);
+
         //Create text of whose turn it is
-        turnText.setX(BOARD_WIDTH/20);
-        turnText.setY(BOARD_HEIGHT/10 * 4.75);
         turnText.setFont(Font.font(20));
-        turnLayer.getChildren().add(turnText);
 
         //Create text of what the score is
-        scoreText.setX(BOARD_WIDTH/20);
-        scoreText.setY(BOARD_HEIGHT/10 * 5.25);
         scoreText.setFont(Font.font(20));
-        turnLayer.getChildren().add(scoreText);
+
+        //Create text to say how many rolls are left
+        rollText.setFont(Font.font(20));
 
         //Create label for resource list
         resourceLabel.setX(BOARD_WIDTH/10 * 8);
@@ -299,7 +306,16 @@ public class Board {
     {
         //Add text to say players turn
         turnText.setText("Players Turn: " + this.playerTurn.name + " (" + this.playerTurn.playerID + ").");
-        scoreText.setText("Players Score: " + this.playerTurn.score);
+        StringBuilder scoreOut = new StringBuilder();
+        for(Player i : this.players)
+        {
+            scoreOut.append(i.name);
+            scoreOut.append(": ");
+            scoreOut.append(i.score);
+            scoreOut.append("\n");
+        }
+        scoreText.setText("Score List: \n" + scoreOut);
+        rollText.setText("Rolls Left: " + (3 - rollsDone));
         int count = 0;
         for(int i = 0 ; i < 6; i++)
         {

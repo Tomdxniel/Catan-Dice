@@ -622,6 +622,7 @@ public class CatanDiceExtra {
 
             return (action.type == ActionType.KEEP);
         }
+        //Used if multipe check are needed
         boolean flag;
 
         //Build phase
@@ -682,21 +683,57 @@ public class CatanDiceExtra {
                         }
                     }
                     case ROAD -> {
+
                         if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
-                        //Check that on of the neighbouring settlements is owned
-                        //FIXME Correct implementation needed
-                        if(board.settlements[pos1].owner != null // ==board.playerTurn
-                                && board.settlements[pos2].owner != null) return false;// ==board.playerTurn
+
+                        int rPos1; //Index of the road being compared
+                        int rPos2;
+                        flag = false;
+                        Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
+                        //Check if there is a settlement at the end of a road or just another road
+                        boolean pos1Settlement = board.settlements[pos1].maxLevel !=0;
+                        boolean pos2Settlement = board.settlements[pos2].maxLevel !=0;
+                        //If either of the points don't contain a settlement check for road on that point
+                        if(!pos1Settlement || !pos2Settlement)
+                        {
+                            for(Piece road : roads)
+                            {
+                                rPos1 = road.boardIndex % 100;
+                                rPos2 = (int)road.boardIndex / 100;
+                                if(road.owner == board.playerTurn && road.boardIndex != action.pieceIndex)
+                                {
+                                    if(!pos1Settlement && (rPos1 == pos1 || rPos2 == pos1))
+                                    {
+                                        flag = true;
+                                        break;
+                                    }
+                                    if(!pos2Settlement && (rPos1 == pos2 || rPos2 == pos2))
+                                    {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if(!flag && (board.settlements[pos1].owner == board.playerTurn
+                                || board.settlements[pos2].owner == board.playerTurn))
+                        {
+                            flag = true;
+                        }
+                        if(!flag)
+                        {
+                            return false;
+                        }
                     }
                     case SETTLEMENT -> {
                         if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.settlements[action.pieceIndex].owner != null) return false;
+                        if(board.settlements[action.pieceIndex].maxLevel == 0) return false;
                         Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
                         flag = false;
-                        //FIXME make sure to reconstruct road, setttlement,city to only be able to be placed on valid placements and for roads not to require a settlement neighbour if it cant exist
                         for(Piece road : roads)
                         {
                             pos1 = road.boardIndex % 100;
