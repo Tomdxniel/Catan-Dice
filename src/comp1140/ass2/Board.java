@@ -53,6 +53,20 @@ public class Board {
             HexType.GRAIN,
             HexType.WOOL
     };
+    //Array to show the max level of the buildings
+    public static int[] levelArray =
+            {1,2,1,
+            0,0,0,0,
+            2,1,1,2,
+            0,0,0,0,0,
+            1,2,2,2,1,
+            0,0,0,0,0,0,
+            0,0,0,0,0,0,
+            1,2,2,2,1,
+            0,0,0,0,0,
+            2,1,1,2,
+            0,0,0,0,
+            1,2,1};
     //List of all the points on the coast
     public static List<Integer> coastRoads = new ArrayList<>(Arrays.asList(
                     0,
@@ -183,6 +197,8 @@ public class Board {
                                     PieceType.SETTLEMENT,//Piece type
                                     x + hexPoints[i*2],//startX
                                     y + hexPoints[i*2 + 1]);//startY
+                            settlements[coordinate].maxLevel = levelArray[coordinate];
+                            settlements[coordinate].updatePiece();
                             settlementLayer.getChildren().add(settlements[coordinate]);
                         }
                         hexes[r+2][q+2].settlement[i] = settlements[coordinate];
@@ -314,10 +330,10 @@ public class Board {
     //To create a boarder for a piece create a new piece of different colour that's slightly bigger and underneath
     private void createOutlinePiece(PieceType type,double x, double y, Group group)
     {
-        Piece outlinePiece = new Piece(0,type,x,y);
-        outlinePiece.scale(boarderScale);
-        outlinePiece.setFill(Color.DARKGREY);
-        group.getChildren().add(outlinePiece);
+//        Piece outlinePiece = new Piece(0,type,x,y);
+//        outlinePiece.scale(boarderScale);
+//        outlinePiece.setFill(Color.DARKGREY);
+//        group.getChildren().add(outlinePiece);
     }
 
 

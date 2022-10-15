@@ -6,25 +6,12 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Added Resources and Score to Viewer">
+    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="Added most of a playable Game">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/HexType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/HexType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,19 +42,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ToolWindowRun.ShowToolbar": "false",
-    "last_opened_file_path": "C:/Users/Sam/Documents/ANUWork/COMP1140 LABS/comp1110-ass1",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "configurable.group.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam/Documents/ANUWork/COMP1140 LABS/comp1110-ass1&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Eliz\Documents\ANU\COMP1140\comp1140-ass2\admin" />
@@ -122,12 +109,16 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Game" />
-      <item itemvalue="Application.Viewer" />
       <item itemvalue="Application.CatanDiceExtra" />
+      <item itemvalue="JUnit.TestIsActionValid" />
       <item itemvalue="JAR Application.CatanDiceExtra.jar" />
       <item itemvalue="JAR Application.comp1140-ass2.jar" />
       <item itemvalue="JAR Application.game.jar" />
+      <item itemvalue="Application.Game" />
+      <item itemvalue="JUnit.Task 10a isActionSequenceValid" />
+      <item itemvalue="JUnit.Task 10b applyActionSequence" />
+      <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
+      <item itemvalue="JUnit.Task 13 generateAction Sanity" />
       <item itemvalue="JUnit.Task 3 isBoardStateWellFormed" />
       <item itemvalue="JUnit.Task 4 isActionWellFormed" />
       <item itemvalue="JUnit.Task 5 rollDice" />
@@ -135,11 +126,7 @@
       <item itemvalue="JUnit.Task 8a longestRoad" />
       <item itemvalue="JUnit.Task 8b largestArmy" />
       <item itemvalue="JUnit.Task 9 applyAction" />
-      <item itemvalue="JUnit.Task 10a isActionSequenceValid" />
-      <item itemvalue="JUnit.Task 10b applyActionSequence" />
-      <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
-      <item itemvalue="JUnit.Task 13 generateAction Sanity" />
-      <item itemvalue="JUnit.TestIsActionValid" />
+      <item itemvalue="Application.Viewer" />
     </list>
     <recent_temporary>
       <list>
@@ -265,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665491305904</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Added most of a playable Game">
+      <created>1665505624559</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1665505624559</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -298,7 +292,8 @@
     <MESSAGE value="Added comments to uncommented code" />
     <MESSAGE value="Rebuilt Game.jar" />
     <MESSAGE value="Added Resources and Score to Viewer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Resources and Score to Viewer" />
+    <MESSAGE value="Added most of a playable Game" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added most of a playable Game" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

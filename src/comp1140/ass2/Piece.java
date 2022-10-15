@@ -2,6 +2,7 @@ package comp1140.ass2;
 
 import comp1140.ass2.gui.Game;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ public class Piece extends Polygon {
     public int boardIndex;
     public Player owner;
     public PieceType type;
+    public int maxLevel;
     //Player color, Dark for usable piece light for used pieces
     private static final Color[] playerColor = {Color.GREEN,Color.LIGHTGREEN,//Player1
                                    Color.BLUE,Color.LIGHTBLUE,//Player2
@@ -25,56 +27,80 @@ public class Piece extends Polygon {
         this.type = type;
         this.setLayoutX(x);
         this.setLayoutY(y);
-        //Update piece to move it to the correct position
-        updatePiece();
-        //Default colour is gray
         this.setFill(Color.LIGHTGRAY);
+
+        switch(this.type)
+        {
+            case KNIGHT,USEDKNIGHT -> drawKnight();
+            case SETTLEMENT -> drawSettlement();
+            case CITY -> drawCity();
+            case CASTLE -> drawCastle();
+        }
+
+        //Default colour is gray
         this.setOnMouseClicked((event) ->
         {
 
             //FIXME move loadBoard to be a constructor and remove
-            if(Game.board.resources != null && this.type!=null)
+            if(Game.board.resources != null)
             {
-                int count = 0;
-                int lastType = -1;
                 //If player selects a resource then knight
                 Action action = new Action();
                 StringBuilder actionString = new StringBuilder();
                 actionString.append("build");
                 actionString.append(this);
-                if(this.type == PieceType.KNIGHT || this.type == PieceType.USEDKNIGHT)
+                switch (this.type)
                 {
-                    actionString.replace(5,6,"K");
-
-                    for(ResourcePiece r: Game.board.resourceDisplay)
+                    case SETTLEMENT,CITY->
                     {
-                        if(r.clicked)
+                        if(maxLevel == 0)
                         {
-                            lastType = r.type;
-                            count ++;
+                            actionString.setLength(0);
+                        } else if (this.owner != null) {
+                            actionString.replace(5,6,"T");
                         }
                     }
 
-                }
-                if(count == 1)
-                {
-
-                    actionString.setLength(0);
-                    actionString.append("swap");
-                    actionString.append(Board.resourceArray.charAt(lastType));
-                    actionString.append(Board.hexTypeArray[this.boardIndex].toString());
-                    if(Board.hexTypeArray[this.boardIndex] != HexType.WILD && actionString.charAt(4) != actionString.charAt(5))
+                    case KNIGHT,USEDKNIGHT->
                     {
-                        //FIXME create a propper error message;
-                        if(!CatanDiceExtra.loadAction(actionString.toString(),action))
+                        int count = 0;
+                        int lastType = -1;
+                        for(ResourcePiece r: Game.board.resourceDisplay)
                         {
-                            throw new RuntimeException();
+                            if(r.clicked)
+                            {
+                                lastType = r.type;
+                                count ++;
+                            }
                         }
-                        Game.applyAction(action);
+                        //Check if only 1 resource is selected
+                        if(count == 1)
+                        {
+
+                            actionString.setLength(0);
+                            actionString.append("swap");
+                            actionString.append(Board.resourceArray.charAt(lastType));
+                            actionString.append(Board.hexTypeArray[this.boardIndex].toString());
+                            //Do nothing if the two resources are the same or trying to convert to money
+                            if(Board.hexTypeArray[this.boardIndex] == HexType.WILD ||
+                                    actionString.charAt(4) == actionString.charAt(5))
+                            {
+                                actionString.setLength(0);
+                            }
+
+                        }
+                        else
+                        {
+                            //Even though K is used knight it encodes for knight in build
+                            actionString.replace(5,6,"K");
+                        }
+
                     }
 
                 }
-                else
+
+                //If action string is empty no action is required
+                if(!actionString.isEmpty())
                 {
                     //FIXME create a propper error message;
                     if(!CatanDiceExtra.loadAction(actionString.toString(),action))
@@ -84,6 +110,7 @@ public class Piece extends Polygon {
 
                     Game.applyAction(action);
                 }
+
             }
         });
 
@@ -106,6 +133,7 @@ public class Piece extends Polygon {
         {
 
             if (Game.board.resources != null && this.type != null) {
+
                 Action action = new Action();
                 StringBuilder actionString = new StringBuilder();
                 actionString.append("build");
@@ -123,7 +151,6 @@ public class Piece extends Polygon {
     }
 
     public void updatePiece(){
-        this.setFill(Color.LIGHTGRAY);
         if(owner != null)
         {
             if(type == PieceType.USEDKNIGHT)
@@ -135,29 +162,38 @@ public class Piece extends Polygon {
                 this.setFill(playerColor["WXYZ".indexOf(owner.playerID)*2]);
             }
         }
+        else
+        {
+            this.setFill(Color.LIGHTGRAY);
+        }
         switch(this.type)
         {
-            case KNIGHT -> drawKnight();
-            case USEDKNIGHT -> drawKnight();
+            case KNIGHT,USEDKNIGHT,CASTLE -> {}
             case SETTLEMENT -> drawSettlement();
             case CITY -> drawCity();
-            case CASTLE -> drawCastle();
         }
+
     }
 
     public void drawKnight(){
+
         Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
         this.getPoints().addAll(points);
     }
 
     public void drawCity(){
-        Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,0.0,-15.0,10.0,-10.0};
+        Double[] points = new Double[]{10.0,15.0,-10.0,15.0,-10.0,-5.0,0.0,-15.0,10.0,-5.0};
         this.getPoints().clear();
         this.getPoints().addAll(points);
     }
 
     public void drawSettlement(){
+        if(this.maxLevel == 0)
+        {
+            this.setFill(null);
+        }
         Double[] points = new Double[]{10.0,10.0,-10.0,10.0,-10.0,-10.0,10.0,-10.0};
+        this.getPoints().clear();
         this.getPoints().addAll(points);
     }
 
@@ -168,8 +204,8 @@ public class Piece extends Polygon {
 
     public void drawRoad(double startX,double startY, double endX, double endY)
     {
-        double roadWidth = 0.03;//roadWidth is 0.1 of length
-        double roadLength = 0.3;//roadLength is 0.5 of length
+        double roadWidth = 0.03;//roadWidth is 0.06 of length
+        double roadLength = 0.3;//roadLength is 0.6 of length
         double vecX = endX-startX;
         double vecY = endY-startY;
         double invecX = startY - endY;
