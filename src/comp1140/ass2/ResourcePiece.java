@@ -7,6 +7,7 @@ public class ResourcePiece extends Polygon {
     public int type;
     public boolean clicked;
     public Polygon outline;
+    private final Color outlineColor = Color.GREY;
     public ResourcePiece(int type, double x, double y)
     {
         this.type = type;
@@ -29,7 +30,7 @@ public class ResourcePiece extends Polygon {
                 outline.setFill(Color.RED);
             }
             else {
-                outline.setFill(null);
+                outline.setFill(outlineColor);
             }
         });
     }
@@ -50,6 +51,21 @@ public class ResourcePiece extends Polygon {
         if(this.getFill() == null)
         {
             this.outline.setFill(null);
+        }
+        if(this.type != -1)
+        {
+            if(clicked)
+            {
+                outline.setFill(Color.RED);
+            }
+            else
+            {
+                outline.setFill(outlineColor);
+            }
+        }
+        else
+        {
+            this.setFill(null);
         }
     }
 }

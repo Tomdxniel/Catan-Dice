@@ -351,7 +351,7 @@ public class Board {
         boolean hasLargestArmy = false;
         for(int i = 0; i < playerCount; i++)
         {
-            this.players[i] = new Player(names[i],playerIDArray.charAt(i));
+            this.players[i] = new Player(names[i],i);
         }
 
         //FIXME are we supposed to have definitions of @param and @return for each method we create

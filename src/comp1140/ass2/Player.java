@@ -6,14 +6,16 @@ public class Player {
 
     String name;
     char playerID;
-    int score;
+    public int playerIndex;
+    public int score;
     boolean largestArmy = false;
     boolean longestRoad = false;
 
-    Player(String playerName, char ID)
+    Player(String playerName, int playerIndex)
     {
+        this.playerIndex = playerIndex;
         this.name = playerName;
-        this.playerID = ID;
+        this.playerID = Board.playerIDArray.charAt(playerIndex);
     }
 
 

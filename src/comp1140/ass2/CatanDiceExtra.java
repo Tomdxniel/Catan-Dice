@@ -540,16 +540,16 @@ public class CatanDiceExtra {
                 return false;
             }
             //Check action is valid
-            if(!checkActionValid(board,action))
+            if(!isActionValid(board,action))
             {
                 return false;
             }
             return true;
         }
 
-    //checkActionValid created by Sam Liersch u7448311
-        // Alternative version of is action valid that relies on Board, and action Class
-    public static boolean checkActionValid(Board board, Action action) {
+    //isActionValid created by Sam Liersch u7448311
+    // is Action valid relies on Board  and Action class instead of strings
+    public static boolean isActionValid(Board board, Action action) {
 
         int pos1;
         int pos2;
@@ -596,8 +596,8 @@ public class CatanDiceExtra {
             index = index + 30;
             for(int y = 0; y < 5; y++)
             {
-                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30)) * 100;
-                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index - 1 + 30) % 30));
+                roadIndex = Math.min(Board.coastRoads.get((index - 1) % 30),Board.coastRoads.get((index - 2  + 30) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get((index - 1) % 30),Board.coastRoads.get((index - 2 + 30) % 30));
                 if(!board.roadsMap.containsKey(roadIndex)) return false;
                 if(board.roadsMap.get(roadIndex).owner != null)
                 {
@@ -908,11 +908,7 @@ public class CatanDiceExtra {
     }
 
     public static void  applyAction(Board board, Action action) {
-        // If aciton is not valid do not apply move
-        if(!checkActionValid(board, action))
-        {
-            return;
-        }
+        // If action is not valid do not apply move
         Player lArmyHolder = null;
         Player lRoadHolder = null;
         for (Player p : board.players) {
@@ -923,12 +919,7 @@ public class CatanDiceExtra {
                 lArmyHolder = p;
             }
         }
-        for (Player p : board.players) {
-            //Player Wins
-            if (p.score >= 10) {
-                return;
-            }
-        }
+
         if (board.setupPhase) {
             board.roadsMap.get(action.pieceIndex).owner = board.playerTurn;
             return;
@@ -946,6 +937,7 @@ public class CatanDiceExtra {
                 for (int i = count; i < board.numDice; i++) {
                     board.resources[rand.nextInt(6)]++;
                 }
+                board.rollsDone ++;
             }
             case BUILD -> {
                 switch (action.pieceType) {
@@ -960,8 +952,8 @@ public class CatanDiceExtra {
                         board.playerTurn.score += 2;
                         board.castles[action.pieceIndex].owner = board.playerTurn;
                         for (int i = 0; i < 6; i++) {
-                            if (board.resources[i] >= 5) {
-                                action.resourceArray[i] = -5;
+                            if (board.resources[i] > 5) {
+                                action.resourceArray[i] = -6;
                             }
                         }
                     }
@@ -1019,7 +1011,7 @@ public class CatanDiceExtra {
             int longest = 4;
             if(lRoadHolder != null)
             {
-                longest = roadLength[playerIDArray.indexOf(lRoadHolder.playerID)];
+                longest = roadLength[lRoadHolder.playerIndex];
             }
             Player maxRoadPlayer = null;
             for(int i = 0; i < roadLength.length; i++)
@@ -1048,7 +1040,7 @@ public class CatanDiceExtra {
             int largest = 2;
             if(lArmyHolder != null)
             {
-                largest = armyCount[playerIDArray.indexOf(lArmyHolder.playerID)];
+                largest = armyCount[lArmyHolder.playerIndex];
             }
 
             Player maxArmyPlayer = null;

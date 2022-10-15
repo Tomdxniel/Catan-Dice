@@ -6,19 +6,19 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Adjusted Game Window">
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Edited applyAction so it works with board actions as well">
+      <change afterPath="$PROJECT_DIR$/src/comp1140/ass2/TestClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/comp1140/ass2/HasMaterialsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/comp1140/ass2/HasMaterialsTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +75,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Task 4 isActionWellFormed">
+  <component name="RunManager" selected="Application.Game">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -89,7 +89,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestIsActionValid" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestClass" />
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -97,9 +98,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="comp1140.ass2" />
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionValid" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -123,6 +121,7 @@
     <list>
       <item itemvalue="Application.Game" />
       <item itemvalue="Application.Viewer" />
+      <item itemvalue="Application.TestClass" />
       <item itemvalue="Application.CatanDiceExtra" />
       <item itemvalue="JAR Application.CatanDiceExtra.jar" />
       <item itemvalue="JAR Application.comp1140-ass2.jar" />
@@ -138,15 +137,14 @@
       <item itemvalue="JUnit.Task 10b applyActionSequence" />
       <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
       <item itemvalue="JUnit.Task 13 generateAction Sanity" />
-      <item itemvalue="JUnit.TestIsActionValid" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestClass" />
         <item itemvalue="JAR Application.game.jar" />
         <item itemvalue="JAR Application.CatanDiceExtra.jar" />
         <item itemvalue="JAR Application.comp1140-ass2.jar" />
         <item itemvalue="Application.CatanDiceExtra" />
-        <item itemvalue="JUnit.TestIsActionValid" />
       </list>
     </recent_temporary>
   </component>
@@ -264,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665491305904</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Edited applyAction so it works with board actions as well">
+      <created>1665809625394</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1665809625394</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -298,6 +303,18 @@
     <MESSAGE value="Rebuilt Game.jar" />
     <MESSAGE value="Added Resources and Score to Viewer" />
     <MESSAGE value="ApplyAction passes tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="ApplyAction passes tests" />
+    <MESSAGE value="Edited applyAction so it works with board actions as well" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited applyAction so it works with board actions as well" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java</url>
+          <line>557</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
