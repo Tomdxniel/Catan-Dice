@@ -108,7 +108,7 @@ public class Piece extends Polygon {
                         throw new RuntimeException();
                     }
 
-                    Game.applyAction(action);
+                    Game.applyGameAction(action);
                 }
 
             }
@@ -144,7 +144,7 @@ public class Piece extends Polygon {
                     throw new RuntimeException();
                 }
 
-                Game.applyAction(action);
+                Game.applyGameAction(action);
 
             }
         });

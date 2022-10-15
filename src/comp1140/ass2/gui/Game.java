@@ -111,9 +111,9 @@ public class Game extends Application {
 
     }
 
-    public static void applyAction(Action action)
+    public static void applyGameAction(Action action)
     {
-        CatanDiceExtra.applyBoardAction(board,action);
+        CatanDiceExtra.applyAction(board,action);
     }
     public void reRoll()
     {
@@ -144,7 +144,7 @@ public class Game extends Application {
                 keepResources[i] = board.resources[i] - keepResources[i];
             }
             action.resourceArray = keepResources;
-            CatanDiceExtra.applyBoardAction(board,action);
+            CatanDiceExtra.applyAction(board,action);
         }
 
 

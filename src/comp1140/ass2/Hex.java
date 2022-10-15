@@ -70,7 +70,7 @@ public class Hex extends Polygon {
                         {
                             throw new RuntimeException();
                         }
-                        Game.applyAction(action);
+                        Game.applyGameAction(action);
                     }
                 }
             });

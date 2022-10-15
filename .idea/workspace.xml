@@ -6,12 +6,19 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2f6b5ed-788d-4de9-977f-418d0fe2ade8" name="Changes" comment="ApplyAction passes tests">
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Adjusted Game Window">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Hex.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/Piece.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/HexType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/comp1140/ass2/HasMaterialsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/comp1140/ass2/HasMaterialsTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +37,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_2_Piece.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_4_Piece.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_5_Piece.class" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -63,7 +75,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Task 9 applyAction">
+  <component name="RunManager" selected="JUnit.Task 4 isActionWellFormed">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -287,16 +299,5 @@
     <MESSAGE value="Added Resources and Score to Viewer" />
     <MESSAGE value="ApplyAction passes tests" />
     <option name="LAST_COMMIT_MESSAGE" value="ApplyAction passes tests" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java</url>
-          <line>665</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

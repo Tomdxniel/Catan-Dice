@@ -15,7 +15,7 @@ public enum HexType {
             case 'l' -> LUMBER;
             case 'o' -> ORE;
             case 'w' -> WOOL;
-            case 'z' -> WILD;
+            case 'm' -> WILD;
             default -> null;
         };
     }

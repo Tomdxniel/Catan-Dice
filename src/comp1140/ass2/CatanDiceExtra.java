@@ -1,20 +1,15 @@
 package comp1140.ass2;
+import com.sun.javafx.logging.PlatformLogger;
+
 import java.sql.SQLOutput;
 import java.util.*;
 
-import static comp1140.ass2.Board.hexTypeArray;
-import static comp1140.ass2.Board.resourceArray;
+import static comp1140.ass2.Board.*;
 import static comp1140.ass2.HexType.BRICK;
+import static comp1140.ass2.HexType.WILD;
 
 public class CatanDiceExtra {
     //Required resources to build objects
-    //Knight Road Settlement City
-    public static int[][] reqResources = {
-            {0,1,0,0,1,1},
-            {1,0,1,0,0,0,},
-            {1,1,1,0,0,1},
-            {0,2,0,0,3,0}};
-
 
     /**
      * Check if the string encoding of a board state is well-formed.
@@ -49,6 +44,14 @@ public class CatanDiceExtra {
     //Loads action into action class
     public static boolean loadAction(String actionString, Action action)
     {
+        //Required resources for building
+        int[][] reqResources = {
+            {0,-1,0,0,-1,-1},//Knight
+            {-1,0,-1,0,0,0,},//Road
+            {-1,-1,-1,0,0,-1},//Settlement
+            {0,-2,0,0,-3,0}};//City
+
+
         //Check if action has type
         if(actionString.length() < 4) return false;
         String type;
@@ -117,6 +120,7 @@ public class CatanDiceExtra {
                             return false;
                         }
                         action.pieceIndex = Integer.parseInt(actionSubject.substring(1,5));
+                        action.resourceArray = reqResources[1];
                     }
                     case  'C' -> {
                         //Castle
@@ -125,6 +129,9 @@ public class CatanDiceExtra {
                         pos1 = Integer.parseInt(actionSubject.substring(1,2));
                         if(!(pos1 >= 0 && pos1 < 4)) return false;
                         action.pieceIndex = pos1;
+                        //Potential bug, ReqResources for castle can change depending on available resources
+                        //And so resource req is calculated when action is applied
+                        action.resourceArray = resourceArray;
                     }
                     case 'S' -> {
                         //Settlement
@@ -133,6 +140,7 @@ public class CatanDiceExtra {
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
                         if(!(pos1 >= 0 && pos1 < 54)) return false;
                         action.pieceIndex = pos1;
+                        action.resourceArray = reqResources[2];
                     }
                     case 'T' -> {
                         //City
@@ -141,6 +149,7 @@ public class CatanDiceExtra {
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
                         if(!(pos1 >= 0 && pos1 < 54)) return false;
                         action.pieceIndex = pos1;
+                        action.resourceArray = reqResources[3];
                     }
                     case 'K' -> {
                         //Knight
@@ -149,6 +158,7 @@ public class CatanDiceExtra {
                         pos1 = Integer.parseInt(actionSubject.substring(1,3));
                         if(!(pos1 >= 0 && pos1 < 20)) return false;
                         action.pieceIndex = pos1;
+                        action.resourceArray = reqResources[0];
                     }
                     default ->
                     {
@@ -602,7 +612,15 @@ public class CatanDiceExtra {
         //Roll phase
         if(board.rollsDone < 3)
         {
-            return (action.type == ActionType.KEEP && hasMaterials(board.resources,action.resourceArray,true));
+            for(int i = 0; i < 6; i++)
+            {
+                if(board.resources[i] < action.resourceArray[i])
+                {
+                    return false;
+                }
+            }
+
+            return (action.type == ActionType.KEEP);
         }
         boolean flag;
 
@@ -629,7 +647,7 @@ public class CatanDiceExtra {
                         if(board.castles[action.pieceIndex].owner != null) return false;
                     }
                     case KNIGHT -> {
-                        if(!hasMaterials(board.resources,reqResources[0],true)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.knights[action.pieceIndex].owner != null) return false;
                         flag = false;
                         //Check at least 1 piece surrounding knight hex is built by player
@@ -664,7 +682,7 @@ public class CatanDiceExtra {
                         }
                     }
                     case ROAD -> {
-                        if(!hasMaterials(board.resources,reqResources[1],true)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
@@ -674,7 +692,7 @@ public class CatanDiceExtra {
                                 && board.settlements[pos2].owner != null) return false;// ==board.playerTurn
                     }
                     case SETTLEMENT -> {
-                        if(!hasMaterials(board.resources,reqResources[2],true)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.settlements[action.pieceIndex].owner != null) return false;
                         Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
                         flag = false;
@@ -693,17 +711,17 @@ public class CatanDiceExtra {
                         if(!flag) return false;
                     }
                     case CITY -> {
-                        if(!hasMaterials(board.resources,reqResources[3],true)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.settlements[action.pieceIndex].owner != board.playerTurn) return false;
                     }
                 }
 
             }
             case TRADE -> {
-                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+                if(!hasMaterials(board.resources,action.resourceArray)) return false;
             }
             case SWAP -> {
-                if(!hasMaterials(board.resources,action.resourceArray,false)) return false;
+                if(!hasMaterials(board.resources,action.resourceArray)) return false;
                 flag = false;
                 //Check if correct knight is owned for trade
                 for(Piece knight : board.knights)
@@ -726,16 +744,9 @@ public class CatanDiceExtra {
 
     // hasMaterials created by Sam Liersch u7448311
     //Returns whether the required materials are available
-    public static boolean hasMaterials(int[] available, int[] required, boolean negate)
+    public static boolean hasMaterials(int[] available, int[] required)
     {
         if(available.length != required.length) return false;
-        if(negate)
-        {
-            for(int i = 0; i < required.length; i++)
-            {
-                required[i] = -required[i];
-            }
-        }
         //Check player has the resources to keep
         for(int i = 0; i < available.length; i++)
         {
@@ -760,10 +771,17 @@ public class CatanDiceExtra {
      * @param boardState: string representation of the board state.
      * @return array of contiguous road lengths, one per player.
      */
-    // longest Road created by Sam Liersch u7448311
-    public static int[] longestRoad(String boardState) {
+
+
+
+    public static int[] longestRoad(String boardState){
+        //Height and width can be 0 as we are not looking at the board
         Board board = new Board(0,0);
         board.loadBoard(boardState);
+        return longestRoad(board);
+    }
+    // longest Road created by Sam Liersch u7448311
+    public static int[] longestRoad(Board board) {
         int[] output = new int [board.playerCount];
         List<Integer> visited = new ArrayList<>();
         List<Integer> roads = new ArrayList<>();
@@ -827,10 +845,14 @@ public class CatanDiceExtra {
      */
 
     // largestArmy created by Sam Liersch u7448311
-    public static int[] largestArmy(String boardState) {
+    public static int[] largestArmy(String boardState){
         //Height and width can be 0 as we are not looking at the board
         Board board = new Board(0,0);
         board.loadBoard(boardState);
+        return largestArmy(board);
+    }
+    public static int[] largestArmy(Board board) {
+
         int[] output = new int [board.playerCount];
         //counts the number of knights owned by a player
         for(int i = 0; i < board.playerCount; i ++)
@@ -871,213 +893,188 @@ public class CatanDiceExtra {
      * For example : given boardState = "X63lmoWK01K02K04K05K06R0105R0205R0206R0408R0509R0610R0812R0813R0913R0914R1014R1015R1318R1419R1520S01S02S08S09T10XJ09K10K11K12K15K16R1824R1924R1925R2025R2026R2430R2531R2632R3035R3036R3136R3137R3237R3641R3742R4145R4146R4246R4549S19S20S37S45T36W06X10RA"
      * - Player 'X' got the score 10 and game ended
      * - No action can be applied at this stage
-     * @param boardState: string representation of the board state.
-     * @param action: string representation of the player action.
+     * @param boardString: string representation of the board state.
+     * @param actionString: string representation of the player action.
      * @return string representation of the updated board state.
      */
-    public static String applyAction(String boardState, String action) {
-        Board board1 = new Board(0, 0);
-        Action action1 = new Action();
-        loadAction(action, action1);
-        board1.loadBoard(boardState);
-        Player lRoad1 = null;
-        Player lArmy1 = null;
-        for (Player p : board1.players) {
+    public static String applyAction(String boardString, String actionString) {
+        Board  board = new Board(0,0);
+        Action action = new Action();
+        board.loadBoard(boardString);
+        loadAction(actionString,action);
+
+        applyAction(board,action);
+        return board.toString();
+    }
+
+    public static void  applyAction(Board board, Action action) {
+        // If aciton is not valid do not apply move
+        if(!checkActionValid(board, action))
+        {
+            return;
+        }
+        Player lArmyHolder = null;
+        Player lRoadHolder = null;
+        for (Player p : board.players) {
             if (p.longestRoad) {
-                lRoad1 = p;
+                lRoadHolder = p;
             }
             if (p.largestArmy) {
-                lArmy1 = p;
+                lArmyHolder = p;
             }
         }
-        for (Player p : board1.players) {
+        for (Player p : board.players) {
+            //Player Wins
             if (p.score >= 10) {
-                return boardState;
+                return;
             }
         }
-        if (boardState.substring(1, 3).equals("00")) {
-            board1.roadsMap.get(action1.pieceIndex).owner = board1.playerTurn;
-            return board1.toString();
+        if (board.setupPhase) {
+            board.roadsMap.get(action.pieceIndex).owner = board.playerTurn;
+            return;
         }
-        switch (action1.type) {
+        switch (action.type) {
             case KEEP -> {
-                    if (action.length() == 10){ return board1.toString();}
-                    int numberDice =  boardState.substring(3, boardState.indexOf('W',2)).length() - action.substring(4).length();
-                    int[] x = new int[]{0, 0, 0, 0, 0, 0};
-                    char[] chars = (rollDice(numberDice) + action.substring(4)).toCharArray();
-                    for (char ch : chars){
-                        if ( ch == 'b') { x[0] ++;}
-                        if ( ch == 'g') { x[1] ++;}
-                        if ( ch == 'l') { x[2] ++;}
-                        if ( ch == 'm') { x[3] ++;}
-                        if ( ch == 'o') { x[4] ++;}
-                        if ( ch == 'w') { x[5] ++;}
-                    }
-                    board1.resources = x;
+                int count = 0;
+                board.resources = new int[]{0, 0, 0, 0, 0, 0};
+                Random rand = new Random();
+
+                for (int i = 0; i < 6; i++) {
+                    count += action.resourceArray[i];
+                    board.resources[i] += action.resourceArray[i];
                 }
+                for (int i = count; i < board.numDice; i++) {
+                    board.resources[rand.nextInt(6)]++;
+                }
+            }
             case BUILD -> {
-                if (action1.pieceType == PieceType.ROAD) {
-                    boolean flag = board1.playerTurn.longestRoad;
-                    board1.roadsMap.get(action1.pieceIndex).owner = board1.playerTurn;
-                    for (int i = 0; i < 6; i++) {
-                        board1.resources[i] -= reqResources[1][i];
+                switch (action.pieceType) {
+                    case ROAD -> {
+                        board.roadsMap.get(action.pieceIndex).owner = board.playerTurn;
                     }
-                }
-                if (action1.pieceType == PieceType.SETTLEMENT) {
-                    board1.playerTurn.score++;
-                    board1.settlements[action1.pieceIndex].owner = board1.playerTurn;
-                    for (int i = 0; i < 6; i++) {
-                        board1.resources[i] -= reqResources[2][i];
+                    case SETTLEMENT -> {
+                        board.playerTurn.score++;
+                        board.settlements[action.pieceIndex].owner = board.playerTurn;
                     }
-                }
-                if (action1.pieceType == PieceType.CASTLE) {
-                    board1.playerTurn.score++;
-                    board1.castles[action1.pieceIndex].owner = board1.playerTurn;
-                    for (int i = 0; i < 6; i++) {
-                        if (board1.resources[i] > 5) {
-                            board1.resources[i] -= 5;
+                    case CASTLE -> {
+                        board.playerTurn.score += 2;
+                        board.castles[action.pieceIndex].owner = board.playerTurn;
+                        for (int i = 0; i < 6; i++) {
+                            if (board.resources[i] >= 5) {
+                                action.resourceArray[i] = -5;
+                            }
                         }
                     }
-                }
-                if (action1.pieceType == PieceType.CITY) {
-                    board1.playerTurn.score++;
-                    board1.settlements[action1.pieceIndex].owner = board1.playerTurn;
-                    for (int i = 0; i < 6; i++) {
-                        board1.resources[i] -= reqResources[3][i];
+                    case CITY -> {
+                        board.playerTurn.score++;
+                        board.settlements[action.pieceIndex].type = PieceType.CITY;
+                    }
+                    case KNIGHT -> {
+                        board.knights[action.pieceIndex].owner = board.playerTurn;
                     }
                 }
-                if (action1.pieceType == PieceType.KNIGHT) {
-                    board1.knights[action1.pieceIndex].owner = board1.playerTurn;
-                    for (int i = 0; i < 6; i++) {
-                        board1.resources[i] -= reqResources[0][i];
-                    }
+                for (int i = 0; i < 6; i++) {
+                    board.resources[i] += action.resourceArray[i];
                 }
             }
             case TRADE -> {
-                char[] req = action.substring(5).toCharArray();
-                for (char x : req) {
-                    for (int j = 0; j < 6; j++) {
-                        if (Board.resourceArray.toCharArray()[j] == x) {
-                            board1.resources[j] += 1;
-                        }
-                    }
+                for (int i = 0; i < 6; i++) {
+                    board.resources[i] += action.resourceArray[i];
                 }
-                board1.resources[3] -= 2 * req.length;
             }
             // FIXME: swap characters for USEDKNIGHTS and KNIGHTS
             case SWAP -> {
-                for (int i = 0; i < board1.knights.length; i++) {
-                    if (board1.knights[i].owner == board1.playerTurn && board1.knights[i].type == PieceType.KNIGHT) {
-                        if (Objects.equals(hexTypeArray[i].toString(), "Wild") || hexTypeArray[i].toString().equals(String.valueOf(action.charAt(5)))) {
-                            board1.knights[i].type = PieceType.USEDKNIGHT;
+                for (Piece knight : board.knights) {
+                    if (knight.type == PieceType.KNIGHT
+                            && knight.owner == board.playerTurn
+                            && action.requiredType == hexTypeArray[knight.boardIndex]) {
+                        //If right knight type is found edit resources and set knight to used knight
+                        for (int i = 0; i < 6; i++) {
+                            board.resources[i] += action.resourceArray[i];
                         }
+                        knight.type = PieceType.USEDKNIGHT;
+                        return;
                     }
                 }
-                for (int j = 0; j < 6; j++) {
-                    if (Board.resourceArray.toCharArray()[j] == action.charAt(4)) {
-                        board1.resources[j] -= 1;
-                    }
-                    if (Board.resourceArray.toCharArray()[j] == action.charAt(5)) {
-                        board1.resources[j] += 1;
+                //If no correct knight type is found check for wild type knights
+                for (Piece knight : board.knights) {
+                    if (knight.type == PieceType.KNIGHT
+                            && knight.owner == board.playerTurn
+                            && action.requiredType == WILD) {
+                        //If right knight type is found edit resources and set knight to used knight
+                        for (int i = 0; i < 6; i++) {
+                            board.resources[i] += action.resourceArray[i];
+                        }
+                        knight.type = PieceType.USEDKNIGHT;
+                        return;
                     }
                 }
+                return;
             }
         }
-        if (action1.type == ActionType.BUILD){
-        int longest = longestRoad(board1.toString())[0];
-        int maxIdroad = 0;
-        for(int i = 1; i <longestRoad(board1.toString()).length; i++) {
-            if(longestRoad(board1.toString())[i] > longest) {
-                longest = longestRoad(board1.toString())[i];
-                maxIdroad = i;
+        if(action.type == ActionType.BUILD && action.pieceType == PieceType.ROAD)
+        {
+            int[] roadLength = longestRoad(board);
+            //Set longest road min to 4 as players have to have at least a road of length 5
+            int longest = 4;
+            if(lRoadHolder != null)
+            {
+                longest = roadLength[playerIDArray.indexOf(lRoadHolder.playerID)];
             }
-            if(longestRoad(board1.toString())[i] == longest && lRoad1 == board1.players[i]) {
-                longest = longestRoad(board1.toString())[i];
-                maxIdroad = i;
+            Player maxRoadPlayer = null;
+            for(int i = 0; i < roadLength.length; i++)
+            {
+                if(longest < roadLength[i])
+                {
+                    maxRoadPlayer = board.players[i];
+                    longest = roadLength[i];
+                }
+            }
+            if(maxRoadPlayer != null)
+            {
+                if(lRoadHolder != null)
+                {
+                    lRoadHolder.longestRoad = false;
+                    lRoadHolder.score -= 2;
+                }
+                maxRoadPlayer.score += 2;
+                maxRoadPlayer.longestRoad = true;
             }
         }
-        if (longest >= 5){
-        if ( maxIdroad == 0 && lRoad1 != board1.players[0] && board1.players[0] == board1.playerTurn) {
-            board1.players[0].longestRoad = true;
-            board1.players[0].score += 2;
-            if (lRoad1 != null){
-            lRoad1.score -=2;
-            lRoad1.longestRoad = false;}
-        }
-        if (maxIdroad == 1 && lRoad1 != board1.players[1] && board1.players[1] == board1.playerTurn) {
-            board1.players[1].longestRoad = true;
-            board1.players[1].score += 2;
-            if (lRoad1 != null){
-            lRoad1.score -=2;
-            lRoad1.longestRoad = false;}
-        }
-        if ( maxIdroad == 2 && lRoad1 != board1.players[2] && board1.players[2] == board1.playerTurn) {
-            board1.players[2].longestRoad = true;
-            board1.players[2].score += 2;
-            if (lRoad1 != null){
-            lRoad1.score -=2;
-            lRoad1.longestRoad = false;}
-        }
-        if ( maxIdroad == 3 && lRoad1 != board1.players[3] && board1.players[3] == board1.playerTurn) {
-            board1.players[3].longestRoad = true;
-            board1.players[3].score += 2;
-            if (lRoad1 != null){
-            lRoad1.score -=2;
-            lRoad1.longestRoad = false;}
-        }}
+        if(action.type == ActionType.BUILD && action.pieceType == PieceType.KNIGHT)
+        {
+            int[] armyCount = largestArmy(board);
+            //Largest army min is 3, only set player to have the largest army if they have an army size of 3 or greater
+            int largest = 2;
+            if(lArmyHolder != null)
+            {
+                largest = armyCount[playerIDArray.indexOf(lArmyHolder.playerID)];
+            }
 
-        int largest = largestArmy(board1.toString())[0];
-        int maxIdarmy = 0;
-        for(int i = 1; i <largestArmy(board1.toString()).length; i++) {
-            if(largestArmy(board1.toString())[i] > largest) {
-                largest = largestArmy(board1.toString())[i];
-                maxIdarmy = i;
+            Player maxArmyPlayer = null;
+            for(int i = 0; i < armyCount.length; i++)
+            {
+                if(largest < armyCount[i])
+                {
+                    maxArmyPlayer = board.players[i];
+                    largest = armyCount[i];
+                }
             }
-            if (largestArmy(board1.toString())[i] == largest && lArmy1 == board1.players[i]){
-                largest = largestArmy(board1.toString())[i];
-                maxIdarmy = i;
+            if(maxArmyPlayer != null)
+            {
+                if(lArmyHolder != null)
+                {
+                    lArmyHolder.largestArmy = false;
+                    lArmyHolder.score -= 2;
+                }
+                maxArmyPlayer.score += 2;
+                maxArmyPlayer.largestArmy = true;
             }
         }
-        if (action1.type == ActionType.BUILD && largest >= 3){
-        if ( maxIdarmy == 0 && lArmy1 != board1.players[0] && board1.players[0] == board1.playerTurn) {
-            board1.players[0].largestArmy = true;
-            board1.players[0].score += 2;
-            if (lArmy1 != null){
-            lArmy1.score -=2;
-            lArmy1.largestArmy = false;}
-        }
-        if ( maxIdarmy == 1 && lArmy1 != board1.players[1] && board1.players[1] == board1.playerTurn) {
-            board1.players[1].largestArmy = true;
-            board1.players[1].score += 2;
-            if (lArmy1 != null){
-            lArmy1.score -=2;
-            lArmy1.largestArmy = false;}
-        }
-        if ( maxIdarmy == 2 && lArmy1 != board1.players[2] && board1.players[2] == board1.playerTurn) {
-            board1.players[2].largestArmy = true;
-            board1.players[2].score += 2;
-            if (lArmy1 != null){
-            lArmy1.score -=2;
-            lArmy1.largestArmy = false;}
-        }
-        if ( maxIdarmy == 3 && lArmy1 != board1.players[3] && board1.players[3] == board1.playerTurn) {
-            board1.players[3].largestArmy = true;
-            board1.players[3].score += 2;
-            if (lArmy1 != null){
-            lArmy1.score -=2;
-            lArmy1.largestArmy = false;}
-        }
-        }
-        }
-        return board1.toString();
     }
 
 
-    public static void applyBoardAction(Board board, Action action)
-    {
-        System.out.println(board.toString());
-        System.out.println(action.toString());
-    }
+
     /**
      * Given valid board state, this method checks if a sequence of player
      * actions is executable.
