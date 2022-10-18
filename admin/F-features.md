@@ -11,3 +11,5 @@ of our project implements the following features:
  - Implements interesting extensions (Task 16)
 
 additional features...
+-Loadable game states
+-error messages
