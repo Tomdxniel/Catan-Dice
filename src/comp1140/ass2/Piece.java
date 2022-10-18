@@ -130,11 +130,10 @@ public class Piece extends Polygon {
                 Action action = new Action();
                 StringBuilder actionString = new StringBuilder();
                 actionString.append("build");
-                actionString.append("R");
-                actionString.append(String.format("%4d", this.boardIndex).replace(' ', '0'));
+                actionString.append(this);
                 //FIXME create a proper error message;
                 if (!action.loadAction(actionString.toString())) {
-                    throw new RuntimeException();
+                    throw new RuntimeException("Road build action created but is not valid");
                 }
 
                 Game.applyGameAction(action);
@@ -225,6 +224,7 @@ public class Piece extends Polygon {
             case SETTLEMENT -> "S" + String.format("%2d",this.boardIndex).replace(' ','0');
             case CITY -> "T" + String.format("%2d",this.boardIndex).replace(' ','0');
             case CASTLE -> "C" + this.boardIndex;
+            case ROAD -> "R" + String.format("%4d", this.boardIndex).replace(' ', '0');
             default -> null;
         };
 

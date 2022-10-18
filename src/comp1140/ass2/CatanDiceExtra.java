@@ -1,5 +1,7 @@
 package comp1140.ass2;
 
+import javafx.scene.paint.Color;
+
 import java.util.*;
 
 import static comp1140.ass2.Board.*;
@@ -259,45 +261,36 @@ public class CatanDiceExtra {
             if(action.pieceType != PieceType.ROAD) return false;
             pos1 = action.pieceIndex % 100;
             pos2 = action.pieceIndex / 100;
-
+            if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
             if(!Board.coastRoads.contains(pos1)) return false;
             if(!Board.coastRoads.contains(pos2)) return false;
-            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1) return false;
+            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1 && action.pieceIndex != 3) return false;
             //check no road is within 5 pieces clockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
-            if(pos1 == 0 && pos2 == 29)
+            //if piece is 3 the clockwise head is pos 3 not 0
+            if(action.pieceIndex == 3)
             {
                 index = 0;
-            }
-            for(int y = 0; y < 5; y++)
-            {
-
-                roadIndex = Math.min(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30)) * 100;
-                roadIndex += Math.max(Board.coastRoads.get(index % 30),Board.coastRoads.get((index + 1) % 30));
-                if(!board.roadsMap.containsKey(roadIndex)) return false;
-                if(board.roadsMap.get(roadIndex).owner != null)
-                {
-                    return false;
-                }
-                index++;
-            }
-            //check no road is within 5 pieces AntiClockwise
-            index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
-            if(pos1 == 0 && pos2 == 29)
-            {
-                index = 29;
             }
             index = index + 30;
             for(int y = 0; y < 5; y++)
             {
-                roadIndex = Math.min(Board.coastRoads.get((index - 1) % 30),Board.coastRoads.get((index - 2  + 30) % 30)) * 100;
-                roadIndex += Math.max(Board.coastRoads.get((index - 1) % 30),Board.coastRoads.get((index - 2 + 30) % 30));
+                //Clockwise
+                roadIndex = Math.min(Board.coastRoads.get((index + y) % 30),Board.coastRoads.get((index+ y + 1) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get((index + y) % 30),Board.coastRoads.get((index + y + 1) % 30));
                 if(!board.roadsMap.containsKey(roadIndex)) return false;
                 if(board.roadsMap.get(roadIndex).owner != null)
                 {
                     return false;
                 }
-                index--;
+                //AntiClockwise
+                roadIndex = Math.min(Board.coastRoads.get((index - y - 1) % 30),Board.coastRoads.get((index - y - 2) % 30)) * 100;
+                roadIndex += Math.max(Board.coastRoads.get((index - y - 1) % 30),Board.coastRoads.get((index - y - 2) % 30));
+                if(!board.roadsMap.containsKey(roadIndex)) return false;
+                if(board.roadsMap.get(roadIndex).owner != null)
+                {
+                    return false;
+                }
             }
             return true;
 
@@ -890,8 +883,15 @@ public class CatanDiceExtra {
      * @return array of strings representing the actions the AI will take.
      */
     public static String[] generateAction(String boardState) {
+
         // FIXME: Task 13
         // FIXME: Task 14 Implement a "smart" generateAction()
-        return null;
+        Board board = new Board(0,0);
+        board.loadBoard(boardState);
+        return generateAction(board);
+    }
+    public static String[] generateAction(Board board)
+    {
+        return new String[] {"keep"};
     }
 }

@@ -19,12 +19,15 @@ import javafx.scene.text.Text;
 public class Game extends Application {
     private final static Group root = new Group();
     private final static Group controls = new Group();
-    private static final int WINDOW_WIDTH = 1200;
-    private static final int WINDOW_HEIGHT = 700;
+    private final static Group menuLayer = new Group();
+    private static final double WINDOW_WIDTH = 1200;
+    private static final double WINDOW_HEIGHT = 700;
     private TextField boardTextField;
+    public static String errorMessage;
     private final static Group winLayer = new Group();
     private final static Text winText = new Text();
     public static Board board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
+    public static boolean playAi = false;
 
     private static final Action reRollBlank = new Action();
     static void updateState() {
@@ -43,6 +46,49 @@ public class Game extends Application {
         }
         board.roadsMap.forEach((key,value)-> value.updatePiece());
         board.updateTurnInfo();
+    }
+    static void numPlayersButton() {
+        Label loadPlayer = new Label("Enter Num Players");
+        Button select = new Button("Select");
+        Button aiButton = new Button("Vs AI");
+        TextField enterPlayerCount = new TextField();
+        enterPlayerCount.setPrefWidth(100);
+        enterPlayerCount.setPromptText("1-4 Players");
+        playAi = false;
+        select.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try
+                {
+                    int playerCount =Integer.parseInt(enterPlayerCount.getText());
+                    if(playerCount > 4 || playerCount < 1)
+                    {
+                        errorMessage = "Invalid Player Count";
+                    }
+                    else
+                    {
+                        newGame(playerCount);
+                    }
+
+                } catch (NumberFormatException e)
+                {
+                    errorMessage = "Invalid Input";
+                }
+
+
+            }
+        });
+        aiButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                playAi = true;
+                newGame(2);
+            }
+        });
+        HBox hb = new HBox();
+        hb.getChildren().addAll(loadPlayer,enterPlayerCount,select,aiButton);
+        hb.setSpacing(10);
+        menuLayer.getChildren().add(hb);
     }
 
     private void makeControlButtons() {
@@ -77,7 +123,9 @@ public class Game extends Application {
         replayGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                newGame();
+
+                root.getChildren().remove(winLayer);
+                root.getChildren().add(menuLayer);
             }
         });
         replayGame.setLayoutX(board.BOARD_WIDTH/2 );
@@ -93,7 +141,15 @@ public class Game extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                newBoard();
+                int count = 0;
+                for(int i = 0; i < Board.playerIDArray.length(); i++)
+                {
+                    if(boardTextField.getText().contains(Board.playerIDArray.substring(i,i+1)))
+                    {
+                        count++;
+                    }
+                }
+                newBoard(count);
                 board.loadBoard(boardTextField.getText());
                 updateState();
             }
@@ -104,7 +160,7 @@ public class Game extends Application {
         controls.getChildren().add(hb);
     }
 
-    private void newBoard(){
+    private static void newBoard(int playerCount){
 
 
         //Hex Tiles
@@ -116,9 +172,10 @@ public class Game extends Application {
         root.getChildren().remove(board.turnLayer);
         root.getChildren().remove(controls);
         root.getChildren().remove(winLayer);
+        root.getChildren().remove(menuLayer);
 
         Game.board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
-
+        Game.board.playerCount = playerCount;
 
         root.getChildren().add(board.hexPlate);
         root.getChildren().add(board.settlementLayer);
@@ -128,10 +185,18 @@ public class Game extends Application {
         root.getChildren().add(board.turnLayer);
         root.getChildren().add(controls);
     }
-    private void newGame()
+    private static void newGame(int playerCount)
     {
-        newBoard();
-        Game.board.loadBoard("W00WXYZW00X00Y00Z00");
+        newBoard(playerCount);
+        StringBuilder startString = new StringBuilder();
+        startString.append("W00");
+        startString.append(Board.playerIDArray, 0, board.playerCount);
+        for(int i = 0; i < board.playerCount; i++)
+        {
+            startString.append(Board.playerIDArray.charAt(i));
+            startString.append("00");
+        }
+        Game.board.loadBoard(startString.toString());
         Game.updateState();
     }
     @Override
@@ -145,14 +210,16 @@ public class Game extends Application {
         winText.setLayoutY(board.BOARD_HEIGHT/2);
         winText.setFont(Font.font(30));
         winLayer.getChildren().add(winText);
-        makeReplayGameButton();
+
 
 
         stage.setTitle("Catan Dice Game XXL");
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        newGame();
+        root.getChildren().add(menuLayer);
 
+        makeReplayGameButton();
+        numPlayersButton();
         makeControlButtons();
         makeLoadGameButton();
 
@@ -164,19 +231,21 @@ public class Game extends Application {
 
     public static void applyGameAction(Action action)
     {
-        System.out.println(action);
-        System.out.println(CatanDiceExtra.isActionValid(board,action));
+        System.out.println("Action: " + action);
+        System.out.println("IsActionValid: " + CatanDiceExtra.isActionValid(board,action));
+        System.out.println("Board String: " + board);
         if(CatanDiceExtra.isActionValid(board,action))
         {
             CatanDiceExtra.applyAction(board,action);
             //Player wins if score > 9
             if(board.playerTurn.score > 9)
             {
-                playerWin(board.playerTurn,board);
+                playerWin(board.playerTurn);
             }
 
             if(board.setupPhase)
             {
+                //Set setup phase to phase as false as soon as first round is completed
                 if((board.playerTurn.playerIndex + 1)%board.players.length == 0)
                 {
                     board.numDice = 3;
@@ -185,9 +254,41 @@ public class Game extends Application {
                     board.resources = new int[] {0,0,0,0,0,0};
                     applyGameAction(reRollBlank);
                 }
-
                 board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
 
+                //If still in setup phase check player can place road otherwise reset
+                if(board.setupPhase)
+                {
+                    boolean flag = false;
+                    Action buildRoad;
+                    int roadIndex;
+                    for(int i = 0; i < Board.coastRoads.size(); i ++)
+                    {
+                        roadIndex = Math.min(Board.coastRoads.get(i % 30),Board.coastRoads.get((i + 1) % 30)) * 100;
+                        roadIndex += Math.max(Board.coastRoads.get(i % 30),Board.coastRoads.get((i + 1) % 30));
+
+                        buildRoad = new Action();
+                        if(!buildRoad.loadAction("buildR" + String.format("%4d", roadIndex).replace(' ', '0')))
+                        {
+                            return;
+                        }
+                        if(CatanDiceExtra.isActionValid(board,buildRoad))
+                        {
+                            flag = true;
+                            break;
+                        }
+
+                    }
+                    if(!flag)
+                    {
+                        Game.newGame(board.playerCount);
+                        return;
+                    }
+                }
+                if(playAi && board.playerTurn.playerIndex == 1)
+                {
+                    aiMove();
+                }
             }
 
             for(ResourcePiece r : board.resourceDisplay)
@@ -197,7 +298,6 @@ public class Game extends Application {
             Game.updateState();
         }
 
-        System.out.println(board);
 
 
     }
@@ -229,7 +329,7 @@ public class Game extends Application {
 
         }
     }
-    public static void playerWin(Player player, Board board)
+    public static void playerWin(Player player)
     {
         root.getChildren().remove(board.hexPlate);
         root.getChildren().remove(board.settlementLayer);
@@ -258,6 +358,22 @@ public class Game extends Application {
             applyGameAction(reRollBlank);
             updateState();
         }
+        //If ai is active and turn = player 2, it's the ai's turn
+        if(playAi && board.playerTurn.playerIndex == 1)
+        {
+            aiMove();
+        }
 
+    }
+
+    public static void aiMove()
+    {
+        Action action;
+        for(String s : CatanDiceExtra.generateAction(board))
+        {
+            action = new Action();
+            action.loadAction(s);
+            applyGameAction(action);
+        }
     }
 }

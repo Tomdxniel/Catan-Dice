@@ -130,8 +130,8 @@ public class Board {
     public Player playerTurn;
     public int numDice;
     public int rollsDone;
-    public final int playerCount = 4;
-    public Player[] players = new Player[playerCount];
+    public int playerCount = 1;
+    public Player[] players;
     private static final String[] names = {"Sam","Jim","Eliz","Tom"}; //Names of each player, Jim is just filler
     public static final String resourceArray = "bglmow";
     public static final String playerIDArray = "WXYZ";
@@ -302,7 +302,14 @@ public class Board {
             scoreOut.append("\n");
         }
         scoreText.setText("Score List: \n" + scoreOut);
-        rollText.setText("Rolls Left: " + (3 - rollsDone));
+        if(this.setupPhase)
+        {
+            rollText.setText("Setup Phase");
+        }
+        else
+        {
+            rollText.setText("Rolls Left: " + (3 - rollsDone));
+        }
         int count = 0;
         for(int i = 0 ; i < 6; i++)
         {
@@ -345,6 +352,7 @@ public class Board {
         boolean winner = false;
         boolean hasLongestRoad = false;
         boolean hasLargestArmy = false;
+        this.players = new Player[playerCount];
         for(int i = 0; i < playerCount; i++)
         {
             this.players[i] = new Player(names[i],i);
