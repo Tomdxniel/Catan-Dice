@@ -6,7 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Completed 10b" />
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Removed Redundant Code">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Viewer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,7 +65,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Task 10b applyActionSequence">
+  <component name="RunManager" selected="Application.Game">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -316,7 +322,21 @@
       <option name="project" value="LOCAL" />
       <updated>1666150882004</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Completed 10b">
+      <created>1666151058900</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1666151058900</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Removed Redundant Code">
+      <created>1666151147014</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1666151147014</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -358,6 +378,7 @@
     <MESSAGE value="Fixed isAction valid setupPhase bug" />
     <MESSAGE value="Completed 10a" />
     <MESSAGE value="Completed 10b" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completed 10b" />
+    <MESSAGE value="Removed Redundant Code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed Redundant Code" />
   </component>
 </project>
