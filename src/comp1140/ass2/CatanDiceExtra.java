@@ -799,8 +799,6 @@ public class CatanDiceExtra {
      * @return true if the sequence is executable, false otherwise.
      */
     public static boolean isActionSequenceValid(String boardState, String[] actionSequence) {
-        // FIXME: Task 10a
-
         Board board = new Board(0, 0);
 
         if (!board.loadBoard(boardState)) return false;
@@ -862,19 +860,20 @@ public class CatanDiceExtra {
 
                 applyAction(board,action);
             }
+            board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
         }
         else
         {
-            if(board.numDice < 6)
-            {
-                board.numDice ++ ;
+            if(board.playerTurn.score < 10) {
+                if (board.numDice < 6) {
+                    board.numDice++;
+                }
+                board.rollsDone = 0;
+                board.resources = new int[]{0, 0, 0, 0, 0, 0};
+                applyAction(board, action);
+                board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
             }
-            board.rollsDone = 0;
-            board.resources = new int[] {0,0,0,0,0,0};
-            applyAction(board, action);
         }
-        board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
-        System.out.println(board);
         return board.toString();
     }
 

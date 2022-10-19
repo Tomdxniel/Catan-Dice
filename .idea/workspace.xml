@@ -6,7 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Fixed isAction valid setupPhase bug">
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Completed 10a">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
@@ -300,7 +300,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666142230070</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Completed 10a">
+      <created>1666149183003</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1666149183003</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -340,6 +347,7 @@
     <MESSAGE value="Fixed Compiler Warnings" />
     <MESSAGE value="Fixed 4 Player being able to stop player from placing road, Fixed bugs" />
     <MESSAGE value="Fixed isAction valid setupPhase bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed isAction valid setupPhase bug" />
+    <MESSAGE value="Completed 10a" />
+    <option name="LAST_COMMIT_MESSAGE" value="Completed 10a" />
   </component>
 </project>
