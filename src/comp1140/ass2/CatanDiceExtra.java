@@ -712,7 +712,7 @@ public class CatanDiceExtra {
                 for (Piece knight : board.knights) {
                     if (knight.type == PieceType.KNIGHT
                             && knight.owner == board.playerTurn
-                            && action.requiredType == WILD) {
+                            && Board.hexTypeArray[knight.boardIndex] == WILD) {
                         //If right knight type is found edit resources and set knight to used knight
                         for (int i = 0; i < 6; i++) {
                             board.resources[i] += action.resourceArray[i];
@@ -801,15 +801,16 @@ public class CatanDiceExtra {
     public static boolean isActionSequenceValid(String boardState, String[] actionSequence) {
         // FIXME: Task 10a
 
-        Board state = new Board(0, 0);
+        Board board = new Board(0, 0);
 
-        if (!state.loadBoard(boardState)) return false;
-        Action action = new Action();
+        if (!board.loadBoard(boardState)) return false;
+        Action action;
 
         for (String act : actionSequence){
+            action = new Action();
             if (action.loadAction(act)){
-                if (!isActionValid(state, action)) return false;
-                applyAction(state, action);
+                if (!isActionValid(board, action)) return false;
+                applyAction(board, action);
             } else {
                 return false;
             }
@@ -834,8 +835,47 @@ public class CatanDiceExtra {
      * @return string representation of the new board state
      */
     public static String applyActionSequence(String boardState, String[] actionSequence) {
-        // FIXME: Task 10b
-        return null;
+        // FIXME: Task 10a
+
+        Board board = new Board(0, 0);
+
+        board.loadBoard(boardState);
+        Action action;
+
+        for (String act : actionSequence){
+            action = new Action();
+            action.loadAction(act);
+            applyAction(board, action);
+        }
+
+        action = new Action();
+        action.loadAction("keep");
+
+        if(board.setupPhase)
+        {
+            if((board.playerTurn.playerIndex + 1)%board.players.length == 0)
+            {
+                board.numDice = 3;
+                board.rollsDone = 0;
+                board.setupPhase = false;
+                board.resources = new int[] {0,0,0,0,0,0};
+
+                applyAction(board,action);
+            }
+        }
+        else
+        {
+            if(board.numDice < 6)
+            {
+                board.numDice ++ ;
+            }
+            board.rollsDone = 0;
+            board.resources = new int[] {0,0,0,0,0,0};
+            applyAction(board, action);
+        }
+        board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
+        System.out.println(board);
+        return board.toString();
     }
 
     /**

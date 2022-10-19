@@ -6,10 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Fixed 4 Player being able to stop player from placing road, Fixed bugs">
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Fixed isAction valid setupPhase bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +64,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Task 10a isActionSequenceValid">
+  <component name="RunManager" selected="JUnit.Task 10b applyActionSequence">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -293,7 +293,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666141795443</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixed isAction valid setupPhase bug">
+      <created>1666142230070</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1666142230070</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -332,6 +339,7 @@
     <MESSAGE value="Cleaned up Comments" />
     <MESSAGE value="Fixed Compiler Warnings" />
     <MESSAGE value="Fixed 4 Player being able to stop player from placing road, Fixed bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed 4 Player being able to stop player from placing road, Fixed bugs" />
+    <MESSAGE value="Fixed isAction valid setupPhase bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed isAction valid setupPhase bug" />
   </component>
 </project>
