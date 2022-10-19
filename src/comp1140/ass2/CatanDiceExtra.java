@@ -31,11 +31,7 @@ public class CatanDiceExtra {
     }
 
 
-    public static boolean isActionWellFormed(String actionString)
-    {
-        Action action = new Action();
-        return action.loadAction(actionString);
-    }
+
 
 
 
@@ -51,112 +47,18 @@ public class CatanDiceExtra {
      * A description of the board state string will be provided in a
      * later update of the project README.
      *
-     * @param action: The string representation of the action.
+     * @param actionString: The string representation of the action.
      * @return true iff the string is a well-formed representation of
      * a player action, false otherwise.
      */
-
-    //isActionWellFormed created by Eliz So, u7489812
-    public static boolean ActionWellFormed(String action) {
-
-        String resources = "bglmow";
-
-        if (action.length() < 4) return false;
-
-        if (action.substring(0,4).compareTo("keep") == 0){
-
-            if (action.length() == 4) return true;
-
-            char[] sort = action.substring(4).toCharArray();
-            char[] res = action.substring(4).toCharArray();
-            Arrays.sort(sort);
-
-            if (Arrays.compare(sort, res) != 0){
-                return false;
-            }
-
-            for (int i = 4; i < action.length(); i++){
-                char c = action.charAt(i);
-                int index = resources.indexOf(c);
-                if (index == -1) return false;
-            }
-
-            return true;
-
-        } else if (action.substring(0,4).compareTo("swap")== 0){
-
-            if (action.length() != 6) return false;
-
-            char in = action.charAt(4);
-            char out = action.charAt(5);
-
-            return (resources.indexOf(in) != -1 && resources.indexOf(out) != -1);
-        }
-        if (action.length() < 5) return false;
-        else if (action.substring(0, 5).compareTo("build") == 0){
-
-            if (action.length() == 5) return false;
-
-            char struct = action.charAt(5);
-            if (struct == 'R'){
-
-                if (action.length() != 10) return false;
-
-                int fir = Integer.parseInt(action.substring(6,8));
-                int sec = Integer.parseInt(action.substring(8,10));
-
-                return (fir < sec && fir >= 0 && sec <= 53);
-
-
-            } else if (struct == 'C'){
-
-                if (action.length() != 7) return false;
-                // 0, 1, 2, 3
-                int n = action.charAt(6)-48;
-                return (n <= 3);
-
-            } else if (struct == 'S' || struct == 'T') {
-
-                if (action.length() != 8) return false;
-                // 00 - 53
-                int n = Integer.parseInt(action.substring(6, 8));
-                return (n >= 0 && n <= 53);
-
-
-            } else if (struct == 'K'){
-
-                if (action.length() != 8) return false;
-                // 00 - 19
-                int n = Integer.parseInt(action.substring(6,8));
-                return (n >= 0 && n <= 19);
-
-            }
-
-        }else if (action.substring(0,5).compareTo("trade") == 0){
-
-
-            if (action.length() == 5) return false;
-
-            char[] sort = action.substring(5).toCharArray();
-            char[] res = action.substring(5).toCharArray();
-            Arrays.sort(sort);
-
-            if (Arrays.compare(sort, res) != 0){
-                return false;
-            }
-
-            for (int i = 5; i < action.length(); i++){
-                char c = action.charAt(i);
-                if (c == 'm') return false;
-                if (resources.indexOf(c) == -1) return false;
-            }
-
-            return true;
-
-        }
-	    return false;
-
+    public static boolean isActionWellFormed(String actionString)
+    {
+        Action action = new Action();
+        return action.loadAction(actionString);
     }
+
+
+
 
     /**
      * Roll the specified number of *random* dice, and return the
