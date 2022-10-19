@@ -130,7 +130,7 @@ public class Board {
     public Player playerTurn;
     public int numDice;
     public int rollsDone;
-    public int playerCount = 1;
+    public int playerCount = 2;
     public Player[] players;
     private static final String[] names = {"Sam","Jim","Eliz","Tom"}; //Names of each player, Jim is just filler
     public static final String resourceArray = "bglmow";
