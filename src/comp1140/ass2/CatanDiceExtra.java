@@ -134,8 +134,7 @@ public class CatanDiceExtra {
                 return false;
             }
             //Check action is well-formed
-
-            if(action.loadAction(actionState))
+            if(!action.loadAction(actionState))
             {
                 return false;
             }
@@ -658,7 +657,7 @@ public class CatanDiceExtra {
         if(action.type == ActionType.BUILD && action.pieceType == PieceType.KNIGHT)
         {
             int[] armyCount = largestArmy(board);
-            //Largest army min is 3, only set player to have the largest army if they have an army size of 3 or greater
+            //Largest army min is 2, only set player to have the largest army if they have an army size of 3 or greater
             int largest = 2;
             if(lArmyHolder != null)
             {
