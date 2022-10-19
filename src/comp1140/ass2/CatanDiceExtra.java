@@ -261,9 +261,10 @@ public class CatanDiceExtra {
             if(action.pieceType != PieceType.ROAD) return false;
             pos1 = action.pieceIndex % 100;
             pos2 = action.pieceIndex / 100;
-            if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
+            if(!board.roadsMap.containsKey(action.pieceIndex)) return false;
             if(!Board.coastRoads.contains(pos1)) return false;
             if(!Board.coastRoads.contains(pos2)) return false;
+            if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
             if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1 && action.pieceIndex != 3) return false;
             //check no road is within 5 pieces clockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
