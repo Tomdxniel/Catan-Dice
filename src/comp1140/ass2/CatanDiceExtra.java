@@ -799,7 +799,22 @@ public class CatanDiceExtra {
      */
     public static boolean isActionSequenceValid(String boardState, String[] actionSequence) {
         // FIXME: Task 10a
-        return false;
+
+        Board state = new Board(0, 0);
+
+        if (!state.loadBoard(boardState)) return false;
+        Action action = new Action();
+
+        for (String act : actionSequence){
+            if (action.loadAction(act)){
+                if (!isActionValid(state, action)) return false;
+                applyAction(state, action);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -865,6 +880,9 @@ public class CatanDiceExtra {
      * @return array of possible action sequences.
      */
     public static String[][] generateAllPossibleActionSequences(String boardState) {
+
+
+
         // FIXME: Task 12
         return null;
     }
@@ -883,6 +901,16 @@ public class CatanDiceExtra {
      * @return array of strings representing the actions the AI will take.
      */
     public static String[] generateAction(String boardState) {
+
+        /*
+        ** swap resources first
+        1) check knight
+        2) check castle
+        3) check longest road
+        4) check settlement
+        5) build road
+        6) keep resources
+         */
 
         // FIXME: Task 13
         // FIXME: Task 14 Implement a "smart" generateAction()
