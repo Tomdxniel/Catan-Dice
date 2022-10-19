@@ -862,19 +862,21 @@ public class CatanDiceExtra {
 
                 applyAction(board,action);
             }
+            board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
         }
         else
         {
-            if(board.numDice < 6)
-            {
-                board.numDice ++ ;
+            if(board.playerTurn.score < 10) {
+                if (board.numDice < 6) {
+                    board.numDice++;
+                }
+                board.rollsDone = 0;
+                board.resources = new int[]{0, 0, 0, 0, 0, 0};
+                applyAction(board, action);
+                board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
+                System.out.println(board);
             }
-            board.rollsDone = 0;
-            board.resources = new int[] {0,0,0,0,0,0};
-            applyAction(board, action);
         }
-        board.playerTurn = board.players[(board.playerTurn.playerIndex + 1)%board.players.length];
-        System.out.println(board);
         return board.toString();
     }
 
