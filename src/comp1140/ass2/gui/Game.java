@@ -89,6 +89,44 @@ public class Game extends Application {
         hb.getChildren().addAll(loadPlayer,enterPlayerCount,select,aiButton);
         hb.setSpacing(10);
         menuLayer.getChildren().add(hb);
+
+        //Create Text on how to play
+
+
+
+        Text build = new Text("-To build a Piece ensure all rolls are used and click on desired Piece");
+        Text reroll = new Text("-To Re-roll your resources select all resources that require re-rolling and click the reroll button");
+        Text trade = new Text("-To trade 2 gold for 1 resource ensure all rolls are used and click on desired resource type Hex");
+        Text swap = new Text("-To use the swap action select only one resource and click knight on a hex of desires output resource.");
+
+        build.setX(0);
+        build.setY(WINDOW_HEIGHT/10);
+        build.setFont(Font.font(20));
+
+        reroll.setX(0);
+        reroll.setY(WINDOW_HEIGHT/10 * 2);
+        reroll.setFont(Font.font(20));
+
+        trade.setX(0);
+        trade.setY(WINDOW_HEIGHT/10 * 3);
+        trade.setFont(Font.font(20));
+
+        swap.setX(0);
+        swap.setY(WINDOW_HEIGHT/10 * 4);
+        swap.setFont(Font.font(20));
+
+        menuLayer.getChildren().addAll(build,reroll,trade,swap);
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void makeControlButtons() {

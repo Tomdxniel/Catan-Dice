@@ -6,15 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Fixed Task 7 Error">
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Added ownership details, comments and ensured game.jar worked">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/ResourcePiece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +62,7 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.game.jar">
+  <component name="RunManager" selected="Application.Game">
     <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
       <module name="comp1140-ass2" />
@@ -354,7 +347,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666160408650</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Added ownership details, comments and ensured game.jar worked">
+      <created>1666311366116</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1666311366116</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -398,6 +398,7 @@
     <MESSAGE value="Completed 10b" />
     <MESSAGE value="Removed Redundant Code" />
     <MESSAGE value="Fixed Task 7 Error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Task 7 Error" />
+    <MESSAGE value="Added ownership details, comments and ensured game.jar worked" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added ownership details, comments and ensured game.jar worked" />
   </component>
 </project>
