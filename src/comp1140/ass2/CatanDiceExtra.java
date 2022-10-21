@@ -917,6 +917,8 @@ public class CatanDiceExtra {
      * @param boardState: string representation of the current board state.
      * @return array of possible action sequences.
      */
+
+    //generateAllPossibleActionSequences created by Eliz So u7489812
     public static String[][] generateAllPossibleActionSequences(String boardState) {
 
         System.out.println(boardState);
@@ -1120,6 +1122,9 @@ public class CatanDiceExtra {
 
     }
 
+
+    //buildGenerator created by Eliz So u7489812
+    //assists generating all possible actions
     public static ArrayList<ArrayList<Action>> buildGenerator(Board board){
         int[] resources = board.resources; //bglmow
 
@@ -1172,6 +1177,7 @@ public class CatanDiceExtra {
         return validActions;
     }
 
+    //missing resources created by Eliz So u7489812
     //outputs what resources are missing for each structure
     public static int[][] missingResources (int[] curRes){
 
@@ -1192,6 +1198,7 @@ public class CatanDiceExtra {
         return outcome;
     }
 
+    //tradeResources created by Eliz So u7489812
     //trades resources
     public static ArrayList<ArrayList<Action>> tradeResources(int i, Board board){
 
@@ -1220,8 +1227,6 @@ public class CatanDiceExtra {
                 }
             }
         }
-
-
 
         //attempts to trade the resources
         if (trade.toString().compareTo("trade") != 0) {
@@ -1257,7 +1262,7 @@ public class CatanDiceExtra {
     }
 
 
-
+    //swapResources created by Eliz So u7489812
    //checks what resources can be swapped.
     public static ArrayList<ArrayList<Action>> swapResources(Board board) {
 
@@ -1414,6 +1419,8 @@ public class CatanDiceExtra {
         return validActions;
     }
 
+    //attemptBuild created by Eliz So u7489812
+    //attempts to build the piece on the board, returns all the possible places it can be built.
     public static ArrayList<Action> attemptBuild(int piece, Board board){
 
         ArrayList<Action> output = new ArrayList<>();
@@ -1483,11 +1490,13 @@ public class CatanDiceExtra {
 
                 StringBuilder buildSettle;
 
+                //checks each of the spot if a settlement can be built
                 for (int i = 0; i < 54; i++){
 
                     action = new Action();
                     buildSettle = new StringBuilder("buildS");
 
+                    //if less than 10, add a zero in font
                     if (i < 10)
                         buildSettle.append(0);
                     buildSettle.append(i);
@@ -1503,10 +1512,12 @@ public class CatanDiceExtra {
 
                 StringBuilder buildCity;
 
+                //checks all the spot if a city can be built
                 for (int i = 0; i < 54; i++){
                     action = new Action();
                     buildCity = new StringBuilder("buildT");
 
+                    //if less than 10, add a 0 in front
                     if (i < 10)
                         buildCity.append(0);
                     buildCity.append(i);
@@ -1543,6 +1554,8 @@ public class CatanDiceExtra {
         return output;
     }
 
+    //generateRollPhase created by Eliz So u7489812
+    //created to keep all the possible combinations.
     public static ArrayList<String> generateRollPhase(Board board){
 
         ArrayList<String> actions = new ArrayList<>();
@@ -1575,13 +1588,15 @@ public class CatanDiceExtra {
 
     }
 
-    // finds all the resources combination
+    //combination created by Eliz So u7489812
+    // finds all the resources combination (nCr) with given r
     public static ArrayList<Resource[]> combination(Resource[] res, int r){
         ArrayList<Resource[]> combs = new ArrayList<>();
         helperComb(res, new Resource[r], combs, 0, res.length - 1, 0 );
         return combs;
     }
 
+    //helperComb created by Eliz So u7489812
     // helper function for combination
     private static void helperComb(Resource[] res, Resource[] data, ArrayList<Resource[]> combs, int start, int end, int index){
         if (index == data.length){
@@ -1625,6 +1640,9 @@ public class CatanDiceExtra {
         // FIXME: Task 14 Implement a "smart" generateAction()
         Board board = new Board(0,0);
         board.loadBoard(boardState);
+
+        String[][] actions = generateAllPossibleActionSequences(boardState);
+
 
 
         return generateAction(board);
