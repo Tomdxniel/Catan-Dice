@@ -1,5 +1,6 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gui.Game;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -110,6 +111,7 @@ public class Board {
     public Text scoreText = new Text();
     public Text resourceLabel = new Text();
     public Text rollText = new Text();
+    public Text errorText = new Text();
     public ResourcePiece[] resourceDisplay = new ResourcePiece[6];
     public Group hexPlate = new Group();
     public Group castleLayer = new Group();
@@ -276,6 +278,11 @@ public class Board {
         resourceLabel.setFont(Font.font(20));
         turnLayer.getChildren().add(resourceLabel);
 
+        //Create error text
+        errorText.setX(BOARD_WIDTH/3);
+        errorText.setY(BOARD_HEIGHT/20 * 19.5);
+        errorText.setFont(Font.font(20));
+        turnLayer.getChildren().add(errorText);
 
         //Add 6 resource squares
         for(int i = 0; i < 6; i++)

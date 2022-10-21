@@ -2,7 +2,7 @@ package comp1140.ass2;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-
+//Resource Piece is created by Sam Liersch u7448311
 public class ResourcePiece extends Polygon {
     public int type;
     public boolean clicked;

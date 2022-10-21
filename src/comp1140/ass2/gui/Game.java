@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
 // Game.java originally created Patrik Haslum
-// Edited by Sam Liersch u7448311
+// Completed by Sam Liersch u7448311
 public class Game extends Application {
     private final static Group root = new Group();
     private final static Group controls = new Group();
@@ -23,7 +23,7 @@ public class Game extends Application {
     private static final double WINDOW_WIDTH = 1200;
     private static final double WINDOW_HEIGHT = 700;
     private TextField boardTextField;
-    public static String errorMessage;
+    public static String errorMessage = "";
     private final static Group winLayer = new Group();
     private final static Text winText = new Text();
     public static Board board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
@@ -231,6 +231,12 @@ public class Game extends Application {
 
     public static void applyGameAction(Action action)
     {
+        Game.errorMessage = "";
+
+        if(board.resources == null)
+        {
+            return;
+        }
         System.out.println("Action: " + action);
         System.out.println("IsActionValid: " + CatanDiceExtra.isActionValid(board,action));
         System.out.println("Board String: " + board);
@@ -297,9 +303,7 @@ public class Game extends Application {
             }
             Game.updateState();
         }
-
-
-
+        board.errorText.setText(Game.errorMessage);
     }
 
 
