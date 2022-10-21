@@ -1110,12 +1110,29 @@ public class CatanDiceExtra {
                 output[i] = new String[]{};
         }
 
-        System.out.println(output.length);
-
         //Task 12
         for (String[] stringArray : output){
             System.out.println(Arrays.toString(stringArray));
         }
+        Board tempState;
+        Action tempAction;
+        for(String[] actions : output)
+        {
+            tempState = new Board(0,0);
+            tempState.loadBoard(boardState);
+            for(String strAction : actions)
+            {
+                tempAction = new Action();
+                tempAction.loadAction(strAction);
+                if(!isActionValid(tempState, tempAction))
+                {
+
+                    return new String[][] {{}};
+                }
+                applyAction(tempState,tempAction);
+            }
+        }
+
 
 
         return output;
@@ -1637,9 +1654,17 @@ public class CatanDiceExtra {
         5) build road
         6) keep resources
          */
-        // FIXME: Task 14 Implement a "smart" generateAction()
         Board board = new Board(0,0);
         board.loadBoard(boardState);
+        if(board.setupPhase)
+        {
+            return new String[] {};
+
+        }
+        if(board.rollsDone != 3)
+        {
+            return new String[] {};
+        }
 
         String[][] actions = generateAllPossibleActionSequences(boardState);
 
@@ -1652,7 +1677,6 @@ public class CatanDiceExtra {
     public static String[] generateAction(Board board)
     {
         String boardString = board.toString();
-        System.out.println(boardString);
         String[][] actionsSequence = generateAllPossibleActionSequences(boardString);
         String[] alt = {};
         Board tempBoard;
@@ -1669,7 +1693,6 @@ public class CatanDiceExtra {
                 {
                     action = new Action();
                     action.loadAction(actionString);
-                    System.out.println(action.type);
                     if(action.type == ActionType.BUILD)
                     {
                         alt = actions;

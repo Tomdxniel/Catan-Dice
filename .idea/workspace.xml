@@ -6,14 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Created Menu screen">
-      <change afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Created Ai">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Hex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Piece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,8 +69,8 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Game">
-    <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
+    <configuration name="TestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestClass" />
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -82,15 +82,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestClass" />
-      <module name="comp1140-ass2" />
+    <configuration name="TestIsActionValid" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="comp1140.ass2.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestIsActionValid" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -115,7 +116,6 @@
       <item itemvalue="Application.Game" />
       <item itemvalue="Application.Viewer" />
       <item itemvalue="Application.TestClass" />
-      <item itemvalue="Application.CatanDiceExtra" />
       <item itemvalue="JAR Application.CatanDiceExtra.jar" />
       <item itemvalue="JAR Application.comp1140-ass2.jar" />
       <item itemvalue="JAR Application.game.jar" />
@@ -130,14 +130,15 @@
       <item itemvalue="JUnit.Task 10b applyActionSequence" />
       <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
       <item itemvalue="JUnit.Task 13 generateAction Sanity" />
+      <item itemvalue="JUnit.TestIsActionValid" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestIsActionValid" />
         <item itemvalue="JAR Application.game.jar" />
         <item itemvalue="Application.TestClass" />
         <item itemvalue="JAR Application.CatanDiceExtra.jar" />
         <item itemvalue="JAR Application.comp1140-ass2.jar" />
-        <item itemvalue="Application.CatanDiceExtra" />
       </list>
     </recent_temporary>
   </component>
@@ -367,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666312318990</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Created Ai">
+      <created>1666318486844</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1666318486844</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -387,7 +395,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
     <MESSAGE value="Created loadAction method in CatandDiceExtra, added classes Action, ActionType" />
     <MESSAGE value="Added alternative version of isActionValid that can be easily modified to be apply action" />
     <MESSAGE value="C-best document" />
@@ -412,6 +419,18 @@
     <MESSAGE value="Fixed Task 7 Error" />
     <MESSAGE value="Added ownership details, comments and ensured game.jar worked" />
     <MESSAGE value="Created Menu screen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created Menu screen" />
+    <MESSAGE value="Created Ai" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Ai" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java</url>
+          <line>1130</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

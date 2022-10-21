@@ -48,7 +48,6 @@ public class Hex extends Polygon {
                 actionString.append(this.type.toString());
                 if(this.type != HexType.WILD)
                 {
-                    //FIXME create a proper error message;
                     if(!action.loadAction(actionString.toString()))
                     {
                         throw new RuntimeException();

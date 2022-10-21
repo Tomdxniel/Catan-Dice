@@ -96,7 +96,6 @@ public class Piece extends Polygon {
             //If action string is empty no action is required
             if(!actionString.isEmpty())
             {
-                //FIXME create a proper error message;
                 if(!action.loadAction(actionString.toString()))
                 {
                     throw new RuntimeException();
@@ -131,7 +130,6 @@ public class Piece extends Polygon {
                 StringBuilder actionString = new StringBuilder();
                 actionString.append("build");
                 actionString.append(this);
-                //FIXME create a proper error message;
                 if (!action.loadAction(actionString.toString())) {
                     throw new RuntimeException("Road build action created but is not valid");
                 }

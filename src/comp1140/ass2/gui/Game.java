@@ -237,8 +237,6 @@ public class Game extends Application {
     public void start(Stage stage) throws Exception {
         //Create reRoll action to be used
         reRollBlank.loadAction("keep");
-
-        //FIXME align button on centre
         //Create win layer
         winText.setLayoutX(board.BOARD_WIDTH/10 * 4.75);
         winText.setLayoutY(board.BOARD_HEIGHT/2);
