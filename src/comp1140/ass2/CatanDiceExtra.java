@@ -1,5 +1,8 @@
 package comp1140.ass2;
 
+import comp1140.ass2.gui.Game;
+import javafx.scene.paint.Color;
+
 import java.util.*;
 
 import static comp1140.ass2.Board.*;
@@ -129,23 +132,26 @@ public class CatanDiceExtra {
             //Check board state is well-formed
             if(!board.loadBoard(boardState))
             {
+                Game.errorMessage = "Board state is not well formed";
                 return false;
             }
             //Check action is well-formed
             if(!action.loadAction(actionState))
             {
+                Game.errorMessage = "Action is not well formed";
                 return false;
             }
             //Check action is valid
             if(!isActionValid(board,action))
             {
+                Game.errorMessage = "Action is not valid";
                 return false;
             }
             return true;
         }
 
     //isActionValid created by Sam Liersch u7448311
-    // is Action valid relies on Board  and Action class instead of strings
+    //is Action valid relies on Board and Action class instead of strings
     public static boolean isActionValid(Board board, Action action) {
 
         int pos1;
@@ -156,15 +162,23 @@ public class CatanDiceExtra {
         {
             int index;
             int roadIndex;
-            if(action.type != ActionType.BUILD) return false;
-            if(action.pieceType != PieceType.ROAD) return false;
+            if(action.type != ActionType.BUILD||action.pieceType != PieceType.ROAD) {
+                Game.errorMessage = "Only Coast Roads can be built in setup phase";
+                return false;
+            }
             pos1 = action.pieceIndex % 100;
             pos2 = action.pieceIndex / 100;
             if(!board.roadsMap.containsKey(action.pieceIndex)) return false;
             if(!Board.coastRoads.contains(pos1)) return false;
             if(!Board.coastRoads.contains(pos2)) return false;
-            if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
-            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1 && action.pieceIndex != 3) return false;
+            if(board.roadsMap.get(action.pieceIndex).owner != null) {
+                Game.errorMessage = "Can only build a road that has not been built";
+                return false;
+            }
+            if(Math.abs(Board.coastRoads.indexOf(pos1) - Board.coastRoads.indexOf(pos2)) > 1 && action.pieceIndex != 3) {
+                Game.errorMessage = "Can only build valid Roads";
+                return false;
+            }
             //check no road is within 5 pieces clockwise
             index = Math.max(Board.coastRoads.indexOf(pos1),Board.coastRoads.indexOf(pos2));
             //if piece is 3 the clockwise head is pos 3 not 0
@@ -181,6 +195,7 @@ public class CatanDiceExtra {
                 if(!board.roadsMap.containsKey(roadIndex)) return false;
                 if(board.roadsMap.get(roadIndex).owner != null)
                 {
+                    Game.errorMessage = "Setup phase requires roads to have 5 roads between";
                     return false;
                 }
                 //AntiClockwise
@@ -189,6 +204,7 @@ public class CatanDiceExtra {
                 if(!board.roadsMap.containsKey(roadIndex)) return false;
                 if(board.roadsMap.get(roadIndex).owner != null)
                 {
+                    Game.errorMessage = "Setup phase requires roads to have 5 roads between";
                     return false;
                 }
             }
@@ -199,6 +215,11 @@ public class CatanDiceExtra {
         //Roll phase
         if(board.rollsDone < 3)
         {
+            if(action.type != ActionType.KEEP)
+            {
+                Game.errorMessage = "Rolls must be completed before any other move";
+                return false;
+            }
             for(int i = 0; i < 6; i++)
             {
                 if(board.resources[i] < action.resourceArray[i])
@@ -206,8 +227,7 @@ public class CatanDiceExtra {
                     return false;
                 }
             }
-
-            return (action.type == ActionType.KEEP);
+            return true;
         }
         //Used if multiple check are needed
         boolean flag;
@@ -231,12 +251,24 @@ public class CatanDiceExtra {
                                 break;
                             }
                         }
-                        if(!flag) return false;
-                        if(board.castles[action.pieceIndex].owner != null) return false;
+                        if(!flag) {
+                            Game.errorMessage = "Castle requires 6 of the same resource";
+                            return false;
+                        }
+                        if(board.castles[action.pieceIndex].owner != null) {
+                            Game.errorMessage = "Cannot build a castle if already built";
+                            return false;
+                        }
                     }
                     case KNIGHT -> {
-                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
-                        if(board.knights[action.pieceIndex].owner != null) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) {
+                            Game.errorMessage = "Insufficient resources for Knight";
+                            return false;
+                        }
+                        if(board.knights[action.pieceIndex].owner != null) {
+                            Game.errorMessage = "Cannot build a Knight if already built";
+                            return false;
+                        }
                         flag = false;
                         //Check at least 1 piece surrounding knight hex is built by player
                         for(Hex[] hexArray : board.hexes)
@@ -263,7 +295,11 @@ public class CatanDiceExtra {
                                             break;
                                         }
                                     }
-                                    if(!flag) return false;
+                                    if(!flag)
+                                    {
+                                        Game.errorMessage = "Knights require an adjacent piece";
+                                        return false;
+                                    }
                                     break;
                                 }
                             }
@@ -271,9 +307,15 @@ public class CatanDiceExtra {
                     }
                     case ROAD -> {
 
-                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) {
+                            Game.errorMessage = "Insufficient resources for a Road";
+                            return false;
+                        }
                         if(board.roadsMap.get(action.pieceIndex) == null) return false;
-                        if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
+                        if(board.roadsMap.get(action.pieceIndex).owner != null) {
+                            Game.errorMessage = "Cannot build a Road if already built";
+                            return false;
+                        }
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
 
@@ -313,12 +355,19 @@ public class CatanDiceExtra {
                         }
                         if(!flag)
                         {
+                            Game.errorMessage = "Roads can only be built in a chain";
                             return false;
                         }
                     }
                     case SETTLEMENT -> {
-                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
-                        if(board.settlements[action.pieceIndex].owner != null) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray)) {
+                            Game.errorMessage = "Insufficient resources for Settlement";
+                            return false;
+                        }
+                        if(board.settlements[action.pieceIndex].owner != null) {
+                            Game.errorMessage = "Cannot build a Settlement if already built";
+                            return false;
+                        }
                         if(board.settlements[action.pieceIndex].maxLevel == 0) return false;
                         Piece[] roads = board.roadsMap.values().toArray(new Piece[0]);
                         flag = false;
@@ -336,18 +385,38 @@ public class CatanDiceExtra {
                         if(!flag) return false;
                     }
                     case CITY -> {
-                        if(!hasMaterials(board.resources,action.resourceArray)) return false;
-                        if(board.settlements[action.pieceIndex].owner != board.playerTurn) return false;
-                        if(!Arrays.asList(cities).contains(action.pieceIndex)) return false;
+                        if(!hasMaterials(board.resources,action.resourceArray))
+                        {
+                            Game.errorMessage = "Insufficient resources to build this City";
+                            return false;
+                        }
+                        if(board.settlements[action.pieceIndex].maxLevel != 2)
+                        {
+                            Game.errorMessage = "This Cities max Level is 1";
+                            return false;
+                        }
+                        if(board.settlements[action.pieceIndex].owner != board.playerTurn)
+                        {
+                            Game.errorMessage = "Can only upgrade owned settlements";
+                            return false;
+                        }
                     }
                 }
 
             }
             case TRADE -> {
-                if(!hasMaterials(board.resources,action.resourceArray)) return false;
+                if(!hasMaterials(board.resources,action.resourceArray))
+                {
+                    Game.errorMessage = "Insufficient materials to trade";
+                    return false;
+                }
             }
             case SWAP -> {
-                if(!hasMaterials(board.resources,action.resourceArray)) return false;
+                if(!hasMaterials(board.resources,action.resourceArray))
+                {
+                    Game.errorMessage = "Insufficient Resources to Swap";
+                    return false;
+                }
                 flag = false;
                 //Check if correct knight is owned for trade
                 for(Piece knight : board.knights)
@@ -361,7 +430,11 @@ public class CatanDiceExtra {
                         break;
                     }
                 }
-                if(!flag) return false;
+                if(!flag)
+                {
+                    Game.errorMessage = "Requires a knight of correct type to Swap";
+                    return false;
+                }
             }
         }
 
@@ -399,6 +472,8 @@ public class CatanDiceExtra {
      */
 
 
+
+    //longestRoad created by Sam Liersch u7448311
 
     public static int[] longestRoad(String boardState){
         //Height and width can be 0 as we are not looking at the board
@@ -522,6 +597,9 @@ public class CatanDiceExtra {
      * @param actionString: string representation of the player action.
      * @return string representation of the updated board state.
      */
+
+    //applyAction created by Thomas Daniel u7490675, Edited by Sam Liersch u7448311
+    //is Action valid relies on Board and Action class instead of strings
     public static String applyAction(String boardString, String actionString) {
         Board  board = new Board(0,0);
         Action action = new Action();
@@ -595,7 +673,6 @@ public class CatanDiceExtra {
                     board.resources[i] += action.resourceArray[i];
                 }
             }
-            // FIXME: swap characters for USEDKNIGHTS and KNIGHTS
             case SWAP -> {
                 for (Piece knight : board.knights) {
                     if (knight.type == PieceType.KNIGHT
@@ -688,6 +765,7 @@ public class CatanDiceExtra {
 
 
 
+
     /**
      * Given valid board state, this method checks if a sequence of player
      * actions is executable.
@@ -699,6 +777,7 @@ public class CatanDiceExtra {
      * @param actionSequence: array of strings, each representing one action
      * @return true if the sequence is executable, false otherwise.
      */
+    //isActionSequenceValid created by Eliz So u7489812 Edited by Sam Liersch u7448311
     public static boolean isActionSequenceValid(String boardState, String[] actionSequence) {
         Board state = new Board(0, 0);
 
@@ -720,6 +799,8 @@ public class CatanDiceExtra {
         return true;
     }
 
+
+    //isActionWellFormed created by Eliz So, u7489812
     /**
      * Given a valid board state and a sequence of player actions, this
      * method returns the new board state after executing the sequence of
@@ -736,7 +817,6 @@ public class CatanDiceExtra {
      * @return string representation of the new board state
      */
     public static String applyActionSequence(String boardState, String[] actionSequence) {
-        // FIXME: Task 10a
 
         Board board = new Board(0, 0);
 
@@ -746,9 +826,14 @@ public class CatanDiceExtra {
         //loops through the action sequence
         if (actionSequence == null) return null;
         for (String act : actionSequence){
+
             action = new Action();
             action.loadAction(act);
             applyAction(board, action);
+            if(board.playerTurn.score > 9)
+            {
+                return board.toString();
+            }
         }
 
         action = new Action();
@@ -1054,7 +1139,7 @@ public class CatanDiceExtra {
                 }
             }
 
-            //checks where the person can build their structure 
+            //checks where the person can build their structure
             if (build){
                 ArrayList<Action> builds = attemptBuild(i, board);
                 if (builds != null && builds.size() > 0)

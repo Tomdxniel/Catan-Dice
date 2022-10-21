@@ -13,3 +13,4 @@ of our project implements the following features:
 additional features...
 - Loadable game states
 - Game Error suggestions
+- Menu Screen With Instructions

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
 // Game.java originally created Patrik Haslum
-// Edited by Sam Liersch u7448311
+// Completed by Sam Liersch u7448311
 public class Game extends Application {
     private final static Group root = new Group();
     private final static Group controls = new Group();
@@ -23,7 +23,7 @@ public class Game extends Application {
     private static final double WINDOW_WIDTH = 1200;
     private static final double WINDOW_HEIGHT = 700;
     private TextField boardTextField;
-    public static String errorMessage;
+    public static String errorMessage = "";
     private final static Group winLayer = new Group();
     private final static Text winText = new Text();
     public static Board board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
@@ -89,6 +89,44 @@ public class Game extends Application {
         hb.getChildren().addAll(loadPlayer,enterPlayerCount,select,aiButton);
         hb.setSpacing(10);
         menuLayer.getChildren().add(hb);
+
+        //Create Text on how to play
+
+
+
+        Text build = new Text("-To build a Piece ensure all rolls are used and click on desired Piece");
+        Text reroll = new Text("-To Re-roll your resources select all resources that require re-rolling and click the reroll button");
+        Text trade = new Text("-To trade 2 gold for 1 resource ensure all rolls are used and click on desired resource type Hex");
+        Text swap = new Text("-To use the swap action select only one resource and click knight on a hex of desires output resource.");
+
+        build.setX(0);
+        build.setY(WINDOW_HEIGHT/10);
+        build.setFont(Font.font(20));
+
+        reroll.setX(0);
+        reroll.setY(WINDOW_HEIGHT/10 * 2);
+        reroll.setFont(Font.font(20));
+
+        trade.setX(0);
+        trade.setY(WINDOW_HEIGHT/10 * 3);
+        trade.setFont(Font.font(20));
+
+        swap.setX(0);
+        swap.setY(WINDOW_HEIGHT/10 * 4);
+        swap.setFont(Font.font(20));
+
+        menuLayer.getChildren().addAll(build,reroll,trade,swap);
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void makeControlButtons() {
@@ -231,6 +269,12 @@ public class Game extends Application {
 
     public static void applyGameAction(Action action)
     {
+        Game.errorMessage = "";
+
+        if(board.resources == null)
+        {
+            return;
+        }
         System.out.println("Action: " + action);
         System.out.println("IsActionValid: " + CatanDiceExtra.isActionValid(board,action));
         System.out.println("Board String: " + board);
@@ -297,9 +341,7 @@ public class Game extends Application {
             }
             Game.updateState();
         }
-
-
-
+        board.errorText.setText(Game.errorMessage);
     }
 
 
