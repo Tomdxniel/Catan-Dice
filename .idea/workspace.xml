@@ -6,8 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Added ownership details, comments and ensured game.jar worked">
+    <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Created Menu screen">
+      <change afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comp1110-ass2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/comp1110-ass2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/gui/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -354,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666311366116</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Created Menu screen">
+      <created>1666312318990</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1666312318990</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -374,7 +387,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Task 4 is done" />
     <MESSAGE value="loadBoard &amp; boardToString moved to Board class, boardToString converted to .toString method. Board.toString improved by adding a toString Override to Piece Class." />
     <MESSAGE value="Created loadAction method in CatandDiceExtra, added classes Action, ActionType" />
     <MESSAGE value="Added alternative version of isActionValid that can be easily modified to be apply action" />
@@ -399,6 +411,7 @@
     <MESSAGE value="Removed Redundant Code" />
     <MESSAGE value="Fixed Task 7 Error" />
     <MESSAGE value="Added ownership details, comments and ensured game.jar worked" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added ownership details, comments and ensured game.jar worked" />
+    <MESSAGE value="Created Menu screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Menu screen" />
   </component>
 </project>

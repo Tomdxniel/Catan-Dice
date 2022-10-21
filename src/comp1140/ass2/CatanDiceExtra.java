@@ -800,7 +800,8 @@ public class CatanDiceExtra {
     }
 
 
-    //isActionWellFormed created by Eliz So, u7489812
+    //applyActionSequence created by Sam Liersch u7448311
+
     /**
      * Given a valid board state and a sequence of player actions, this
      * method returns the new board state after executing the sequence of
@@ -816,11 +817,18 @@ public class CatanDiceExtra {
      * @param actionSequence: array of strings, each representing one action
      * @return string representation of the new board state
      */
-    public static String applyActionSequence(String boardState, String[] actionSequence) {
-
+    public static String applyActionSequence(String boardState, String[] actionSequence)
+    {
         Board board = new Board(0, 0);
-
         board.loadBoard(boardState);
+
+        return applyActionSequence(board, actionSequence);
+    }
+
+
+    public static String applyActionSequence(Board board, String[] actionSequence) {
+
+
         Action action;
 
         //loops through the action sequence
@@ -911,6 +919,7 @@ public class CatanDiceExtra {
      */
     public static String[][] generateAllPossibleActionSequences(String boardState) {
 
+        System.out.println(boardState);
         // the action types include keep, build, swap, and trade
         // find the resources that it has
         // for keep, find all the resources it has, and keep the combinations of it
@@ -1624,6 +1633,53 @@ public class CatanDiceExtra {
     }
     public static String[] generateAction(Board board)
     {
-        return new String[] {"keep"};
+        String boardString = board.toString();
+        System.out.println(boardString);
+        String[][] actionsSequence = generateAllPossibleActionSequences(boardString);
+        String[] alt = {};
+        Board tempBoard;
+        Action action;
+        String[] maxSequence = {};
+        int maxAction = 0;
+        for(String[] actions : actionsSequence)
+        {
+            tempBoard = new Board(0,0);
+            tempBoard.loadBoard(boardString);
+            if(actions != null)
+            {
+                for(String actionString : actions)
+                {
+                    action = new Action();
+                    action.loadAction(actionString);
+                    System.out.println(action.type);
+                    if(action.type == ActionType.BUILD)
+                    {
+                        alt = actions;
+                    }
+                    applyAction(tempBoard,action);
+                }
+            }
+
+            if(board.playerTurn.score > maxAction)
+            {
+                maxAction = board.playerTurn.score;
+                maxSequence = actions;
+            }
+        }
+
+
+        //if no best action is found play biuld action
+        if(maxAction == board.playerTurn.score)
+        {
+            maxSequence = alt;
+        }
+        if(maxSequence != null)
+        {
+            for(String i : maxSequence)
+            {
+                System.out.println(i);
+            }
+        }
+        return maxSequence;
     }
 }

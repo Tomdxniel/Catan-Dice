@@ -54,10 +54,10 @@ public class Game extends Application {
         TextField enterPlayerCount = new TextField();
         enterPlayerCount.setPrefWidth(100);
         enterPlayerCount.setPromptText("1-4 Players");
-        playAi = false;
         select.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                playAi = false;
                 try
                 {
                     int playerCount =Integer.parseInt(enterPlayerCount.getText());
@@ -82,7 +82,12 @@ public class Game extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 playAi = true;
-                newGame(2);
+                newBoard(2);
+                board.loadBoard("W61ggggggWR2127XR2632W00X00");
+                board.players[1].name = "AI player";
+                CatanDiceExtra.applyAction(board,reRollBlank);
+                board.rollsDone = 1;
+                updateState();
             }
         });
         HBox hb = new HBox();
@@ -116,16 +121,6 @@ public class Game extends Application {
         swap.setFont(Font.font(20));
 
         menuLayer.getChildren().addAll(build,reroll,trade,swap);
-
-
-
-
-
-
-
-
-
-
 
     }
 
@@ -214,6 +209,7 @@ public class Game extends Application {
 
         Game.board = new Board(WINDOW_HEIGHT,WINDOW_WIDTH);
         Game.board.playerCount = playerCount;
+
 
         root.getChildren().add(board.hexPlate);
         root.getChildren().add(board.settlementLayer);
@@ -410,12 +406,19 @@ public class Game extends Application {
 
     public static void aiMove()
     {
-        Action action;
-        for(String s : CatanDiceExtra.generateAction(board))
+        //Ensure all keep moves are completed
+        while(board.rollsDone < 3)
         {
-            action = new Action();
-            action.loadAction(s);
-            applyGameAction(action);
+            CatanDiceExtra.applyAction(board,reRollBlank);
+            board.rollsDone++;
         }
+        //Do end move
+        CatanDiceExtra.applyActionSequence(board,CatanDiceExtra.generateAction(board));
+        if(board.playerTurn.score > 9)
+        {
+            playerWin(board.playerTurn);
+        }
+        updateState();
+
     }
 }

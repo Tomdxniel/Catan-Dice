@@ -370,6 +370,7 @@ public class Board {
         boolean winner = false;
         boolean hasLongestRoad = false;
         boolean hasLargestArmy = false;
+        this.setupPhase = false;
         this.players = new Player[playerCount];
         for(int i = 0; i < playerCount; i++)
         {
