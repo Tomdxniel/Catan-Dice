@@ -1,5 +1,6 @@
 package comp1140.ass2;
 
+//Resource.java created by Eliz So u7489812
 public enum Resource {
     BRICK, GRAIN, LUMBER, GOLD, ORE, WOOL;
     public static Resource fromChar(char c){
