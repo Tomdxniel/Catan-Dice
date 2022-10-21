@@ -38,7 +38,7 @@ public class Board {
             HexType.ORE,
             HexType.BRICK,
             HexType.LUMBER,
-            HexType.WOOL,
+            HexType. WOOL,
             HexType.GRAIN,
             HexType.LUMBER,
             HexType.WILD,
@@ -100,6 +100,17 @@ public class Board {
                     7,
                     3
     ));
+
+    public static final Integer[] cities =
+            {
+                    1,
+                    7, 10,
+                    17, 18, 19,
+                    34, 35, 36,
+                    43, 46,
+                    52
+
+            };
 //FIXME theres a typo in positional indexing in readme, coordinate 50 does not exist
 
     public Hex[][] hexes = new Hex[5][5];

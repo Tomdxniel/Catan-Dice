@@ -7,10 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4c360b8-af6f-489a-8418-407a92fce0f7" name="Changes" comment="Removed Redundant Code">
+      <change afterPath="$PROJECT_DIR$/src/comp1140/ass2/Resource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.jar" beforeDir="false" afterPath="$PROJECT_DIR$/game.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/CatanDiceExtra.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/comp1140-ass2/comp1140/ass2/gui/Viewer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp1140/ass2/CatanDiceExtra.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,9 +67,9 @@
       <recent name="comp1140.ass2" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Task 7 isActionValid">
-    <configuration name="CatanDiceExtra" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.CatanDiceExtra" />
+  <component name="RunManager" selected="JUnit.Task 13 generateAction Sanity">
+    <configuration name="TestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestClass" />
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -79,8 +81,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.TestClass" />
+    <configuration name="GenerateAllPossibleActionSequencesTest.testFullGame2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="comp1140-ass2" />
       <extension name="coverage">
         <pattern>
@@ -88,6 +89,10 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="comp1140.ass2" />
+      <option name="MAIN_CLASS_NAME" value="comp1140.ass2.GenerateAllPossibleActionSequencesTest" />
+      <option name="METHOD_NAME" value="testFullGame2" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -112,7 +117,6 @@
       <item itemvalue="Application.Game" />
       <item itemvalue="Application.Viewer" />
       <item itemvalue="Application.TestClass" />
-      <item itemvalue="Application.CatanDiceExtra" />
       <item itemvalue="JAR Application.CatanDiceExtra.jar" />
       <item itemvalue="JAR Application.comp1140-ass2.jar" />
       <item itemvalue="JAR Application.game.jar" />
@@ -127,14 +131,15 @@
       <item itemvalue="JUnit.Task 10b applyActionSequence" />
       <item itemvalue="JUnit.Task 12 generateAllPossibleActionSequences" />
       <item itemvalue="JUnit.Task 13 generateAction Sanity" />
+      <item itemvalue="JUnit.GenerateAllPossibleActionSequencesTest.testFullGame2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.GenerateAllPossibleActionSequencesTest.testFullGame2" />
         <item itemvalue="Application.TestClass" />
         <item itemvalue="JAR Application.game.jar" />
         <item itemvalue="JAR Application.CatanDiceExtra.jar" />
         <item itemvalue="JAR Application.comp1140-ass2.jar" />
-        <item itemvalue="Application.CatanDiceExtra" />
       </list>
     </recent_temporary>
   </component>
@@ -387,5 +392,10 @@
     <MESSAGE value="Completed 10b" />
     <MESSAGE value="Removed Redundant Code" />
     <option name="LAST_COMMIT_MESSAGE" value="Removed Redundant Code" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/comp1140_ass2$Task_12_generateAllPossibleActionSequences.ic" NAME="Task 12 generateAllPossibleActionSequences Coverage Results" MODIFIED="1666273717373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>comp1140.ass2.*</FILTER>
+    </SUITE>
   </component>
 </project>

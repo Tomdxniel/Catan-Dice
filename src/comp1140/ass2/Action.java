@@ -22,7 +22,7 @@ public class Action {
         //Required resources for building
         int[][] reqResources = {
                 {0,-1,0,0,-1,-1},//Knight
-                {-1,0,-1,0,0,0,},//Road
+                {-1,0,-1,0,0,0},//Road
                 {-1,-1,-1,0,0,-1},//Settlement
                 {0,-2,0,0,-3,0}};//City
 
@@ -238,4 +238,6 @@ public class Action {
         }
         return output.toString();
     }
+
+
 }

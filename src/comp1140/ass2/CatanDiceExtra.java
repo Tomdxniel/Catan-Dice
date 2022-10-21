@@ -1,7 +1,5 @@
 package comp1140.ass2;
 
-import javafx.scene.paint.Color;
-
 import java.util.*;
 
 import static comp1140.ass2.Board.*;
@@ -274,6 +272,7 @@ public class CatanDiceExtra {
                     case ROAD -> {
 
                         if(!hasMaterials(board.resources,action.resourceArray)) return false;
+                        if(board.roadsMap.get(action.pieceIndex) == null) return false;
                         if(board.roadsMap.get(action.pieceIndex).owner != null) return false;
                         pos1 = action.pieceIndex % 100;
                         pos2 = action.pieceIndex / 100;
@@ -339,6 +338,7 @@ public class CatanDiceExtra {
                     case CITY -> {
                         if(!hasMaterials(board.resources,action.resourceArray)) return false;
                         if(board.settlements[action.pieceIndex].owner != board.playerTurn) return false;
+                        if(!Arrays.asList(cities).contains(action.pieceIndex)) return false;
                     }
                 }
 
@@ -700,16 +700,18 @@ public class CatanDiceExtra {
      * @return true if the sequence is executable, false otherwise.
      */
     public static boolean isActionSequenceValid(String boardState, String[] actionSequence) {
-        Board board = new Board(0, 0);
+        Board state = new Board(0, 0);
 
-        if (!board.loadBoard(boardState)) return false;
+        // check if there are problems with loading the boardState.
+        if (!state.loadBoard(boardState)) return false;
         Action action;
 
         for (String act : actionSequence){
             action = new Action();
+            //checks if action is well formed
             if (action.loadAction(act)){
-                if (!isActionValid(board, action)) return false;
-                applyAction(board, action);
+                if (!isActionValid(state, action)) return false;
+                applyAction(state, action);
             } else {
                 return false;
             }
@@ -741,6 +743,8 @@ public class CatanDiceExtra {
         board.loadBoard(boardState);
         Action action;
 
+        //loops through the action sequence
+        if (actionSequence == null) return null;
         for (String act : actionSequence){
             action = new Action();
             action.loadAction(act);
@@ -822,11 +826,683 @@ public class CatanDiceExtra {
      */
     public static String[][] generateAllPossibleActionSequences(String boardState) {
 
+        // the action types include keep, build, swap, and trade
+        // find the resources that it has
+        // for keep, find all the resources it has, and keep the combinations of it
+        // for swapping, find out what it can swap
+        // for trading, find out what can be traded.
+        // for build, find all the things it can build before keeping, swapping and trading the resource and also after
+        // if none can be done, return false;
+
+        System.out.println("start");
+
+        Board board = new Board(0, 0);
+        board.loadBoard(boardState);
 
 
-        // FIXME: Task 12
-        return null;
+        Action action;
+
+
+
+        //start of the game
+        if (board.setupPhase){
+            ArrayList<Action> actions = new ArrayList<>();
+            for (int i = 1; i < coastRoads.size(); i++){
+
+                action = new Action();
+
+                //gets the position of the coastRoads
+                int pos0 = coastRoads.indexOf(i-1);
+                int pos1 = coastRoads.indexOf(i);
+
+                //creates an action string for the road.
+                String buildRoad = "buildR";
+                if (pos0 < 10) buildRoad += '0' + pos0;
+                else buildRoad += pos0;
+                if (pos1 < 10) buildRoad += '0' + pos1;
+                else buildRoad += pos1;
+
+                //checks if the action is valid.
+                if (action.loadAction(buildRoad))
+                    if (isActionValid(board, action))
+                        actions.add(action);
+            }
+            System.out.println("starting");
+            return new String[][]{actionsToString(actions)};
+
+        }
+
+
+
+        //roll phase
+        else if (board.rollsDone < 3){
+            ArrayList<String> rolls =  generateRollPhase(board);
+            String[][] output = new String[rolls.size()][1];
+            for (int j = 0; j < rolls.size(); j++){
+                output[j] = new String[]{rolls.get(j)};
+            }
+            return output;
+        }
+
+        //build phase
+
+        //generate the build actions
+        ArrayList<ArrayList<Action>> build = new ArrayList<>();
+        ArrayList<ArrayList<Action>> tempBuild;
+
+
+
+
+        build.addAll(buildGenerator(board));
+
+        for (int j = 0 ; j < build.size(); j++ ){
+
+            ArrayList<Action> actions = build.get(j);
+
+            System.out.println("actions: " + Arrays.toString(actions.toArray()));
+            if (actions.isEmpty()) break;
+
+            Board temp = new Board(0, 0);
+            temp.loadBoard(board.toString());
+
+            boolean trade = false;
+            Action tradeAct = new Action();
+            String newTrade;
+
+            ArrayList<Action> tempAct = new ArrayList<>();
+
+            for (Action act : actions){
+                tempAct.add(act);
+                applyAction(temp, act);
+                if (act.type == ActionType.TRADE)
+                {
+                    tradeAct = act;
+                    trade = true;
+                }
+                System.out.println(temp.toString());
+            }
+
+
+
+            System.out.println("tempAct: " + Arrays.toString(tempAct.toArray()));
+
+            tempBuild = buildGenerator(temp);
+            System.out.println("tempBuild: " + Arrays.toString(tempBuild.toArray()));
+
+            for (ArrayList<Action> acts : tempBuild){
+
+                for (Action act : acts){
+                    if (trade && act.type == ActionType.TRADE){
+                        // finds out what else to be traded and add to the same trade string
+                        newTrade = act.toString();
+                        ArrayList<Character> output = new ArrayList<>();
+                        ArrayList<Character> insert = new ArrayList<>();
+
+                        for (char c : tradeAct.toString().toCharArray())
+                            output.add(c);
+                        for (char c : newTrade.toCharArray())
+                            insert.add(c);
+
+                        int out = 5;
+                        int in = 5;
+
+
+
+                        //merge the two trades together
+                        while (out < output.size() && in < insert.size()){
+
+                            if (output.get(out) > insert.get(in)){
+                                output.add(out, insert.get(in));
+                                in++;
+                            }
+                            out++;
+
+                        }
+
+                        //add the remaining of the elements in
+                        while (in < insert.size()){
+                            output.add(insert.get(in));
+                            in++;
+                        }
+
+
+                        Action tradeNew = new Action();
+                        tradeNew.loadAction(output.toString());
+
+                        tempAct.remove(tradeAct);
+                        tempAct.add(0, tradeNew);
+
+
+
+
+                    } else {
+                        if (act != null)
+                            tempAct.add(act);
+                    }
+                }
+
+                if (!build.contains(tempAct) && tempAct.size() > 0)
+                    build.add(tempAct);
+            }
+        }
+
+
+
+
+        //change it back to String[][]
+        ArrayList<String[]> temp = new ArrayList<>();
+
+
+
+        //changes the arrayList to String[]
+        for (ArrayList<Action> actions : build) {
+            String[] toAdd = actionsToString(actions);
+            if (!temp.contains(toAdd))
+                temp.add(toAdd);
+
+        }
+
+
+        String[][] output = new String[temp.size()][];
+
+
+        //change the ArrayList of actions to String[][]
+        for (int i = 0; i < temp.size(); i++){
+            if (temp.get(i) != null)
+                output[i] = temp.get(i);
+            else
+                output[i] = new String[]{};
+        }
+
+        System.out.println(output.length);
+
+        //Task 12
+        for (String[] stringArray : output){
+            System.out.println(Arrays.toString(stringArray));
+        }
+
+
+        return output;
+
     }
+
+    public static ArrayList<ArrayList<Action>> buildGenerator(Board board){
+        int[] resources = board.resources; //bglmow
+
+        int[][] required = {
+                {0,1,0,0,1,1}, // Knight
+                {1,0,1,0,0,0}, // Road
+                {1,1,1,0,0,1}, // Settlement
+                {0,2,0,0,3,0}  // City
+        };
+
+        //checks resources state after building a structure
+        int[][] outcome = missingResources(resources);
+
+        ArrayList<ArrayList<Action>> validActions = new ArrayList<>();
+
+        //check for the structures that can directly built off
+        for (int i = 0; i < required.length; i++){
+
+            boolean build = true;
+
+            //if all the resources in outcome[i] > 0, then the building can be built.
+            for (int j = 0; j < resources.length; j++){
+                if (outcome[i][j] < 0) {
+                    build = false;
+                    break;
+                }
+            }
+
+            //checks where the person can build their structure 
+            if (build){
+                ArrayList<Action> builds = attemptBuild(i, board);
+                if (builds != null && builds.size() > 0)
+                    for (Action b : builds) validActions.add(new ArrayList<>(Collections.singletonList(b)));
+            }
+        }
+
+        // check for swap resources
+        validActions.addAll(swapResources(board));
+
+        // check for trade resources
+        for (int i = 0; i < required.length; i++){
+            ArrayList<ArrayList<Action>> t = tradeResources(i, board);
+            if (t != null) System.out.println(t.size());
+            if (t != null && t.size() > 0)
+                validActions.addAll(tradeResources(i, board));
+        }
+
+        validActions.add(new ArrayList<>());
+
+        return validActions;
+    }
+
+    //outputs what resources are missing for each structure
+    public static int[][] missingResources (int[] curRes){
+
+        int[][] required = {
+                {0,1,0,0,1,1}, // Knight
+                {1,0,1,0,0,0}, // Road
+                {1,1,1,0,0,1}, // Settlement
+                {0,2,0,0,3,0}  // City
+        };
+        int[][] outcome = new int[4][6];
+
+        for (int i = 0; i < required.length; i++){
+            for (int j = 0; j < curRes.length; j++){
+                outcome[i][j] = curRes[j] - required[i][j];
+            }
+        }
+
+        return outcome;
+    }
+
+    //trades resources
+    public static ArrayList<ArrayList<Action>> tradeResources(int i, Board board){
+
+        int[] res = board.resources;
+        if (res[3] < 2) return null;
+
+        Action action;
+        ArrayList<ArrayList<Action>> validActions = new ArrayList<>();
+        int[][] outcome = missingResources(res);
+
+        action = new Action();
+        ArrayList<Action> builds;
+        StringBuilder trade = new StringBuilder("trade");
+
+        int gold = res[3];
+
+        //checks what resources are missing and needs to be traded
+        for (int j = 0; j < outcome[i].length; j++) {
+            if (outcome[i][j] < 0) {
+                for (int temp = 0; temp < (outcome[i][j] * -1); temp++) {
+                    if (gold < 2) {
+                        break;
+                    }
+                    trade.append(Resource.fromInt(j).toString());
+                    gold -= 2;
+                }
+            }
+        }
+
+
+
+        //attempts to trade the resources
+        if (trade.toString().compareTo("trade") != 0) {
+
+            System.out.println(trade);
+
+            Board temp = new Board(0, 0);
+            temp.loadBoard(board.toString());
+
+            if (action.loadAction(trade.toString())) {
+                if (isActionValid(board, action)) {
+
+                    //if resources can be traded, check if the structures can be built
+                    //remove all redundant actions
+                    applyAction(temp, action);
+                    System.out.println("Need to build: " + i);
+                    builds = attemptBuild(i, temp);
+
+                    if (builds != null && builds.size() > 0) {
+                        //if structures can be built after trading, add to validActions
+                        for (Action b : builds) {
+                            ArrayList<Action> temps = new ArrayList<>();
+                            temps.add(action);
+                            temps.add(b);
+                            validActions.add(temps);
+                        }
+                    }
+                }
+            }
+        }
+
+        return validActions;
+    }
+
+
+
+   //checks what resources can be swapped.
+    public static ArrayList<ArrayList<Action>> swapResources(Board board) {
+
+        int[] resources = board.resources; //bglmow
+
+        int[][] outcome = missingResources(resources);
+        int[] amountReq = {3, 2, 4, 5}; //K, R, S, T
+        int totalRes = Arrays.stream(resources).sum();
+        ArrayList<Resource> needs;
+        ArrayList<Resource> avail;
+        ArrayList<ArrayList<Action>> swaps;
+        ArrayList<ArrayList<Action>> validActions = new ArrayList<>();
+
+        Action action;
+
+        //checks each structure that can be built.
+        for (int i = 0; i < amountReq.length; i++) {
+
+            System.out.println("building: " + i);
+            System.out.println(Arrays.toString(outcome[i]));
+
+            if (totalRes < amountReq[i]) continue;
+
+            needs = new ArrayList<>();
+            avail = new ArrayList<>();
+
+            //checks on resources that are needed, and checks on resources that are available.
+            for (int j = 0; j < outcome[i].length; j++) {
+                if (outcome[i][j] < 0) {
+                    for (int k = outcome[i][j]; k < 0; k++)
+                        needs.add(Resource.fromInt(j));
+                } else if (outcome[i][j] > 0) {
+                    for (int k = outcome[i][j]; k > 0; k--)
+                        avail.add(Resource.fromInt(j));
+                }
+            }
+
+            //if it can be built, it should've been built in the previous function, no swaps are needed
+            if (needs.size() <= 0) continue;
+
+            int index = 0;
+
+            ArrayList<Action> tempSwaps;
+
+            Resource[] availArray = new Resource[avail.size()];
+
+            for (int j = 0; j < availArray.length; j++)
+                availArray[j] = avail.get(j);
+
+            //if there are enough resources to swap
+            if (needs.size() <= avail.size()){
+
+                //finds all the combination
+                ArrayList<Resource[]> combs = combination(availArray, needs.size());
+
+                //loop through each combination
+                for (Resource[] comb : combs){
+                    tempSwaps = new ArrayList<>();
+                    index = 0;
+
+                    //goes through each of the resources and build the swap string.
+                    for (Resource res : comb){
+                        action = new Action();
+                        if (res == null) continue;
+                        String swapString = "swap" + res.toString() + needs.get(index).toString();
+                        //System.out.println(swapString);
+
+                        // check if this swap is valid
+                        if (action.loadAction(swapString)){
+                            if (isActionValid(board, action)){
+                                tempSwaps.add(action);
+                                index++;
+                            }
+                        }
+                    }
+
+                    //create a temporary board and apply the swaps
+                    Board temp = new Board(0, 0);
+                    temp.loadBoard(board.toString());
+
+                    for (Action swap : tempSwaps){
+                        applyAction(temp, swap);
+                    }
+
+                    //gives the available builds for structure i
+                    ArrayList<Action> builds = attemptBuild(i, temp);
+
+                    //if there are builds after the swap, add it to the ArrayList
+                    if (builds != null && builds.size() > 0) {
+                        for (Action b : builds) {
+                            ArrayList<Action> temps = new ArrayList<>();
+                            temps.addAll(tempSwaps);
+                            temps.add(b);
+                            //System.out.println(Arrays.toString(temps.toArray()));
+                            validActions.add(temps);
+                        }
+                    }
+
+                }
+            }
+            // if there aren't enough resources to swap, trade
+            else {
+
+                ArrayList<Resource[]> combs = combination(availArray, avail.size());
+
+                for (Resource[] comb : combs) {
+
+                    tempSwaps = new ArrayList<>();
+                    index = 0;
+
+                    //goes through each of the resources and build the swap string.
+                    for (Resource res : comb){
+                        action = new Action();
+                        if (res == null) continue;
+                        String swapString = "swap" + res.toString() + needs.get(index).toString();
+                        //System.out.println(swapString);
+
+                        // check if this swap is valid
+                        if (action.loadAction(swapString)){
+                            if (isActionValid(board, action)){
+                                tempSwaps.add(action);
+                                index++;
+                            }
+                        }
+                    }
+
+                    //create a temporary board and apply the swaps
+                    Board temp = new Board(0, 0);
+                    temp.loadBoard(board.toString());
+
+                    for (Action swap : tempSwaps){
+                        applyAction(temp, swap);
+                    }
+
+                    ArrayList<ArrayList<Action>> trades = tradeResources(i, temp);
+
+                    if (trades != null && trades.size() > 0){
+                        for (ArrayList<Action> actions : trades){
+                            ArrayList<Action> temps = new ArrayList<>();
+                            temps.addAll(tempSwaps);
+                            temps.addAll(actions);
+                            //System.out.println(Arrays.toString(temps.toArray()));
+                            validActions.add(temps);
+                        }
+                    }
+
+                }
+
+            }
+
+
+        }
+        //System.out.println(validActions.size());
+        return validActions;
+    }
+
+    public static ArrayList<Action> attemptBuild(int piece, Board board){
+
+        ArrayList<Action> output = new ArrayList<>();
+        Action action;
+
+        switch (piece){
+            case 0 -> {
+                StringBuilder buildKnight;
+
+                //checks all the knight spots, see if a knight can be added
+                for (int i = 0; i < 20; i++){
+                    buildKnight = new StringBuilder("buildK");
+                    action = new Action();
+
+                    //append the string to build the action
+                    if (i < 10){
+                        buildKnight.append(0);
+                    }
+                    buildKnight.append(i);
+
+                    //checks if the action is valid
+                    if (action.loadAction(buildKnight.toString()))
+                        if (isActionValid(board, action))
+                            output.add(action);
+                }
+
+            }
+
+            case 1 -> {
+
+                StringBuilder buildRoad;
+
+                for (int i = 1 ; i < coordinateArray.length; i++){
+
+                    action = new Action();
+
+                    //gets the position of the coordinateArray
+                    int pos0 = coordinateArray[i-1];
+                    int pos1 = coordinateArray[i];
+
+                    //creates an action string for the road.
+                    buildRoad = new StringBuilder("buildR");
+                    if (pos0 > pos1){
+                        int temp = pos0;
+                        pos0 = pos1;
+                        pos1 = temp;
+                    }
+                    if (pos0 < 10)
+                        buildRoad.append(0);
+                    buildRoad.append(pos0);
+                    if (pos1 < 10)
+                        buildRoad.append(0);
+                    buildRoad.append(pos1);
+
+                    //checks if the action is valid.
+                    if (action.loadAction(buildRoad.toString())){
+                        boolean check = isActionValid(board, action);
+                        if (check)
+                            output.add(action);
+                    }
+
+
+                }
+
+            }
+            case 2 -> {
+
+                StringBuilder buildSettle;
+
+                for (int i = 0; i < 54; i++){
+
+                    action = new Action();
+                    buildSettle = new StringBuilder("buildS");
+
+                    if (i < 10)
+                        buildSettle.append(0);
+                    buildSettle.append(i);
+
+                    if (action.loadAction(buildSettle.toString()))
+                        if (isActionValid(board, action))
+                            output.add(action);
+
+                }
+
+            }
+            case 3 -> {
+
+                StringBuilder buildCity;
+
+                for (int i = 0; i < 54; i++){
+                    action = new Action();
+                    buildCity = new StringBuilder("buildT");
+
+                    if (i < 10)
+                        buildCity.append(0);
+                    buildCity.append(i);
+
+                    if (action.loadAction(buildCity.toString()))
+                        if (isActionValid(board, action))
+                            output.add(action);
+                }
+
+            }
+            default -> {
+                return null;
+            }
+        }
+
+        return output;
+    }
+
+
+
+
+
+    //change an ArrayList of actions to an array of String.
+    public static String[] actionsToString(ArrayList<Action> actions){
+
+        if (actions == null || actions.size() == 0) return null;
+
+        String[] output = new String[actions.size()];
+
+        for (int i = 0; i < actions.size(); i++){
+            output[i] = actions.get(i).toString();
+        }
+
+        return output;
+    }
+
+    public static ArrayList<String> generateRollPhase(Board board){
+
+        ArrayList<String> actions = new ArrayList<>();
+        Resource[] resources = Resource.fromIntArray(board.resources);
+
+        actions.add("keep");
+
+        ArrayList<Resource[]> combs;
+
+        //finds all the combination of resources the player can keep.
+        for (int i = 1; i <= resources.length; i++){
+            combs = combination(resources, i);
+
+            for (Resource[] comb : combs){
+
+                StringBuilder keepString = new StringBuilder("keep");
+
+                for (Resource res : comb){
+                    keepString.append(res.toString());
+                }
+
+                if (!actions.contains(keepString.toString()))
+                {
+                    actions.add(keepString.toString());
+                }
+            }
+        }
+
+        return actions;
+
+    }
+
+    // finds all the resources combination
+    public static ArrayList<Resource[]> combination(Resource[] res, int r){
+        ArrayList<Resource[]> combs = new ArrayList<>();
+        helperComb(res, new Resource[r], combs, 0, res.length - 1, 0 );
+        return combs;
+    }
+
+    // helper function for combination
+    private static void helperComb(Resource[] res, Resource[] data, ArrayList<Resource[]> combs, int start, int end, int index){
+        if (index == data.length){
+            combs.add(data.clone());
+        } else if (start <= end){
+            data[index] = res[start];
+            helperComb(res, data, combs, start + 1, end, index + 1);
+            helperComb(res, data, combs, start + 1, end, index);
+
+        }
+    }
+
+
+
+
 
     /**
      * Given a valid board state, return a valid action sequence.
@@ -852,12 +1528,14 @@ public class CatanDiceExtra {
         5) build road
         6) keep resources
          */
-
-        // FIXME: Task 13
         // FIXME: Task 14 Implement a "smart" generateAction()
         Board board = new Board(0,0);
         board.loadBoard(boardState);
+
+
         return generateAction(board);
+
+
     }
     public static String[] generateAction(Board board)
     {
