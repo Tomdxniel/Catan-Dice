@@ -50,9 +50,9 @@ assets:
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Sam Liersch
+    uid: u7448311
+  - name: Thomas Daniel
+    uid: u7490675
   - name:
     uid:
