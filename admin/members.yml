@@ -1,0 +1,11 @@
+# List the membership of this group.  (Remove entries if you have fewer
+# than three members.)
+#
+
+members:
+  - name: Sam Liersch
+    uid: u7448311
+  - name: Thomas Daniel
+    uid: u7490675
+  - name: Eliz So 
+    uid: u7489812
